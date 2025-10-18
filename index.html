@@ -10,17 +10,50 @@
         /* Custom font import for modern look */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         
+        /* 1. DEFINE YOUR CUSTOM COLOR */
+        :root {
+            /* You can change this single hex code to instantly update the accent color */
+            --primary-accent: #8b5cf6; /* A vibrant purple (like Indigo/Violet) */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a; /* Dark background for the whole page (Slate 950) */
         }
+        
+        /* 2. ANIMATED BACKGROUND STYLES */
+        .animated-bg {
+            /* Fallback and base dark color */
+            background-color: #0f172a; 
+            background: linear-gradient(
+                -45deg, 
+                #0f172a, /* Deep Slate */
+                #1e3a8a, /* Dark Blue */
+                #6d28d9, /* Violet */
+                #0f172a  /* Deep Slate */
+            );
+            background-size: 400% 400%; /* Make the gradient large */
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 3. APPLY CUSTOM COLOR TO HERO SECTION */
         .hero-section {
-            /* Darker, high-contrast indigo gradient */
-            background: linear-gradient(135deg, #3730a3, #5b21b6); 
+            background: linear-gradient(135deg, var(--primary-accent), #5b21b6); 
+        }
+
+        /* 4. APPLY CUSTOM COLOR TO PROJECT CARD BORDERS */
+        .project-card-border {
+            border-top-color: var(--primary-accent) !important;
         }
     </style>
 </head>
-<body>
+<body class="animated-bg"> <!-- ADDED: Apply the animated-bg class to the body -->
 
     <!-- Main Container - Setting overall light text color for dark mode -->
     <div class="min-h-screen text-gray-200">
@@ -46,7 +79,7 @@
 
             <!-- About Section -->
             <section id="about" class="mb-16">
-                <!-- Title text changed to light color -->
+                <!-- Border color changed to use custom accent -->
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">About Me</h2>
                 <div class="space-y-4 text-lg text-gray-400">
                     <!-- Body text changed to light color -->
@@ -57,10 +90,11 @@
 
             <!-- Skills Section -->
             <section id="skills" class="mb-16">
-                <!-- Title text changed to light color -->
+                <!-- Border color changed to use custom accent -->
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Technical Skills</h2>
                 <div class="flex flex-wrap gap-3">
                     <!-- Skill badges adjusted for dark background -->
+                    <!-- Note: For skill badges, we keep a consistent Tailwind color (indigo-900/300) for simplicity, but you can manually override them using the custom variable if you like! -->
                     <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Python (Pandas, NumPy)</span>
                     <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">ELO Rating Systems</span>
                     <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Data Automation</span>
@@ -77,14 +111,15 @@
 
                 <div class="grid md:grid-cols-1 gap-8">
                     
-                    <!-- PROJECT CARD: Manga ELO System (Background and text changed) -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-purple-500">
+                    <!-- PROJECT CARD 1: Manga ELO System -->
+                    <!-- ADDED: project-card-border class -->
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-purple-500 project-card-border">
                         <div class="flex justify-between items-start mb-4">
                             <!-- Title text changed -->
                             <h3 class="text-xl sm:text-2xl font-semibold text-white">
                                 Algorithmic Ranking System for Manga
                             </h3>
-                            <!-- Badge text is fine -->
+                            <!-- Badge text color changed to use custom variable for consistency -->
                             <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Python/ELO</span>
                         </div>
                         
@@ -94,7 +129,7 @@
                         </p>
                         
                         <div class="flex space-x-4">
-                            <!-- Link colors adjusted for dark mode contrast -->
+                            <!-- Link colors adjusted for dark mode contrast, using indigo-400 as a placeholder -->
                             <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium">
                                 View Code (GitHub) &rarr;
                             </a>
@@ -104,8 +139,9 @@
                         </div>
                     </div>
                     
-                    <!-- Placeholder for future project (Background and text changed) -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-blue-500 opacity-70">
+                    <!-- PROJECT CARD 2: Placeholder for future project -->
+                    <!-- ADDED: project-card-border class -->
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-blue-500 opacity-70 project-card-border">
                         <!-- Title text changed -->
                         <h3 class="text-xl sm:text-2xl font-semibold text-white mb-4">
                             [Future Project Title Placeholder]
@@ -114,7 +150,7 @@
                         <p class="text-gray-400 mb-4">
                             *Add description of your next project here (e.g., a React component or data visualization).*
                         </p>
-                        <!-- Link colors adjusted for dark mode contrast -->
+                        <!-- Link colors adjusted for dark mode contrast, using blue-400 as a placeholder -->
                         <a href="#" class="text-blue-400 font-medium hover:text-blue-300">
                             Link to Project &rarr;
                         </a>
