@@ -18,6 +18,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
+            /* The main area background remains static dark gray */
             background-color: #0f172a; /* Dark background for the whole page (Slate 950) */
         }
         
@@ -26,14 +27,14 @@
             /* Fallback and base dark color */
             background-color: #0f172a; 
             background: linear-gradient(
-                -30deg, 
+                -45deg, 
                 #0f172a, /* Deep Slate */
                 #1e3a8a, /* Dark Blue */
                 #6d28d9, /* Violet */
                 #0f172a  /* Deep Slate */
             );
             background-size: 400% 400%; /* Make the gradient large */
-            animation: gradient-animation 10s ease infinite;
+            animation: gradient-animation 15s ease infinite;
         }
 
         @keyframes gradient-animation {
@@ -44,7 +45,8 @@
 
         /* 3. APPLY CUSTOM COLOR TO HERO SECTION */
         .hero-section {
-            background: linear-gradient(135deg, var(--primary-accent), #5b21b6); 
+            /* This static background is removed so the animated-bg class takes effect when added to the header HTML */
+            /* background: linear-gradient(135deg, var(--primary-accent), #5b21b6); */ 
         }
 
         /* 4. APPLY CUSTOM COLOR TO PROJECT CARD BORDERS */
@@ -53,13 +55,13 @@
         }
     </style>
 </head>
-<body class="animated-bg"> <!-- ADDED: Apply the animated-bg class to the body -->
+<body> <!-- EDITED: Removed animated-bg class from body. It now uses the solid dark gray set in the CSS. -->
 
     <!-- Main Container - Setting overall light text color for dark mode -->
     <div class="min-h-screen text-gray-200">
 
         <!-- Header/Hero Section - Text remains white for contrast against dark gradient -->
-        <header class="hero-section text-white py-16 sm:py-24 shadow-lg">
+        <header class="hero-section animated-bg text-white py-16 sm:py-24 shadow-lg"> <!-- EDITED: Added animated-bg class to header. -->
             <div class="max-w-4xl mx-auto px-6 text-center">
                 <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight">
                     [Your Name]
