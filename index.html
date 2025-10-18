@@ -53,15 +53,23 @@
         .project-card-border {
             border-top-color: var(--primary-accent) !important;
         }
+        
+        /* Helper class for consistent section items (like education and work) */
+        .section-item {
+            background-color: #1f2937; /* Darker than the background but lighter than project cards */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
-<body> <!-- EDITED: Removed animated-bg class from body. It now uses the solid dark gray set in the CSS. -->
+<body>
 
     <!-- Main Container - Setting overall light text color for dark mode -->
     <div class="min-h-screen text-gray-200">
 
-        <!-- Header/Hero Section - Text remains white for contrast against dark gradient -->
-        <header class="hero-section animated-bg text-white py-16 sm:py-24 shadow-lg"> <!-- EDITED: Added animated-bg class to header. -->
+        <!-- Header/Hero Section (Animated Background) -->
+        <header class="hero-section animated-bg text-white py-16 sm:py-24 shadow-lg">
             <div class="max-w-4xl mx-auto px-6 text-center">
                 <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight">
                     Chu Kai Le
@@ -79,59 +87,108 @@
         <!-- Main Content Area -->
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
 
-            <!-- About Section -->
+            <!-- About Section (Existing) -->
             <section id="about" class="mb-16">
-                <!-- Border color changed to use custom accent -->
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">About Me</h2>
                 <div class="space-y-4 text-lg text-gray-400">
-                    <!-- Body text changed to light color -->
                     <p>I am a technically-minded developer focused on applying data science and algorithmic solutions to complex ranking problems. My expertise lies in Python development, data automation, and building systems that provide objective, measurable results.</p>
                     <p>I thrive on turning raw data into actionable insights and creating robust tools to improve processes, whether through implementing ranking algorithms or automating complex reporting pipelines.</p>
                 </div>
             </section>
-
-            <!-- Skills Section -->
-            <section id="skills" class="mb-16">
-                <!-- Border color changed to use custom accent -->
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Technical Skills</h2>
-                <div class="flex flex-wrap gap-3">
-                    <!-- Skill badges adjusted for dark background -->
-                    <!-- Note: For skill badges, we keep a consistent Tailwind color (indigo-900/300) for simplicity, but you can manually override them using the custom variable if you like! -->
-                    <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Python (Pandas, NumPy)</span>
-                    <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">ELO Rating Systems</span>
-                    <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Data Automation</span>
-                    <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">HTML & Tailwind CSS</span>
-                    <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Git / GitHub Pages</span>
-                    <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Excel / CSV Reporting</span>
+            
+            <!-- NEW SECTION: Education -->
+            <section id="education" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Education</h2>
+                <div class="space-y-6">
+                    <!-- Education Entry 1 -->
+                    <div class="section-item">
+                        <h3 class="text-xl font-semibold text-white">Engineering Undergraduate (Expected [Year])</h3>
+                        <p class="text-indigo-400 font-medium">[University Name]</p>
+                        <p class="text-sm text-gray-500">202X &mdash; Present | [City, Country]</p>
+                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
+                            <li>Relevant Coursework: [List 2-3 key courses, e.g., Data Structures, Applied Calculus, Electrical Systems].</li>
+                            <li>Achieved [GPA/Honors, e.g., 3.8/4.0 GPA, Dean's List].</li>
+                        </ul>
+                    </div>
+                    <!-- Education Entry 2 (Pre-University/High School) -->
+                    <div class="section-item">
+                        <h3 class="text-xl font-semibold text-white">Pre-University Studies</h3>
+                        <p class="text-indigo-400 font-medium">[High School / College Name]</p>
+                        <p class="text-sm text-gray-500">20XX &mdash; 20XX | [City, Country]</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- NEW SECTION: Work Experience -->
+            <section id="experience" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Work Experience</h2>
+                <div class="space-y-6">
+                    <!-- Experience Entry 1 -->
+                    <div class="section-item">
+                        <h3 class="text-xl font-semibold text-white">[Job Title / Internship Position]</h3>
+                        <p class="text-indigo-400 font-medium">[Company Name]</p>
+                        <p class="text-sm text-gray-500">Month, 20XX &mdash; Month, 20XX | [City, Country]</p>
+                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
+                            <li>[Action verb] key achievement or responsibility, quantifying the impact (e.g., Automated reporting process, saving 5 hours of manual work per week).</li>
+                            <li>[Action verb] second key achievement (e.g., Collaborated on project X using Y technology).</li>
+                        </ul>
+                    </div>
+                    <!-- Experience Entry 2 (Optional) -->
+                    <div class="section-item opacity-70">
+                        <h3 class="text-xl font-semibold text-white">[Second Job/Volunteer Title Placeholder]</h3>
+                        <p class="text-indigo-400 font-medium">[Organization Name]</p>
+                        <p class="text-sm text-gray-500">Month, 20XX &mdash; Month, 20XX</p>
+                    </div>
                 </div>
             </section>
 
-            <!-- Projects Section -->
+            <!-- UPDATED SECTION: Skills & Certifications -->
+            <section id="skills" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Skills & Certifications</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-white mb-3">Core Technologies</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <!-- Existing Skill badges -->
+                        <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Python (Pandas, NumPy)</span>
+                        <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">ELO Rating Systems</span>
+                        <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Data Automation</span>
+                        <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">HTML & Tailwind CSS</span>
+                        <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Git / GitHub Pages</span>
+                        <span class="px-4 py-1 bg-indigo-900 text-indigo-300 rounded-full text-sm font-medium">Excel / CSV Reporting</span>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-white mb-3">Certifications</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-1 bg-green-900 text-green-300 rounded-full text-sm font-medium">TensorFlow Developer Certificate</span>
+                        <span class="px-4 py-1 bg-green-900 text-green-300 rounded-full text-sm font-medium">AWS Certified Cloud Practitioner</span>
+                        <span class="px-4 py-1 bg-green-900 text-green-300 rounded-full text-sm font-medium">[Add Your Certification Name]</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section (Now called Key Projects) -->
             <section id="projects" class="mb-16">
-                <!-- Title text changed to light color -->
                 <h2 class="text-3xl font-bold text-gray-100 mb-8 border-b-2 border-indigo-400 pb-2">Key Projects</h2>
 
                 <div class="grid md:grid-cols-1 gap-8">
                     
                     <!-- PROJECT CARD 1: Manga ELO System -->
-                    <!-- ADDED: project-card-border class -->
                     <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-purple-500 project-card-border">
                         <div class="flex justify-between items-start mb-4">
-                            <!-- Title text changed -->
                             <h3 class="text-xl sm:text-2xl font-semibold text-white">
                                 Algorithmic Ranking System for Manga
                             </h3>
-                            <!-- Badge text color changed to use custom variable for consistency -->
                             <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Python/ELO</span>
                         </div>
                         
-                        <!-- Paragraph text changed -->
                         <p class="text-gray-400 mb-4">
                             Developed a Python-based ELO system for comparative ranking of manga titles. This system successfully addressed personal rating inflation by applying the ELO algorithm to normalize scores and drive the distribution toward a standard normal curve, establishing a more objective ranking methodology. The system also auto-exports the results to Excel for further analysis.
                         </p>
                         
                         <div class="flex space-x-4">
-                            <!-- Link colors adjusted for dark mode contrast, using indigo-400 as a placeholder -->
                             <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium">
                                 View Code (GitHub) &rarr;
                             </a>
@@ -140,26 +197,82 @@
                             </a>
                         </div>
                     </div>
+                </div>
+            </section>
+            
+            <!-- NEW SECTION: Other Projects -->
+            <section id="other-projects" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Other Projects</h2>
+                <div class="space-y-4 text-lg text-gray-400">
                     
-                    <!-- PROJECT CARD 2: Placeholder for future project -->
-                    <!-- ADDED: project-card-border class -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-blue-500 opacity-70 project-card-border">
-                        <!-- Title text changed -->
-                        <h3 class="text-xl sm:text-2xl font-semibold text-white mb-4">
-                            [Future Project Title Placeholder]
-                        </h3>
-                        <!-- Paragraph text changed -->
-                        <p class="text-gray-400 mb-4">
+                    <!-- Moved former Project Card 2 here -->
+                    <div class="section-item">
+                        <h3 class="text-xl font-semibold text-white">[Future Project Title Placeholder]</h3>
+                        <p class="text-gray-400 mb-2">
                             *Add description of your next project here (e.g., a React component or data visualization).*
                         </p>
-                        <!-- Link colors adjusted for dark mode contrast, using blue-400 as a placeholder -->
-                        <a href="#" class="text-blue-400 font-medium hover:text-blue-300">
+                         <a href="#" class="text-blue-400 font-medium hover:text-blue-300 text-sm">
                             Link to Project &rarr;
                         </a>
                     </div>
                     
+                    <!-- Placeholder 2 -->
+                    <div class="section-item opacity-80">
+                         <h3 class="text-xl font-semibold text-white">Automated Data Scraper</h3>
+                        <p class="text-gray-400 mb-2">
+                            A script built with Python and Beautiful Soup to collect pricing data from e-commerce sites, used for market analysis and price monitoring.
+                        </p>
+                         <a href="#" class="text-blue-400 font-medium hover:text-blue-300 text-sm">
+                            View on GitHub &rarr;
+                        </a>
+                    </div>
                 </div>
             </section>
+            
+            <!-- NEW SECTION: Awards -->
+            <section id="awards" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Awards & Recognition</h2>
+                <div class="space-y-4 text-lg text-gray-400">
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>**[Award Name]** (20XX) &mdash; Awarded for [brief description of achievement].</li>
+                        <li>**[Competition Name] Finalist** (20XX) &mdash; Recognised among the top X% for [project/skill].</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- NEW SECTION: Leadership & Community Contributions -->
+            <section id="leadership" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Leadership & Community Contributions</h2>
+                <div class="space-y-4 text-lg text-gray-400">
+                    <!-- Contribution Entry 1 -->
+                    <div class="section-item">
+                        <h3 class="text-xl font-semibold text-white">[Club/Role Title, e.g., Head of Robotics Team]</h3>
+                        <p class="text-indigo-400 font-medium">[Organization Name]</p>
+                        <p class="text-sm text-gray-500">20XX &mdash; 20XX</p>
+                        <p class="text-gray-400 mt-2">Managed a team of X members to deliver [project outcome]. Developed training material for new members.</p>
+                    </div>
+                    <!-- Contribution Entry 2 -->
+                     <div class="section-item opacity-80">
+                        <h3 class="text-xl font-semibold text-white">Volunteer [Role]</h3>
+                        <p class="text-indigo-400 font-medium">[Community Group]</p>
+                        <p class="text-sm text-gray-500">20XX &mdash; Present</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- NEW SECTION: Activities and Interests -->
+            <section id="interests" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-indigo-400 pb-2">Activities and Interests</h2>
+                <div class="space-y-4 text-lg text-gray-400">
+                    <p>Outside of technical work, I enjoy [Hobby 1], which helps me [Skill gained/related attribute]. I also have a strong interest in [Hobby 2] and [Hobby 3].</p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Chess (Ranked)</span>
+                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Competitive Programming</span>
+                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">3D Printing</span>
+                    </div>
+                </div>
+            </section>
+            
 
         </main>
         
@@ -179,7 +292,7 @@
                         Email
                     </a>
                 </div>
-                <p class="mt-6 text-xs text-gray-500">&copy; 2024 [Your Name]. Built with HTML and Tailwind CSS.</p>
+                <p class="mt-6 text-xs text-gray-500">&copy; 2024 Chu Kai Le. Built with HTML and Tailwind CSS.</p>
             </div>
         </footer>
 
