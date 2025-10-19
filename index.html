@@ -45,8 +45,7 @@
 
         /* 3. APPLY CUSTOM COLOR TO HERO SECTION */
         .hero-section {
-            /* This static background is removed so the animated-bg class takes effect when added to the header HTML */
-            /* background: linear-gradient(135deg, var(--primary-accent), #5b21b6); */ 
+            /* Kept blank for animated-bg class to take effect */
         }
 
         /* 4. APPLY CUSTOM COLOR TO PROJECT CARD BORDERS */
@@ -66,6 +65,7 @@
 <body>
 
     <!-- Main Container - Setting overall light text color for dark mode -->
+    <!-- This is the DIV that was being closed prematurely -->
     <div class="min-h-screen text-gray-200">
 
         <!-- Header/Hero Section (Animated Background) -->
@@ -84,7 +84,7 @@
             </div>
         </header>
 
-        <!-- Main Content Area -->
+        <!-- Main Content Area: max-w-4xl ensures content remains centered and contained -->
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
 
             <!-- About Section (Existing) -->
@@ -117,6 +117,7 @@
                         <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
                             <li>Graduated with a NUS High Diploma (High Distinction), Overall CAP: 4.5 / A-</li>
                             <li>Major CAP: Chemistry - 4.9 / A+, Mathematics - 4.9 / A+, Physics - 4.6 / A</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -170,6 +171,7 @@
                         <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
                            <li><span class="font-semibold text-white">High-Volume Order Fulfillment</span>: Managed the accurate picking, packing, and sorting of large order volumes, including the manual loading and integration of packaged goods into automated processing machinery.</li>
                            <li><span class="font-semibold text-white">Supply Chain Coordination</span>: Served as the primary liaison between the warehouse and external logistics partners, coordinating inbound and outbound freight appointments and resolving delivery discrepancies on behalf of management.</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -223,6 +225,9 @@
                         <span class="px-4 py-1 bg-green-900 text-green-300 rounded-full text-sm font-medium">Intermediate Python (DataCamp)</span>
                     </div>
                 </div>
+                <!-- The following block contained redundant heading/divs, causing the layout break. 
+                     I've merged the Operational Certifications into a single clean block. -->
+                <div class="mb-8">
                     <h3 class="text-xl font-semibold text-white mb-3">Operational Certifications</h3>
                     <div class="flex flex-wrap gap-3">
                         <!-- Operational Certs -->
@@ -245,7 +250,11 @@
                             <h3 class="text-xl sm:text-2xl font-semibold text-white">
                                 Algorithmic Ranking System for Manga
                             </h3>
-                            <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Python</span>
+                            <!-- Succint Badges from previous exchange applied -->
+                            <div class="flex space-x-2">
+                                <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Quantitative Modeling</span>
+                                <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Python Data Automation</span>
+                            </div>
                         </div>
                         
                         <p class="text-gray-400 mb-4">
@@ -264,11 +273,17 @@
                             <h3 class="text-xl sm:text-2xl font-semibold text-white">
                                 Scrabble Word Validity Trainer
                             </h3>
-                            <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">JavaScript/Generative AI</span>
+                            <!-- Succint Badges from previous exchange applied -->
+                            <div class="flex space-x-2">
+                                <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Generative AI / LLM</span>
+                                <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Asynchronous JS</span>
+                            </div>
                         </div>
                         
+                        <!-- FIX: Added missing closing </p> tag here -->
                         <p class="text-gray-400 mb-4">
                             Place holder text for what i did with this
+                        </p>
                         
                         <div class="flex space-x-4">
                             <a href="https://github.com/kaishx/Manga-Rater" class="text-indigo-400 hover:text-indigo-300 font-medium">
@@ -287,6 +302,7 @@
                         
                         <p class="text-gray-400 mb-4">
                             Place holder text for what i did with this
+                        </p>
                         
                         <div class="flex space-x-4">
                             <a href="https://github.com/kaishx/Manga-Rater" class="text-indigo-400 hover:text-indigo-300 font-medium">
@@ -300,11 +316,12 @@
                             <h3 class="text-xl sm:text-2xl font-semibold text-white">
                                 Fusion360 Modelling Project for DND Figurine
                             </h3>
-                            <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Pandas/Numpy</span>
+                            <span class="text-sm font-medium text-white bg-purple-600 rounded-full px-3 py-1">Fusion 360 / CAD</span>
                         </div>
                         
                         <p class="text-gray-400 mb-4">
                             Place holder text for what i did with this
+                        </p>
                         
                         <div class="flex space-x-4">
                             <a href="https://github.com/kaishx/Manga-Rater" class="text-indigo-400 hover:text-indigo-300 font-medium">
@@ -327,18 +344,18 @@
                         <p class="text-gray-400 mb-2">
                             *Add description of your next project here (e.g., a React component or data visualization).*
                         </p>
-                         <a href="#" class="text-blue-400 font-medium hover:text-blue-300 text-sm">
+                        <a href="#" class="text-blue-400 font-medium hover:text-blue-300 text-sm">
                             Link to Project &rarr;
                         </a>
                     </div>
                     
                     <!-- Placeholder 2 -->
                     <div class="section-item opacity-80">
-                         <h3 class="text-xl font-semibold text-white">Automated Data Scraper</h3>
+                        <h3 class="text-xl font-semibold text-white">Automated Data Scraper</h3>
                         <p class="text-gray-400 mb-2">
                             A script built with Python and Beautiful Soup to collect pricing data from e-commerce sites, used for market analysis and price monitoring.
                         </p>
-                         <a href="#" class="text-blue-400 font-medium hover:text-blue-300 text-sm">
+                        <a href="#" class="text-blue-400 font-medium hover:text-blue-300 text-sm">
                             View on GitHub &rarr;
                         </a>
                     </div>
@@ -368,7 +385,7 @@
                         <p class="text-gray-400 mt-2">Managed a team of X members to deliver [project outcome]. Developed training material for new members.</p>
                     </div>
                     <!-- Contribution Entry 2 -->
-                     <div class="section-item opacity-80">
+                    <div class="section-item opacity-80">
                         <h3 class="text-xl font-semibold text-white">Volunteer [Role]</h3>
                         <p class="text-indigo-400 font-medium">[Community Group]</p>
                         <p class="text-sm text-gray-500">20XX &mdash; Present</p>
