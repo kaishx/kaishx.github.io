@@ -43,7 +43,7 @@
     <!-- Main Container - Setting overall light text color for dark mode -->
 <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
 
-  <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black/0 z-0"></div>
+  <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black z-0"></div>
 
   <div class="absolute inset-0 floor">
     </div>
@@ -96,9 +96,6 @@
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
 
-    /* ❌ REMOVED: .horizon-line CSS is gone */
-
-
     /* === LAYER 1: STATIC Vertical Lines (NOW INCLUDES STATIC HORIZON LINE) === */
     .floor::before {
       /* Vertical Lines: repeating-linear-gradient */
@@ -109,12 +106,12 @@
           transparent var(--line-width),
           transparent var(--v-line-spacing)
         ),
-        /* 🟢 FIX: STATIC HORIZON LINE: simple linear-gradient for the top edge */
+        /* STATIC HORIZON LINE: simple linear-gradient for the top edge */
         linear-gradient(
           to bottom,
           var(--grid-line-color) 0,
           var(--grid-line-color) var(--line-width),
-          transparent var(--line-width) /* The line fades to transparent after its thickness */
+          transparent var(--line-width)
         );
         
       /* Set background sizes for both images: V-lines repeat, H-line does not */
