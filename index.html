@@ -84,91 +84,93 @@
   </div>
 
   <style>
-    /* 🔴 Synthwave Color Palette */
-    :root {
-      --synth-red-strong: #FF1A1A;
-      --synth-red-medium: #FF4D4D;
-      --synth-red-light: #FF6666;
-      --line-width: 2px;
-    }
+  /* 🔴 Synthwave Color Palette */
+  :root {
+    --synth-red-strong: #FF1A1A;
+    --synth-red-medium: #FF4D4D;
+    --synth-red-light: #FF6666;
+    --line-width: 2px;
+    --h-line-spacing: 52px; /* Horizontal line spacing (road stripes) */
+    --v-line-spacing: 10%; /* Vertical line spacing (lanes) */
+  }
 
-    /* --- Perspective Container (The Road) --- */
-    .floor {
-      /* This is the key to the 3D 'driving' effect */
-      perspective: 600px;
-      perspective-origin: 50% 100%; /* Vanishing point at the bottom center */
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      /* Add the pseudo-element grid */
-      --grid-scale: 2; /* Adjust this to make lines closer/further */
-    }
+  /* --- Perspective Container (The Road) --- */
+  .floor {
+    perspective: 600px;
+    perspective-origin: 50% 100%; 
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 
-    /* Using a pseudo-element to generate the grid */
-    .floor::before {
-      content: '';
-      position: absolute;
-      /* Starts from the bottom */
-      top: 0;
-      left: -50%;
-      width: 200%; /* Wider width to ensure side lines are covered when perspective distorts */
-      height: 400%; /* Taller height to ensure lines start far and move close */
-      background-image: repeating-linear-gradient(
-          to right, 
-          transparent 0, 
-          transparent calc(10% - var(--line-width)), 
-          var(--synth-red-medium) calc(10% - var(--line-width)), 
-          var(--synth-red-medium) 10%
-        ), 
-        repeating-linear-gradient(
-          to bottom, 
-          transparent 0, 
-          transparent 50px, 
-          var(--synth-red-medium) 50px, 
-          var(--synth-red-medium) 52px /* Creates horizontal line every 52px */
-        );
-      background-size: 10% 52px, 100% 52px;
-      
-      /* Apply 3D transform */
-      transform: rotateX(70deg) translateZ(-100px); /* Adjust rotation for a better road angle */
-      transform-origin: 50% 100%;
+  /* Using a pseudo-element to generate the grid */
+  .floor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%; 
+    height: 400%; 
+    opacity: 0.7;
+    
+    /* === FIX: Define both vertical (V) and horizontal (H) gradients in one property === */
+    background-image: 
+      /* V-Lines: Vertical lines spaced every 10% */
+      repeating-linear-gradient(
+        to right, 
+        transparent 0, 
+        transparent calc(var(--v-line-spacing) - var(--line-width)), 
+        var(--synth-red-medium) calc(var(--v-line-spacing) - var(--line-width)), 
+        var(--synth-red-medium) var(--v-line-spacing)
+      ), 
+      /* H-Lines: Horizontal lines spaced every 52px */
+      repeating-linear-gradient(
+        to bottom, 
+        transparent 0, 
+        transparent calc(var(--h-line-spacing) - var(--line-width)), 
+        var(--synth-red-medium) calc(var(--h-line-spacing) - var(--line-width)), 
+        var(--synth-red-medium) var(--h-line-spacing)
+      );
 
-      /* Animation for moving forward */
-      animation: driveGrid 2s linear infinite;
-      
-      opacity: 0.7;
-    }
+    /* === FIX: Set background size for the V-lines and H-lines === */
+    background-size: var(--v-line-spacing) 100%, 100% var(--h-line-spacing);
 
-    /* The "Driving" Animation */
-    @keyframes driveGrid {
-      0% {
-        /* Move the background position down by one unit (52px) */
-        background-position: 0 0, 0 0;
-      }
-      100% {
-        /* Move the background position down by one unit (52px) */
-        background-position: 0 52px, 0 52px;
-      }
-    }
+    /* Apply 3D transform */
+    transform: rotateX(70deg) translateZ(-100px); 
+    transform-origin: 50% 100%;
 
-    /* --- Neon Effects --- */
+    /* Animation for moving forward */
+    animation: driveGrid 2s linear infinite;
+  }
 
-    /* Neon text */
-    .neon-text {
-      text-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
+  /* The "Driving" Animation */
+  @keyframes driveGrid {
+    0% {
+      /* Background position for V-lines is 0, H-lines is 0 */
+      background-position: 0 0, 0 0;
     }
+    100% {
+      /* Background position for V-lines is 0 (no vertical movement), H-lines moves 52px */
+      background-position: 0 0, 0 var(--h-line-spacing);
+    }
+  }
 
-    /* Neon Button */
-    .neon-button {
-      box-shadow: 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
-      transition: all 0.3s ease-in-out;
-    }
-    .neon-button:hover {
-      box-shadow: 0 0 16px var(--synth-red-strong), 0 0 32px var(--synth-red-medium), 0 0 48px var(--synth-red-light);
-      transform: scale(1.05); /* Added slight scale for extra punch */
-    }
-  </style>
+  /* --- Neon Effects (Kept the same) --- */
+
+  .neon-text {
+    text-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
+  }
+
+  .neon-button {
+    box-shadow: 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
+    transition: all 0.3s ease-in-out;
+  }
+  .neon-button:hover {
+    box-shadow: 0 0 16px var(--synth-red-strong), 0 0 32px var(--synth-red-medium), 0 0 48px var(--synth-red-light);
+    transform: scale(1.05); 
+  }
+</style>
 </header>
 
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
