@@ -115,30 +115,32 @@
       overflow: visible;
     }
 
-    /* Vertical lines: converging to horizon */
+    /* Vertical lines: converge toward horizon */
     .vline {
       position: absolute;
       bottom: 0;
       width: 2px;
       height: 200%;
-      background: rgba(255, 0, 255, 0.7);
+      background: rgba(255,0,0,0.8);
       transform-origin: bottom center;
-      transform: translateX(0) scaleY(0.5) skewY(-45deg);
-      animation: stretchLines 2s linear infinite;
+      /* rotate toward horizon: smaller scale near horizon */
+      transform: rotateX(60deg) translateZ(0);
+      animation: vlinePulse 2s ease-in-out infinite alternate;
     }
 
-    @keyframes stretchLines {
-      0% { transform: translateX(0) scaleY(0.5) skewY(-45deg); }
-      100% { transform: translateX(0) scaleY(1.2) skewY(-45deg); }
+    @keyframes vlinePulse {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
     }
 
-    /* Horizontal lines: moving forward */
+    /* Horizontal lines: move forward */
     .hline {
       position: absolute;
       left: 0;
       width: 100%;
       height: 2px;
-      background: rgba(255, 0, 255, 0.6);
+      background: rgba(255,0,0,0.7);
       transform-origin: center bottom;
       animation: moveForward 1.5s linear infinite;
     }
@@ -165,6 +167,7 @@
   </style>
 
 </header>
+
 
 
 
