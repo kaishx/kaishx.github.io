@@ -61,37 +61,12 @@
 <body>
 
     <!-- Main Container - Setting overall light text color for dark mode -->
-    <div class="min-h-screen text-gray-200">
-
-       <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
+    <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
 
   <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black/0 z-0"></div>
 
   <div class="absolute inset-0 floor">
-
-    <div class="vline" style="left:10%;"></div>
-    <div class="vline" style="left:20%;"></div>
-    <div class="vline" style="left:30%;"></div>
-    <div class="vline" style="left:40%;"></div>
-    <div class="vline" style="left:50%;"></div>
-    <div class="vline" style="left:60%;"></div>
-    <div class="vline" style="left:70%;"></div>
-    <div class="vline" style="left:80%;"></div>
-    <div class="vline" style="left:90%;"></div>
-
-    <div class="hline"></div>
-    <div class="hline" style="animation-delay: -0.1s;"></div>
-    <div class="hline" style="animation-delay: -0.2s;"></div>
-    <div class="hline" style="animation-delay: -0.3s;"></div>
-    <div class="hline" style="animation-delay: -0.4s;"></div>
-    <div class="hline" style="animation-delay: -0.5s;"></div>
-    <div class="hline" style="animation-delay: -0.6s;"></div>
-    <div class="hline" style="animation-delay: -0.7s;"></div>
-    <div class="hline" style="animation-delay: -0.8s;"></div>
-    <div class="hline" style="animation-delay: -0.9s;"></div>
-    <div class="hline" style="animation-delay: -1.0s;"></div>
-
-  </div>
+    </div>
 
   <div class="relative z-10 max-w-4xl px-6 text-center text-red-200 drop-shadow-lg">
     <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight neon-text">Chu Kai Le</h1>
@@ -110,70 +85,72 @@
       --synth-red-medium: #FF4D4D;
       --synth-red-light: #FF6666;
       --line-width: 2px;
+      --grid-line-color: rgba(255, 77, 77, 0.7); /* Red with opacity */
+      --v-line-spacing: 10%; /* Vertical line spacing */
+      --h-line-spacing: 40px; /* Horizontal line spacing */
     }
 
     /* --- Perspective Container (The Road) --- */
     .floor {
       perspective: 800px;
-      perspective-origin: 50% 100%;
+      perspective-origin: 50% 100%; /* Vanishing point at the bottom center */
       bottom: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
     }
-
-    /* Vertical lines */
-    .vline {
+    
+    /* === THE GRID (Generated with CSS) === */
+    .floor::before {
+      content: '';
       position: absolute;
       bottom: 0;
-      width: var(--line-width);
-      height: 100%;
-      background: var(--synth-red-strong);
-      opacity: 0.7;
-      transform: rotateX(70deg);
-      transform-origin: bottom center;
-      box-shadow: 0 0 5px var(--synth-red-strong), 0 0 10px var(--synth-red-medium);
-    }
-
-    /* Horizontal lines: FIX APPLIED HERE (Initial TOP position adjusted) */
-    .hline {
-      position: absolute;
       left: 0;
-      /* Adjusted START position to 10% down to ensure visibility */
-      top: 10%; 
       width: 100%;
-      height: var(--line-width);
-      background: var(--synth-red-medium);
+      height: 200%; /* Make it tall to allow for scrolling */
       
-      transform-origin: center center; 
-      transform: rotateX(70deg); 
-      
-      box-shadow: 0 0 5px var(--synth-red-medium), 0 0 10px var(--synth-red-light);
+      /* --- 1. The Grid Pattern --- */
+      background-image: 
+        /* Vertical Lines */
+        repeating-linear-gradient(
+          to right,
+          transparent,
+          transparent calc(var(--v-line-spacing) - var(--line-width)),
+          var(--grid-line-color) calc(var(--v-line-spacing) - var(--line-width)),
+          var(--grid-line-color) var(--v-line-spacing)
+        ),
+        /* Horizontal Lines */
+        repeating-linear-gradient(
+          to bottom,
+          transparent,
+          transparent calc(var(--h-line-spacing) - var(--line-width)),
+          var(--grid-line-color) calc(var(--h-line-spacing) - var(--line-width)),
+          var(--grid-line-color) var(--h-line-spacing)
+        );
 
-      /* Animation cycle defines position AND movement */
-      animation: moveForward 2s linear infinite; 
+      /* --- 2. Sizing for the gradients --- */
+      background-size: var(--v-line-spacing) 100%, 100% var(--h-line-spacing);
+      
+      /* --- 3. Position and 3D Transform --- */
+      transform-origin: bottom center; /* Rotate from the bottom */
+      transform: rotateX(70deg); /* Lay it flat */
+
+      /* --- 4. The Driving Animation --- */
+      animation: driveForward 1.2s linear infinite;
+
+      /* --- 5. Neon Glow --- */
+      filter: drop-shadow(0 0 4px var(--synth-red-medium));
     }
 
-    /* Keyframes for the 'driving' effect on horizontal lines: FULL CYCLE */
-    @keyframes moveForward {
+    /* Keyframes for the 'driving' effect */
+    @keyframes driveForward {
       0% {
-        /* Start: Far away, small, and dim (simulating distance) */
-        transform: rotateX(70deg) translateY(0%) scaleX(0.1);
-        opacity: 0;
-      }
-      5% {
-        /* Become visible just off-screen */
-        opacity: 0.8;
-      }
-      90% {
-        /* Move closer: Larger and brighter */
-        transform: rotateX(70deg) translateY(80vh) scaleX(2.5);
-        opacity: 0.8;
+        /* V-lines (x-pos), H-lines (y-pos) */
+        background-position: 0 0, 0 0;
       }
       100% {
-        /* End: Off-screen below the header, then cycle resets */
-        transform: rotateX(70deg) translateY(100vh) scaleX(3);
-        opacity: 0;
+        /* V-lines don't move. H-lines move by one space */
+        background-position: 0 0, 0 var(--h-line-spacing);
       }
     }
 
