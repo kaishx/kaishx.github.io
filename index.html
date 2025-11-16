@@ -46,7 +46,7 @@
   <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black/0 z-0"></div>
 
   <div class="absolute inset-0 floor">
-    <div class="horizon-line"></div> 
+    <div class="horizon-line"></div>
     </div>
 
   <div class="relative z-10 max-w-4xl px-6 text-center text-red-200 drop-shadow-lg">
@@ -60,26 +60,23 @@
   </div>
 
   <style>
-    body {
-        background-color: black;
-    }
     /* 🔴 Synthwave Color Palette */
     :root {
-      --synth-red-strong: #FF1A1A;
+      --synth-red-strong: #FF1A1A; /* Strongest Red */
       --synth-red-medium: #FF4D4D;
       --synth-red-light: #FF6666;
       
-      --line-width: 24px; /* Line thickness */
+      --line-width: 24px;
       --grid-line-color: rgba(255, 77, 77, 0.7);
       
-      --v-line-spacing: 160px; /* Vertical spacing */
-      --h-line-spacing: 140px; /* Horizontal spacing */
+      --v-line-spacing: 160px;
+      --h-line-spacing: 140px;
     }
 
     /* --- Perspective Container (The Road) --- */
     .floor {
-      perspective: 1600px; 
-      perspective-origin: 50% 100%; 
+      perspective: 1600px;
+      perspective-origin: 50% 100%;
       bottom: 0;
       width: 100%;
       height: 100%;
@@ -94,7 +91,7 @@
       position: absolute;
       bottom: 0;
       left: -100%;
-      width: 300%; 
+      width: 300%;
       height: 200%;
       transform-origin: bottom center;
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
@@ -103,18 +100,20 @@
     /* === PERMANENT HORIZON LINE FIX === */
     .horizon-line {
       position: absolute;
-      top: 66%; /* Starts at the top of the container */
+      top: 66%;
       left: -100%;
-      width: 300%; 
-      height: var(--line-width); 
+      width: 300%;
+      height: var(--line-width);
+      
+      /* 🟢 FIX 1: ADDED THE MISSING BACKGROUND COLOR */
+      background: var(--synth-red-strong); 
       
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
       
-      /* Apply the exact same 3D transforms */
       transform-origin: bottom center;
-      transform: rotateX(70deg); 
+      transform: rotateX(70deg);
       
-      z-index: 5; /* Ensure it draws over the grid layers */
+      z-index: 5;
     }
 
 
@@ -128,7 +127,7 @@
           transparent var(--v-line-spacing)
         );
       background-size: var(--v-line-spacing) 100%;
-      transform: rotateX(70deg); 
+      transform: rotateX(70deg);
     }
 
     /* === LAYER 2: MOVING Horizontal Lines === */
@@ -145,7 +144,7 @@
       animation: driveForward 0.7s linear infinite;
     }
 
-    /* Keyframes for the 'driving' effect (only on horizontal layer) */
+    /* Keyframes remain the same */
     @keyframes driveForward {
       0% {
         background-position: 0 0;
@@ -155,7 +154,7 @@
       }
     }
 
-    /* Neon text and button styles remain the same */
+    /* Neon styles remain the same */
     .neon-text {
       text-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
     }
