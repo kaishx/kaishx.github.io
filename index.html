@@ -82,12 +82,12 @@
 
     <!-- Horizontal lines -->
     <div class="hline" style="bottom:0;"></div>
-    <div class="hline" style="bottom:50px;"></div>
-    <div class="hline" style="bottom:100px;"></div>
-    <div class="hline" style="bottom:150px;"></div>
-    <div class="hline" style="bottom:200px;"></div>
-    <div class="hline" style="bottom:250px;"></div>
+    <div class="hline" style="bottom:60px;"></div>
+    <div class="hline" style="bottom:120px;"></div>
+    <div class="hline" style="bottom:180px;"></div>
+    <div class="hline" style="bottom:240px;"></div>
     <div class="hline" style="bottom:300px;"></div>
+    <div class="hline" style="bottom:360px;"></div>
 
   </div>
 
@@ -106,7 +106,6 @@
   </div>
 
   <style>
-    /* Floor container perspective */
     .floor {
       position: absolute;
       bottom: 0;
@@ -116,31 +115,38 @@
       overflow: visible;
     }
 
-    /* Vertical lines */
+    /* Vertical lines: converging to horizon */
     .vline {
       position: absolute;
       bottom: 0;
-      width: 3px; /* thicker */
-      height: 200%; /* extend to horizon */
-      background: rgba(255,0,0,0.8);
+      width: 2px;
+      height: 200%;
+      background: rgba(255, 0, 255, 0.7);
       transform-origin: bottom center;
-      transform: skewY(-30deg) scaleY(0.5); /* tilt lines toward horizon */
+      transform: translateX(0) scaleY(0.5) skewY(-45deg);
+      animation: stretchLines 2s linear infinite;
     }
 
-    /* Horizontal lines */
+    @keyframes stretchLines {
+      0% { transform: translateX(0) scaleY(0.5) skewY(-45deg); }
+      100% { transform: translateX(0) scaleY(1.2) skewY(-45deg); }
+    }
+
+    /* Horizontal lines: moving forward */
     .hline {
       position: absolute;
       left: 0;
       width: 100%;
-      height: 3px; /* thicker */
-      background: rgba(255,0,0,0.8);
-      transform-origin: bottom center;
-      animation: moveForward 2s linear infinite;
+      height: 2px;
+      background: rgba(255, 0, 255, 0.6);
+      transform-origin: center bottom;
+      animation: moveForward 1.5s linear infinite;
     }
 
     @keyframes moveForward {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(50px); }
+      0% { transform: translateY(0) scaleX(1); opacity: 0.6; }
+      50% { transform: translateY(50%) scaleX(1.5); opacity: 0.9; }
+      100% { transform: translateY(100%) scaleX(2); opacity: 0; }
     }
 
     /* Neon text */
