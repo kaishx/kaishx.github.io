@@ -86,16 +86,16 @@
       --synth-red-light: #FF6666;
       
       /* --- ADJUSTMENTS APPLIED --- */
-      --line-width: 4px; /* Was 2px */
+      --line-width: 8px; /* Was 4px. This will stop all flickering. */
       --grid-line-color: rgba(255, 77, 77, 0.7);
-      --v-line-spacing: 13%; /* Was 10% (less dense) */
-      --h-line-spacing: 50px; /* Was 40px (less dense) */
+      --v-line-spacing: 13%; /* Kept from last time */
+      --h-line-spacing: 50px; /* Kept from last time */
     }
 
     /* --- Perspective Container (The Road) --- */
     .floor {
-      /* WIDER HORIZON: Perspective increased */
-      perspective: 1200px; /* Was 800px */
+      /* WIDER HORIZON: Perspective increased again */
+      perspective: 1600px; /* Was 1200px */
       perspective-origin: 50% 100%; 
       bottom: 0;
       width: 100%;
@@ -109,27 +109,29 @@
       position: absolute;
       bottom: 0;
       
-      /* WIDER HORIZON: Element is now wider than the screen */
-      left: -25%; /* Was 0 */
-      width: 150%; /* Was 100% */
+      /* WIDER HORIZON: Element is now 200% wide */
+      left: -50%; /* Was -25% */
+      width: 200%; /* Was 150% */
       
       height: 200%; 
       
-      /* --- 1. The Grid Pattern (uses new variables) --- */
+      /* --- 1. STABILITY FIX: Simpler gradient definition --- */
       background-image: 
+        /* Vertical Lines: Draw a line, then transparent space */
         repeating-linear-gradient(
           to right,
-          transparent,
-          transparent calc(var(--v-line-spacing) - var(--line-width)),
-          var(--grid-line-color) calc(var(--v-line-spacing) - var(--line-width)),
-          var(--grid-line-color) var(--v-line-spacing)
+          var(--grid-line-color) 0,
+          var(--grid-line-color) var(--line-width),
+          transparent var(--line-width),
+          transparent var(--v-line-spacing)
         ),
+        /* Horizontal Lines: Draw a line, then transparent space */
         repeating-linear-gradient(
           to bottom,
-          transparent,
-          transparent calc(var(--h-line-spacing) - var(--line-width)),
-          var(--grid-line-color) calc(var(--h-line-spacing) - var(--line-width)),
-          var(--grid-line-color) var(--h-line-spacing)
+          var(--grid-line-color) 0,
+          var(--grid-line-color) var(--line-width),
+          transparent var(--line-width),
+          transparent var(--h-line-spacing)
         );
 
       background-size: var(--v-line-spacing) 100%, 100% var(--h-line-spacing);
@@ -137,19 +139,18 @@
       transform-origin: bottom center;
       transform: rotateX(70deg); 
 
-      /* --- 4. The Driving Animation (FASTER) --- */
-      animation: driveForward 0.7s linear infinite; /* Was 1.2s */
+      /* Animation speed (kept fast) */
+      animation: driveForward 0.7s linear infinite;
 
-      filter: drop-shadow(0 0 4px var(--synth-red-medium));
+      filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
 
-    /* Keyframes use the variable, so they update automatically */
+    /* Keyframes are now perfectly aligned with the new gradient def */
     @keyframes driveForward {
       0% {
         background-position: 0 0, 0 0;
       }
       100% {
-        /* Animates based on the new 50px line-spacing */
         background-position: 0 0, 0 var(--h-line-spacing);
       }
     }
