@@ -19,26 +19,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #0f0f0f; /* bg of whole page */
         }
-        
-        /* header animation */
-        .animated-bg {
-            background-color: ##4f0404; 
-            background: linear-gradient(
-                -30deg, 
-                #0a0a0a, 
-                #242424, 
-                #979797, 
-                #f5f5f5  
-            );
-            background-size: 400% 400%;
-            animation: gradient-animation 8s ease infinite;
-        }
-
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
 
         /* hero section */
         .hero-section {
@@ -120,13 +100,13 @@
     /* === PERMANENT HORIZON LINE FIX === */
     .horizon-line {
       position: absolute;
-      top: 60%; /* Starts at the top of the container */
+      top: 65%; /* Starts at the top of the container */
       left: -100%;
       width: 300%; 
       height: var(--line-width); 
       
       background: var(--synth-red-strong);
-      filter: drop-shadow(0 0 8px var(--synth-red-strong));
+      filter: drop-shadow(0 0 8px var(--synth-red-medium));
       
       /* Apply the exact same 3D transforms */
       transform-origin: bottom center;
