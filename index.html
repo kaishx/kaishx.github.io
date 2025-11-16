@@ -64,18 +64,50 @@
     <div class="min-h-screen text-gray-200">
 
         <!-- header section -->
-        <header class="hero-section animated-bg text-white py-16 sm:py-24 shadow-lg">
-            <div class="max-w-4xl mx-auto px-6 text-center">
+        <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden shadow-lg">
+        
+            <!-- Animated Red Horizon Grid -->
+            <div class="absolute inset-0">
+                <div class="w-full h-full grid-background animate-grid"></div>
+            </div>
+        
+            <!-- Translucent Black Overlay -->
+            <div class="absolute inset-0 bg-black/60"></div>
+        
+            <!-- Hero Content -->
+            <div class="relative z-10 max-w-4xl mx-auto px-6 text-center text-red-200">
                 <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight">
                     Chu Kai Le
                 </h1>
                 <p class="text-lg sm:text-2xl font-light opacity-90">
-                    Pre-Univerity Student | Engineering Undergraduate
+                    Pre-University Student | Engineering Undergraduate
                 </p>
-                <a href="#projects" class="mt-8 inline-block bg-white text-red-700 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition duration-300">
+                <a href="#projects" class="mt-8 inline-block bg-red-700/80 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-red-600 transition duration-300">
                     View My Projects
                 </a>
             </div>
+        
+            <!-- Grid Animation Styles -->
+            <style>
+                .grid-background {
+                    position: absolute;
+                    width: 200%;
+                    height: 200%;
+                    background-image: 
+                        linear-gradient(0deg, transparent 49%, rgba(255,0,0,0.3) 50%, transparent 51%),
+                        linear-gradient(90deg, transparent 49%, rgba(255,0,0,0.3) 50%, transparent 51%);
+                    background-size: 50px 50px;
+                }
+        
+                @keyframes gridAnimation {
+                    0% { transform: translateX(0) translateY(0); }
+                    100% { transform: translateX(-50px) translateY(-50px); }
+                }
+        
+                .animate-grid {
+                    animation: gridAnimation 5s linear infinite;
+                }
+            </style>
         </header>
 
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
