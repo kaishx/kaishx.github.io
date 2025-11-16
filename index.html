@@ -66,35 +66,13 @@
         <!-- header section -->
         <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
 
-  <!-- Floor Grid -->
+  <div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-red-900/60 to-black/0 z-0"></div>
+
   <div class="absolute inset-0 floor">
+    </div>
 
-    <!-- Vertical lines -->
-    <div class="vline" style="left:10%;"></div>
-    <div class="vline" style="left:20%;"></div>
-    <div class="vline" style="left:30%;"></div>
-    <div class="vline" style="left:40%;"></div>
-    <div class="vline" style="left:50%;"></div>
-    <div class="vline" style="left:60%;"></div>
-    <div class="vline" style="left:70%;"></div>
-    <div class="vline" style="left:80%;"></div>
-    <div class="vline" style="left:90%;"></div>
-
-    <!-- Horizontal lines -->
-    <div class="hline" style="bottom:0;"></div>
-    <div class="hline" style="bottom:60px;"></div>
-    <div class="hline" style="bottom:120px;"></div>
-    <div class="hline" style="bottom:180px;"></div>
-    <div class="hline" style="bottom:240px;"></div>
-    <div class="hline" style="bottom:300px;"></div>
-    <div class="hline" style="bottom:360px;"></div>
-
-  </div>
-
-  <!-- Overlay -->
   <div class="absolute inset-0 bg-black/30"></div>
 
-  <!-- Hero Content -->
   <div class="relative z-10 max-w-4xl px-6 text-center text-red-200 drop-shadow-lg">
     <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight neon-text">Chu Kai Le</h1>
     <p class="text-lg sm:text-2xl font-light opacity-90 neon-text">
@@ -106,70 +84,92 @@
   </div>
 
   <style>
+    /* 🔴 Synthwave Color Palette */
+    :root {
+      --synth-red-strong: #FF1A1A;
+      --synth-red-medium: #FF4D4D;
+      --synth-red-light: #FF6666;
+      --line-width: 2px;
+    }
+
+    /* --- Perspective Container (The Road) --- */
     .floor {
-      position: absolute;
+      /* This is the key to the 3D 'driving' effect */
+      perspective: 600px;
+      perspective-origin: 50% 100%; /* Vanishing point at the bottom center */
       bottom: 0;
       width: 100%;
       height: 100%;
-      perspective: 800px;
-      overflow: visible;
+      overflow: hidden;
+      /* Add the pseudo-element grid */
+      --grid-scale: 2; /* Adjust this to make lines closer/further */
     }
 
-    /* Vertical lines: converge toward horizon */
-    .vline {
+    /* Using a pseudo-element to generate the grid */
+    .floor::before {
+      content: '';
       position: absolute;
-      bottom: 0;
-      width: 2px;
-      height: 200%;
-      background: rgba(255,0,0,0.8);
-      transform-origin: bottom center;
-      /* rotate toward horizon: smaller scale near horizon */
-      transform: rotateX(60deg) translateZ(0);
-      animation: vlinePulse 2s ease-in-out infinite alternate;
+      /* Starts from the bottom */
+      top: 0;
+      left: -50%;
+      width: 200%; /* Wider width to ensure side lines are covered when perspective distorts */
+      height: 400%; /* Taller height to ensure lines start far and move close */
+      background-image: repeating-linear-gradient(
+          to right, 
+          transparent 0, 
+          transparent calc(10% - var(--line-width)), 
+          var(--synth-red-medium) calc(10% - var(--line-width)), 
+          var(--synth-red-medium) 10%
+        ), 
+        repeating-linear-gradient(
+          to bottom, 
+          transparent 0, 
+          transparent 50px, 
+          var(--synth-red-medium) 50px, 
+          var(--synth-red-medium) 52px /* Creates horizontal line every 52px */
+        );
+      background-size: 10% 52px, 100% 52px;
+      
+      /* Apply 3D transform */
+      transform: rotateX(70deg) translateZ(-100px); /* Adjust rotation for a better road angle */
+      transform-origin: 50% 100%;
+
+      /* Animation for moving forward */
+      animation: driveGrid 2s linear infinite;
+      
+      opacity: 0.7;
     }
 
-    @keyframes vlinePulse {
-      0% { opacity: 0.5; }
-      50% { opacity: 1; }
-      100% { opacity: 0.5; }
+    /* The "Driving" Animation */
+    @keyframes driveGrid {
+      0% {
+        /* Move the background position down by one unit (52px) */
+        background-position: 0 0, 0 0;
+      }
+      100% {
+        /* Move the background position down by one unit (52px) */
+        background-position: 0 52px, 0 52px;
+      }
     }
 
-    /* Horizontal lines: move forward */
-    .hline {
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: rgba(255,0,0,0.7);
-      transform-origin: center bottom;
-      animation: moveForward 1.5s linear infinite;
-    }
-
-    @keyframes moveForward {
-      0% { transform: translateY(0) scaleX(1); opacity: 0.6; }
-      50% { transform: translateY(50%) scaleX(1.5); opacity: 0.9; }
-      100% { transform: translateY(100%) scaleX(2); opacity: 0; }
-    }
+    /* --- Neon Effects --- */
 
     /* Neon text */
     .neon-text {
-      text-shadow: 0 0 4px #ff1a1a, 0 0 8px #ff1a1a, 0 0 16px #ff1a1a, 0 0 24px #ff4d4d;
+      text-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
     }
 
     /* Neon Button */
     .neon-button {
-      box-shadow: 0 0 8px #ff1a1a, 0 0 16px #ff4d4d, 0 0 24px #ff6666;
+      box-shadow: 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
       transition: all 0.3s ease-in-out;
     }
     .neon-button:hover {
-      box-shadow: 0 0 16px #ff1a1a, 0 0 32px #ff4d4d, 0 0 48px #ff6666;
+      box-shadow: 0 0 16px var(--synth-red-strong), 0 0 32px var(--synth-red-medium), 0 0 48px var(--synth-red-light);
+      transform: scale(1.05); /* Added slight scale for extra punch */
     }
   </style>
-
 </header>
-
-
-
 
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
 
