@@ -64,122 +64,112 @@
     <div class="min-h-screen text-gray-200">
 
         <!-- header section -->
-        <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden perspective-container">
+        <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+
+          <!-- Floor Grid -->
+          <div class="absolute inset-0 floor-grid">
+            <!-- Horizontal lines -->
+            <div class="line" style="top:10%;"></div>
+            <div class="line" style="top:20%;"></div>
+            <div class="line" style="top:30%;"></div>
+            <div class="line" style="top:40%;"></div>
+            <div class="line" style="top:50%;"></div>
+            <div class="line" style="top:60%;"></div>
+            <div class="line" style="top:70%;"></div>
+            <div class="line" style="top:80%;"></div>
+            <div class="line" style="top:90%;"></div>
         
-            <!-- Floor Grid -->
-            <div class="absolute inset-0 floor-grid">
-                <!-- Horizontal lines -->
-                <div class="grid-lines">
-                    <!-- We'll generate multiple lines for perspective -->
-                    <div class="line" style="top:10%;"></div>
-                    <div class="line" style="top:20%;"></div>
-                    <div class="line" style="top:30%;"></div>
-                    <div class="line" style="top:40%;"></div>
-                    <div class="line" style="top:50%;"></div>
-                    <div class="line" style="top:60%;"></div>
-                    <div class="line" style="top:70%;"></div>
-                    <div class="line" style="top:80%;"></div>
-                    <div class="line" style="top:90%;"></div>
-                </div>
+            <!-- Vertical lines -->
+            <div class="vline" style="left:10%;"></div>
+            <div class="vline" style="left:20%;"></div>
+            <div class="vline" style="left:30%;"></div>
+            <div class="vline" style="left:40%;"></div>
+            <div class="vline" style="left:50%;"></div>
+            <div class="vline" style="left:60%;"></div>
+            <div class="vline" style="left:70%;"></div>
+            <div class="vline" style="left:80%;"></div>
+            <div class="vline" style="left:90%;"></div>
+          </div>
         
-                <!-- Vertical lines -->
-                <div class="grid-verticals">
-                    <div class="vline" style="left:10%;"></div>
-                    <div class="vline" style="left:20%;"></div>
-                    <div class="vline" style="left:30%;"></div>
-                    <div class="vline" style="left:40%;"></div>
-                    <div class="vline" style="left:50%;"></div>
-                    <div class="vline" style="left:60%;"></div>
-                    <div class="vline" style="left:70%;"></div>
-                    <div class="vline" style="left:80%;"></div>
-                    <div class="vline" style="left:90%;"></div>
-                </div>
-            </div>
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-black/30"></div>
         
-            <!-- Translucent Overlay -->
-            <div class="absolute inset-0 bg-black/30"></div>
+          <!-- Hero Content -->
+          <div class="relative z-10 max-w-4xl mx-auto px-6 text-center text-red-200 drop-shadow-lg">
+              <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight neon-text">
+                  Chu Kai Le
+              </h1>
+              <p class="text-lg sm:text-2xl font-light opacity-90 neon-text">
+                  Pre-University Student | Engineering Undergraduate
+              </p>
+              <a href="#projects" class="mt-8 inline-block bg-red-700/80 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-red-600 transition duration-300 neon-button">
+                  View My Projects
+              </a>
+          </div>
         
-            <!-- Hero Content -->
-            <div class="relative z-10 max-w-4xl mx-auto px-6 text-center text-red-200 drop-shadow-lg">
-                <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight neon-text">
-                    Chu Kai Le
-                </h1>
-                <p class="text-lg sm:text-2xl font-light opacity-90 neon-text">
-                    Pre-University Student | Engineering Undergraduate
-                </p>
-                <a href="#projects" class="mt-8 inline-block bg-red-700/80 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-red-600 transition duration-300 neon-button">
-                    View My Projects
-                </a>
-            </div>
+          <style>
+            .floor-grid {
+              position: absolute;
+              bottom: -50%;  /* push grid down so it fills the view */
+              left: 0;
+              width: 100%;
+              height: 200%;
+              transform: rotateX(65deg);
+              transform-origin: bottom center;
+            }
         
-            <style>
-                /* Perspective container */
-                .perspective-container {
-                    perspective: 800px;
-                }
+            /* Horizontal lines */
+            .floor-grid .line {
+              position: absolute;
+              left: 0;
+              width: 100%;
+              height: 1px;
+              background: rgba(255,0,0,0.7);
+              animation: moveLines 4s linear infinite;
+            }
         
-                /* Floor grid container */
-                .floor-grid {
-                    position: absolute;
-                    bottom: 0;
-                    width: 200%;
-                    height: 200%;
-                    transform: rotateX(60deg) translateY(50%);
-                    transform-origin: bottom center;
-                    overflow: visible;
-                }
+            @keyframes moveLines {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(50px); }
+            }
         
-                /* Grid horizontal lines */
-                .grid-lines .line {
-                    position: absolute;
-                    left: 0;
-                    width: 100%;
-                    height: 1px;
-                    background: rgba(255,0,0,0.7);
-                    animation: moveLines 4s linear infinite;
-                }
+            /* Vertical lines */
+            .floor-grid .vline {
+              position: absolute;
+              top: 0;
+              height: 100%;
+              width: 1px;
+              background: rgba(255,0,0,0.7);
+              transform-origin: bottom center;
+              animation: moveVLines 4s linear infinite;
+            }
         
-                @keyframes moveLines {
-                    0% { transform: translateY(0); }
-                    100% { transform: translateY(50px); }
-                }
+            @keyframes moveVLines {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(50px); }
+            }
         
-                /* Grid vertical lines */
-                .grid-verticals .vline {
-                    position: absolute;
-                    top: 0;
-                    height: 100%;
-                    width: 1px;
-                    background: rgba(255,0,0,0.7);
-                    transform-origin: bottom center;
-                    animation: moveVLines 4s linear infinite;
-                }
+            /* Neon text */
+            .neon-text {
+              text-shadow: 
+                0 0 4px #ff1a1a,
+                0 0 8px #ff1a1a,
+                0 0 16px #ff1a1a,
+                0 0 24px #ff4d4d;
+            }
         
-                @keyframes moveVLines {
-                    0% { transform: scaleY(1) translateY(0); }
-                    100% { transform: scaleY(1) translateY(50px); }
-                }
+            /* Neon button */
+            .neon-button {
+              box-shadow: 0 0 8px #ff1a1a, 0 0 16px #ff4d4d, 0 0 24px #ff6666;
+              transition: all 0.3s ease-in-out;
+            }
         
-                /* Neon Text */
-                .neon-text {
-                    text-shadow: 
-                        0 0 4px #ff1a1a,
-                        0 0 8px #ff1a1a,
-                        0 0 16px #ff1a1a,
-                        0 0 24px #ff4d4d;
-                }
-        
-                /* Neon Button Glow */
-                .neon-button {
-                    box-shadow: 0 0 8px #ff1a1a, 0 0 16px #ff4d4d, 0 0 24px #ff6666;
-                    transition: all 0.3s ease-in-out;
-                }
-        
-                .neon-button:hover {
-                    box-shadow: 0 0 16px #ff1a1a, 0 0 32px #ff4d4d, 0 0 48px #ff6666;
-                }
-            </style>
+            .neon-button:hover {
+              box-shadow: 0 0 16px #ff1a1a, 0 0 32px #ff4d4d, 0 0 48px #ff6666;
+            }
+          </style>
         </header>
+
 
 
 
