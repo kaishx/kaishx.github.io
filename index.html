@@ -64,10 +64,10 @@
     <div class="min-h-screen text-gray-200">
 
         <!-- header section -->
-        <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+        <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden perspective-container">
         
             <!-- Animated Red Horizon Grid -->
-            <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden grid-perspective">
                 <div class="grid-background animate-grid"></div>
             </div>
         
@@ -89,28 +89,42 @@
         
             <!-- Grid & Neon Styles -->
             <style>
-                /* Glowing Red Grid */
+                /* Perspective Container */
+                .perspective-container {
+                    perspective: 800px; /* gives depth for the tilted grid */
+                }
+        
+                /* Grid Perspective Wrapper */
+                .grid-perspective {
+                    width: 100%;
+                    height: 100%;
+                    transform-style: preserve-3d;
+                }
+        
+                /* Glowing Red Horizon Grid */
                 .grid-background {
                     width: 200%;
                     height: 200%;
                     background-image: 
-                        linear-gradient(0deg, transparent 49%, rgba(255,0,0,0.5) 50%, transparent 51%),
-                        linear-gradient(90deg, transparent 49%, rgba(255,0,0,0.5) 50%, transparent 51%);
+                        linear-gradient(0deg, transparent 49%, rgba(255,0,0,0.7) 50%, transparent 51%),
+                        linear-gradient(90deg, transparent 49%, rgba(255,0,0,0.7) 50%, transparent 51%);
                     background-size: 50px 50px;
                     position: absolute;
-                    top: 0;
-                    left: 0;
-                    filter: drop-shadow(0 0 8px red) drop-shadow(0 0 16px red);
+                    bottom: 0;
+                    left: -50%;
+                    transform-origin: bottom center;
+                    transform: rotateX(60deg);
+                    filter: drop-shadow(0 0 8px #ff1a1a) drop-shadow(0 0 16px #ff4d4d);
                 }
         
-                /* Grid Animation (scrolling towards horizon) */
+                /* Grid Animation (moving towards horizon) */
                 @keyframes gridAnimation {
-                    0% { transform: translate(0, 0) perspective(600px) rotateX(0deg); }
-                    100% { transform: translate(-50px, -50px) perspective(600px) rotateX(15deg); }
+                    0% { transform: translateY(0) rotateX(60deg); }
+                    100% { transform: translateY(-200px) rotateX(60deg); }
                 }
         
                 .animate-grid {
-                    animation: gridAnimation 5s linear infinite;
+                    animation: gridAnimation 6s linear infinite;
                 }
         
                 /* Neon Text */
@@ -133,6 +147,7 @@
                 }
             </style>
         </header>
+
 
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
 
