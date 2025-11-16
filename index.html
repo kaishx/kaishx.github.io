@@ -63,8 +63,7 @@
     <!-- Main Container - Setting overall light text color for dark mode -->
     <div class="min-h-screen text-gray-200">
 
-        <!-- header section -->
-<header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
+       <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
 
   <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black/0 z-0"></div>
 
@@ -74,19 +73,23 @@
     <div class="vline" style="left:20%;"></div>
     <div class="vline" style="left:30%;"></div>
     <div class="vline" style="left:40%;"></div>
-    <div class="vline" style="left:50%;"></div>
+    <div class="vline" style="50%;"></div>
     <div class="vline" style="left:60%;"></div>
     <div class="vline" style="left:70%;"></div>
     <div class="vline" style="left:80%;"></div>
     <div class="vline" style="left:90%;"></div>
 
-    <div class="hline" style="bottom:0%;"></div>
-    <div class="hline" style="bottom:15%;"></div>
-    <div class="hline" style="bottom:30%;"></div>
-    <div class="hline" style="bottom:45%;"></div>
-    <div class="hline" style="bottom:60%;"></div>
-    <div class="hline" style="bottom:75%;"></div>
-    <div class="hline" style="bottom:90%;"></div>
+    <div class="hline"></div>
+    <div class="hline" style="animation-delay: -0.1s;"></div>
+    <div class="hline" style="animation-delay: -0.2s;"></div>
+    <div class="hline" style="animation-delay: -0.3s;"></div>
+    <div class="hline" style="animation-delay: -0.4s;"></div>
+    <div class="hline" style="animation-delay: -0.5s;"></div>
+    <div class="hline" style="animation-delay: -0.6s;"></div>
+    <div class="hline" style="animation-delay: -0.7s;"></div>
+    <div class="hline" style="animation-delay: -0.8s;"></div>
+    <div class="hline" style="animation-delay: -0.9s;"></div>
+    <div class="hline" style="animation-delay: -1.0s;"></div>
 
   </div>
 
@@ -132,44 +135,54 @@
       box-shadow: 0 0 5px var(--synth-red-strong), 0 0 10px var(--synth-red-medium);
     }
 
-    /* Horizontal lines: FIX APPLIED HERE */
+    /* Horizontal lines: CRITICAL FIX APPLIED HERE */
     .hline {
       position: absolute;
       left: 0;
+      /* Starts positioned far up the screen */
+      top: 0; 
       width: 100%;
       height: var(--line-width);
       background: var(--synth-red-medium);
       
       /* Apply the driving rotation statically */
-      transform: rotateX(70deg);
       transform-origin: center center; 
+      transform: rotateX(70deg); 
       
       box-shadow: 0 0 5px var(--synth-red-medium), 0 0 10px var(--synth-red-light);
 
-      /* Faster animation for better driving feel */
-      animation: moveForward 0.8s linear infinite; 
+      /* Animation cycle defines position AND movement */
+      animation: moveForward 2s linear infinite; 
     }
 
-    /* Keyframes for the 'driving' effect on horizontal lines: SIMPLIFIED */
+    /* Keyframes for the 'driving' effect on horizontal lines: FULL CYCLE */
     @keyframes moveForward {
       0% {
-        /* Start at its assigned 'bottom: X%' position */
-        transform: rotateX(70deg) translateY(0);
-        opacity: 0.2;
+        /* Start: Far away, small, and dim (simulating distance) */
+        transform: rotateX(70deg) translateY(0%) scaleX(0.1);
+        opacity: 0;
+      }
+      5% {
+        /* Become visible just off-screen */
+        opacity: 0.8;
+      }
+      90% {
+        /* Move closer: Larger and brighter */
+        transform: rotateX(70deg) translateY(80vh) scaleX(2.5);
+        opacity: 0.8;
       }
       100% {
-        /* Line moves from its start position to 200% down, then resets */
-        transform: rotateX(70deg) translateY(200%);
-        opacity: 0.8; 
+        /* End: Off-screen below the header, then cycle resets */
+        transform: rotateX(70deg) translateY(100vh) scaleX(3);
+        opacity: 0;
       }
     }
 
-    /* Neon text */
+    /* Neon text and button styles remain the same */
     .neon-text {
       text-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
     }
 
-    /* Neon Button */
     .neon-button {
       box-shadow: 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
       transition: all 0.3s ease-in-out;
