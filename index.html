@@ -96,16 +96,19 @@
       transform-origin: bottom center;
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
-
     .horizon-line {
       position: absolute;
-      top: 66.5%;
+      top: 66.6%;
       left: -100%;
       width: 300%;
       height: var(--line-width);
       
-      /* 🟢 FIX: Use the semi-transparent variable to match the grid lines */
-      background: var(--grid-line-color); 
+      /* 🟢 FIX: Define the line using a gradient to match rendering context */
+      background: linear-gradient(
+          to right, 
+          var(--grid-line-color) 0, 
+          var(--grid-line-color) 100%
+      ); 
       
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
       
