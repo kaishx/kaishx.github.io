@@ -73,7 +73,7 @@
     <div class="vline" style="left:20%;"></div>
     <div class="vline" style="left:30%;"></div>
     <div class="vline" style="left:40%;"></div>
-    <div class="vline" style="50%;"></div>
+    <div class="vline" style="left:50%;"></div>
     <div class="vline" style="left:60%;"></div>
     <div class="vline" style="left:70%;"></div>
     <div class="vline" style="left:80%;"></div>
@@ -122,7 +122,7 @@
       overflow: hidden;
     }
 
-    /* Vertical lines (working correctly) */
+    /* Vertical lines */
     .vline {
       position: absolute;
       bottom: 0;
@@ -135,17 +135,16 @@
       box-shadow: 0 0 5px var(--synth-red-strong), 0 0 10px var(--synth-red-medium);
     }
 
-    /* Horizontal lines: CRITICAL FIX APPLIED HERE */
+    /* Horizontal lines: FIX APPLIED HERE (Initial TOP position adjusted) */
     .hline {
       position: absolute;
       left: 0;
-      /* Starts positioned far up the screen */
-      top: 0; 
+      /* Adjusted START position to 10% down to ensure visibility */
+      top: 10%; 
       width: 100%;
       height: var(--line-width);
       background: var(--synth-red-medium);
       
-      /* Apply the driving rotation statically */
       transform-origin: center center; 
       transform: rotateX(70deg); 
       
