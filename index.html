@@ -85,73 +85,79 @@
       --synth-red-medium: #FF4D4D;
       --synth-red-light: #FF6666;
       
-      /* --- ADJUSTMENTS APPLIED --- */
-      --line-width: 8px; /* Was 4px. This will stop all flickering. */
+      --line-width: 8px; /* Kept thick to fight flicker */
       --grid-line-color: rgba(255, 77, 77, 0.7);
-      --v-line-spacing: 13%; /* Kept from last time */
-      --h-line-spacing: 50px; /* Kept from last time */
+      
+      /* --- FIXES APPLIED --- */
+      --v-line-spacing: 120px; /* FIXED pixel value for consistency */
+      --h-line-spacing: 50px; 
     }
 
     /* --- Perspective Container (The Road) --- */
     .floor {
-      /* WIDER HORIZON: Perspective increased again */
-      perspective: 1600px; /* Was 1200px */
+      perspective: 1600px; 
       perspective-origin: 50% 100%; 
       bottom: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
+      /* This is needed to manage the 3D layers */
+      transform-style: preserve-3d;
     }
     
-    /* === THE GRID (Generated with CSS) === */
-    .floor::before {
+    /* Common styles for both grid layers */
+    .floor::before,
+    .floor::after {
       content: '';
       position: absolute;
       bottom: 0;
-      
-      /* WIDER HORIZON: Element is now 200% wide */
-      left: -50%; /* Was -25% */
-      width: 200%; /* Was 150% */
-      
-      height: 200%; 
-      
-      /* --- 1. STABILITY FIX: Simpler gradient definition --- */
-      background-image: 
-        /* Vertical Lines: Draw a line, then transparent space */
-        repeating-linear-gradient(
+      left: -50%;
+      width: 200%;
+      height: 200%; /* Tall enough to scroll */
+      transform-origin: bottom center;
+      filter: drop-shadow(0 0 6px var(--synth-red-medium));
+    }
+
+    /* === LAYER 1: STATIC Vertical Lines === */
+    .floor::before {
+      background-image: repeating-linear-gradient(
           to right,
           var(--grid-line-color) 0,
           var(--grid-line-color) var(--line-width),
           transparent var(--line-width),
           transparent var(--v-line-spacing)
-        ),
-        /* Horizontal Lines: Draw a line, then transparent space */
-        repeating-linear-gradient(
+        );
+      background-size: var(--v-line-spacing) 100%;
+      
+      /* 3D Transform, but NO animation */
+      transform: rotateX(70deg); 
+    }
+
+    /* === LAYER 2: MOVING Horizontal Lines === */
+    .floor::after {
+      background-image: repeating-linear-gradient(
           to bottom,
           var(--grid-line-color) 0,
           var(--grid-line-color) var(--line-width),
           transparent var(--line-width),
           transparent var(--h-line-spacing)
         );
+      background-size: 100% var(--h-line-spacing);
 
-      background-size: var(--v-line-spacing) 100%, 100% var(--h-line-spacing);
-      
-      transform-origin: bottom center;
-      transform: rotateX(70deg); 
-
-      /* Animation speed (kept fast) */
+      /* 3D Transform AND animation */
+      transform: rotateX(70deg);
       animation: driveForward 0.7s linear infinite;
-
-      filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
 
-    /* Keyframes are now perfectly aligned with the new gradient def */
+    /* Keyframes for the 'driving' effect (only on horizontal layer) */
     @keyframes driveForward {
       0% {
-        background-position: 0 0, 0 0;
+        /* V-lines (x), H-lines (y) */
+        background-position: 0 0;
       }
       100% {
-        background-position: 0 0, 0 var(--h-line-spacing);
+        /* Move H-lines (y) by one full space */
+        background-position: 0 var(--h-line-spacing);
       }
     }
 
