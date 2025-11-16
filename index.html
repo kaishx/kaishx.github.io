@@ -64,30 +64,16 @@
     <div class="min-h-screen text-gray-200">
 
         <!-- header section -->
-        <<header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
+        <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
 
-  <!-- Synthwave Floor -->
-  <div class="absolute inset-0 floor">
-    <!-- Horizontal lines -->
-    <div class="hline" style="top:80%;"></div>
-    <div class="hline" style="top:65%;"></div>
-    <div class="hline" style="top:50%;"></div>
-    <div class="hline" style="top:35%;"></div>
-    <div class="hline" style="top:20%;"></div>
+  <!-- Synthwave Floor Grid -->
+  <div class="absolute inset-0 floor"></div>
 
-    <!-- Vertical lines -->
-    <div class="vline" style="left:10%;"></div>
-    <div class="vline" style="left:20%;"></div>
-    <div class="vline" style="left:30%;"></div>
-    <div class="vline" style="left:40%;"></div>
-    <div class="vline" style="left:50%;"></div>
-    <div class="vline" style="left:60%;"></div>
-    <div class="vline" style="left:70%;"></div>
-    <div class="vline" style="left:80%;"></div>
-  </div>
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/30"></div>
 
   <!-- Hero Content -->
-  <div class="relative z-10 text-center text-red-200 drop-shadow-lg">
+  <div class="relative z-10 max-w-4xl px-6 text-center text-red-200 drop-shadow-lg">
     <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 neon-text">Chu Kai Le</h1>
     <p class="text-lg sm:text-2xl font-light opacity-90 neon-text">
       Pre-University Student | Engineering Undergraduate
@@ -98,53 +84,41 @@
   </div>
 
   <style>
-    /* Floor perspective */
+    /* Floor grid using repeating linear gradients */
     .floor {
       position: absolute;
       bottom: 0;
-      width: 100%;
-      height: 100%;
-      perspective: 800px;
-      transform-style: preserve-3d;
-      overflow: visible;
-    }
-
-    .hline {
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: rgba(255,0,0,0.7);
-      transform: rotateX(70deg);
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-image:
+        linear-gradient(0deg, rgba(255,0,0,0.8) 3px, transparent 3px),
+        linear-gradient(90deg, rgba(255,0,0,0.8) 3px, transparent 3px);
+      background-size: 50px 50px;
+      transform: rotateX(60deg);
       transform-origin: bottom center;
-      animation: moveH 5s linear infinite;
+      filter: drop-shadow(0 0 8px #ff1a1a) drop-shadow(0 0 16px #ff4d4d);
+      animation: moveFloor 5s linear infinite;
     }
 
-    .vline {
-      position: absolute;
-      top: 0;
-      width: 1px;
-      height: 100%;
-      background: rgba(255,0,0,0.7);
-      transform-origin: bottom center;
-      transform: rotateX(70deg);
-      animation: moveV 5s linear infinite;
+    @keyframes moveFloor {
+      0% { background-position: 0 0; }
+      100% { background-position: -50px -50px; }
     }
 
-    @keyframes moveH {
-      0% { transform: rotateX(70deg) translateY(0); }
-      100% { transform: rotateX(70deg) translateY(50px); }
+    /* Neon Text */
+    .neon-text {
+      text-shadow: 0 0 4px #ff1a1a, 0 0 8px #ff1a1a, 0 0 16px #ff1a1a, 0 0 24px #ff4d4d;
     }
 
-    @keyframes moveV {
-      0% { transform: rotateX(70deg) translateY(0); }
-      100% { transform: rotateX(70deg) translateY(50px); }
+    /* Neon Button */
+    .neon-button {
+      box-shadow: 0 0 8px #ff1a1a, 0 0 16px #ff4d4d, 0 0 24px #ff6666;
+      transition: all 0.3s ease-in-out;
     }
-
-    /* Neon */
-    .neon-text { text-shadow: 0 0 4px #ff1a1a,0 0 8px #ff1a1a,0 0 16px #ff1a1a,0 0 24px #ff4d4d; }
-    .neon-button { box-shadow:0 0 8px #ff1a1a,0 0 16px #ff4d4d,0 0 24px #ff6666; transition: all 0.3s ease-in-out;}
-    .neon-button:hover { box-shadow:0 0 16px #ff1a1a,0 0 32px #ff4d4d,0 0 48px #ff6666;}
+    .neon-button:hover {
+      box-shadow: 0 0 16px #ff1a1a, 0 0 32px #ff4d4d, 0 0 48px #ff6666;
+    }
   </style>
 </header>
 
