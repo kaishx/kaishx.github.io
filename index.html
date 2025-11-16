@@ -97,16 +97,15 @@
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
 
-    /* === PERMANENT HORIZON LINE FIX === */
     .horizon-line {
       position: absolute;
-      top: 66%;
+      top: 66.5%;
       left: -100%;
       width: 300%;
       height: var(--line-width);
       
-      /* 🟢 FIX 1: ADDED THE MISSING BACKGROUND COLOR */
-      background: var(--synth-red-strong); 
+      /* 🟢 FIX: Use the semi-transparent variable to match the grid lines */
+      background: var(--grid-line-color); 
       
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
       
