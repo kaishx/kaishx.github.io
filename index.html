@@ -46,7 +46,6 @@
   <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black/0 z-0"></div>
 
   <div class="absolute inset-0 floor">
-    <div class="horizon-line"></div>
     </div>
 
   <div class="relative z-10 max-w-4xl px-6 text-center text-red-200 drop-shadow-lg">
@@ -62,7 +61,7 @@
   <style>
     /* 🔴 Synthwave Color Palette */
     :root {
-      --synth-red-strong: #FF1A1A; /* Strongest Red */
+      --synth-red-strong: #FF1A1A;
       --synth-red-medium: #FF4D4D;
       --synth-red-light: #FF6666;
       
@@ -96,43 +95,37 @@
       transform-origin: bottom center;
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
-    .horizon-line {
-      position: absolute;
-      top: 66.6%;
-      left: -100%;
-      width: 300%;
-      height: var(--line-width);
-      
-      /* 🟢 FIX: Define the line using a gradient to match rendering context */
-      background: linear-gradient(
-          to right, 
-          var(--grid-line-color) 0, 
-          var(--grid-line-color) 100%
-      ); 
-      
-      filter: drop-shadow(0 0 6px var(--synth-red-medium));
-      
-      transform-origin: bottom center;
-      transform: rotateX(70deg);
-      
-      z-index: 5;
-    }
+
+    /* ❌ REMOVED: .horizon-line CSS is gone */
 
 
-    /* === LAYER 1: STATIC Vertical Lines === */
+    /* === LAYER 1: STATIC Vertical Lines (NOW INCLUDES STATIC HORIZON LINE) === */
     .floor::before {
+      /* Vertical Lines: repeating-linear-gradient */
       background-image: repeating-linear-gradient(
           to right,
           var(--grid-line-color) 0,
           var(--grid-line-color) var(--line-width),
           transparent var(--line-width),
           transparent var(--v-line-spacing)
+        ),
+        /* 🟢 FIX: STATIC HORIZON LINE: simple linear-gradient for the top edge */
+        linear-gradient(
+          to bottom,
+          var(--grid-line-color) 0,
+          var(--grid-line-color) var(--line-width),
+          transparent var(--line-width) /* The line fades to transparent after its thickness */
         );
-      background-size: var(--v-line-spacing) 100%;
+        
+      /* Set background sizes for both images: V-lines repeat, H-line does not */
+      background-size: var(--v-line-spacing) 100%, 100% 100%; 
+
+      background-position: 0 0, 0 100px; /* Align H-line to the top */
+      
       transform: rotateX(70deg);
     }
 
-    /* === LAYER 2: MOVING Horizontal Lines === */
+    /* === LAYER 2: MOVING Horizontal Lines (No Change) === */
     .floor::after {
       background-image: repeating-linear-gradient(
           to bottom,
