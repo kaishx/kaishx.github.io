@@ -13,24 +13,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
         :root {
-            --primary-accent: #ff5858; /* accent color, change for different custom color */
+            --primary-accent: #ff5858; /* change this color to change accent color (the lines )*/
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f0f0f; /* bg of whole page */
+            background-color: #0f0f0f; /* change this color to change bg*/
         }
 
-        /* hero section */
         .hero-section {
         }
 
-        /* project card borders */
         .project-card-border {
             border-top-color: var(--primary-accent) !important;
         }
         
-        /* helper class for education/work sections */
         .section-item {
             background-color: #100000;
             padding: 1rem;
@@ -48,12 +45,10 @@
 <nav class="fixed top-0 left-0 w-full z-50 bg-[#1a0000]/90 border-b border-red-700 shadow-[0_0_20px_#ff1a1a]">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
 
-        <!-- Logo / Name -->
         <a href="#" class="text-red-400 font-extrabold text-xl tracking-wide hover:text-red-300 transition">
             kaishx.github.io
         </a>
 
-        <!-- Nav Links -->
         <div class="hidden md:flex space-x-8 text-gray-300 text-sm font-medium">
             <a href="#education" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Education</a>
             <a href="#research" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Research</a>
@@ -66,7 +61,7 @@
     </div>
 </nav>
 
-    <!-- Main Container - Setting overall light text color for dark mode -->
+<!-- dont edit the synthwave anymore it finally fucking works -->
 <header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
 
   <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black z-0"></div>
@@ -85,7 +80,6 @@
   </div>
 
   <style>
-    /* 🔴 Synthwave Color Palette */
     :root {
       --synth-red-strong: #FF1A1A;
       --synth-red-medium: #FF4D4D;
@@ -98,7 +92,6 @@
       --h-line-spacing: 140px;
     }
 
-    /* --- Perspective Container (The Road) --- */
     .floor {
       perspective: 1600px;
       perspective-origin: 50% 100%;
@@ -109,7 +102,6 @@
       transform-style: preserve-3d;
     }
     
-    /* Common styles for both grid layers */
     .floor::before,
     .floor::after {
       content: '';
@@ -121,10 +113,8 @@
       transform-origin: bottom center;
       filter: drop-shadow(0 0 6px var(--synth-red-medium));
     }
-
-    /* === LAYER 1: STATIC Vertical Lines (NOW INCLUDES STATIC HORIZON LINE) === */
+      
     .floor::before {
-      /* Vertical Lines: repeating-linear-gradient */
       background-image: repeating-linear-gradient(
           to right,
           var(--grid-line-color) 0,
@@ -132,7 +122,7 @@
           transparent var(--line-width),
           transparent var(--v-line-spacing)
         ),
-        /* STATIC HORIZON LINE: simple linear-gradient for the top edge */
+        /* static horizon line so that the vertical lines dont jut out when the newest one goes down, quick ez fix*/
         linear-gradient(
           to bottom,
           var(--grid-line-color) 0,
@@ -140,15 +130,13 @@
           transparent var(--line-width)
         );
         
-      /* Set background sizes for both images: V-lines repeat, H-line does not */
       background-size: var(--v-line-spacing) 100%, 100% 100%; 
 
-      background-position: 0 0, 0 0; /* Align H-line to the top */
+      background-position: 0 0, 0 0; 
       
       transform: rotateX(70deg);
     }
 
-    /* === LAYER 2: MOVING Horizontal Lines (No Change) === */
     .floor::after {
       background-image: repeating-linear-gradient(
           to bottom,
@@ -162,7 +150,6 @@
       animation: driveForward 0.7s linear infinite;
     }
 
-    /* Keyframes remain the same */
     @keyframes driveForward {
       0% {
         background-position: 0 0;
@@ -172,7 +159,6 @@
       }
     }
 
-    /* Neon styles remain the same */
     .neon-text {
       text-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-strong), 0 0 16px var(--synth-red-medium), 0 0 24px var(--synth-red-light);
     }
@@ -189,7 +175,7 @@
         
         <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
 
-            <!-- About -->
+            <!-- abiout section -->
             <section id="about" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">About Me</h2>
                 <div class="space-y-4 text-lg text-gray-400">
@@ -197,11 +183,11 @@
                 </div>
             </section>
             
-            <!-- Education -->
+            <!-- education section -->
             <section id="education" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Education</h2>
                 <div class="space-y-6">
-                    <!-- Education Entry 1 -->
+                    <!-- uni -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Incoming Engineering Undergraduate in 2026</h3>
                         <p class="text-red-400 font-medium">National University of Singapore (NUS)</p>
@@ -210,7 +196,7 @@
                                 <li>Mechanical Engineering with a Double Major in Computing, under the CDE Engineering Scholars Programme (accelerated 3-year B.Eng.).</li>
                         </ul>
                     </div>
-                    <!-- Education Entry 2 -->
+                    <!-- hs -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Secondary/Pre-Tertiary</h3>
                         <p class="text-red-400 font-medium">NUS High School of Mathematics and Science (NUSH)</p>
@@ -227,7 +213,7 @@
             <section id="research" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Research</h2>
                 <div class="space-y-6">
-                    <!-- Education Entry 1 -->
+                    <!-- research in hs -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Synthesis of Peptide Nanomaterials via Controlled Self-Assembly</h3>
                         <p class="text-red-400 font-medium">NUS High / NUS</p>
@@ -239,11 +225,11 @@
                 </div>
             </section>
             
-            <!-- Work Experience -->
+            <!-- experience -->
             <section id="experience" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Work Experience</h2>
                 <div class="space-y-6">
-                    <!-- Experience Entry 1 -->
+                    <!-- aft -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Air Force Electro-Armament Technician (NS)</h3>
                         <p class="text-red-400 font-medium">Republic of Singapore Air Force / 5th Ammunition Depot</p>
@@ -255,7 +241,7 @@
                             <li><span class="font-semibold text-white">Logistics Operations</span>: Operated forklifts and buggies to move inventory safely and efficiently.</li>
                         </ul>
                     </div>
-                    <!-- Experience Entry 2 -->
+                    <!-- grant -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Landscape Architecture Intern</h3>
                         <p class="text-red-400 font-medium">Grant Associates</p>
@@ -266,7 +252,7 @@
                             <li><span class="font-semibold text-white">Urban Planning Knowledge</span>: Studied land use regulations and plant design principles for sustainable design.</li>
                         </ul>
                     </div>
-                    <!-- Experience Entry 3 -->
+                    <!-- cold storage -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Part-time Supermarket Assistant</h3>
                         <p class="text-red-400 font-medium">Cold Storage</p>
@@ -276,7 +262,7 @@
                             <li><span class="font-semibold text-white">Customer Support</span>: Assisted customers with product queries and self-checkout systems.</li>
                         </ul>
                     </div>
-                    <!-- Experience Entry 4 -->
+                    <!-- warehouse -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Part-time Production Operator</h3>
                         <p class="text-red-400 font-medium">LF Logistics</p>
@@ -290,14 +276,14 @@
             </section>
 
 
-            <!-- Skills & Certifications -->
+            <!-- skills -->
             <section id="skills" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Skills & Certifications</h2>
                 
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-white mb-3">Technical Skills</h3>
                     <div class="flex flex-wrap gap-3">
-                        <!-- Technical Skill badges -->
+                        <!-- technical skills -->
                         <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">Excel (Proficient)</span>
                         <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">Excel Formulas and Macros (Proficient)</span>
                         <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">AI Tools (Proficient)</span>
@@ -310,7 +296,7 @@
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-white mb-3">Analytical Skills</h3>
                     <div class="flex flex-wrap gap-3">
-                        <!-- Analytical Skill badges -->
+                        <!-- soft skills -->
                         <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Problem Solving</span>
                         <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Comparative Data Analysis</span>
                         <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Statistical Reporting</span>
@@ -320,7 +306,7 @@
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-white mb-3">Technical Certifications</h3>
                     <div class="flex flex-wrap gap-3">
-                        <!-- Technical Certs -->
+                        <!-- certs -->
                         <span class="px-4 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm font-medium">Foundational Data Analytics (Coursera)</span>
                         <span class="px-4 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm font-medium">Intermediate SQL (DataCamp)</span>
                         <span class="px-4 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm font-medium">Intermediate Python (DataCamp)</span>
@@ -334,7 +320,7 @@
                 <div class="relative w-full overflow-hidden">
                     
                     <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
-                        
+                        <!-- backtester -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
                                 <div class="md:w-1/2 md:h-96 overflow-y-auto">
@@ -355,7 +341,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <!-- paper trading algo -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
                                 <div class="md:w-1/2 md:h-96 overflow-y-auto">
@@ -377,7 +363,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- scrabble -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
                                 <div class="md:w-1/2 md:h-96 overflow-y-auto">
@@ -397,7 +383,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- the modelling -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
                                 <div class="md:w-1/2 md:h-96 overflow-y-auto">
@@ -417,7 +403,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- nanga rater -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
                                 <div class="md:w-1/2 md:h-96 overflow-y-auto">
@@ -457,14 +443,14 @@
                 <div class="relative w-full overflow-hidden">
                     
                     <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
-            
+                        <!-- carou -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
                                 
                                 <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
                                     <img src="assets/carou.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
                                 </div>
-            
+                                
                                 <div class="md:w-1/2 md:h-96 overflow-y-auto">
                                     <div class="flex justify-between items-start mb-4">
                                         <h3 class="text-xl sm:text-2xl font-semibold text-white">Online Marketplace Business</h3>
@@ -477,7 +463,7 @@
             
                             </div>
                         </div>
-
+                        <!-- tm -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
             
@@ -497,7 +483,7 @@
                             </div>
                         </div>
                         
-            
+                        <!-- cardgame -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
             
@@ -518,7 +504,8 @@
                                 </div>
                             </div>
                         </div>
-            
+                        
+                        <!-- manga db -->
                         <div class="flex-shrink-0 w-full">
                             <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
             
@@ -554,7 +541,7 @@
                 </div>
             </section>
             
-            <!-- Awards -->
+            <!-- awards -->
             <section id="awards" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Awards & Recognition</h2>
                 <div class="space-y-4 text-lg text-gray-400">
@@ -567,32 +554,32 @@
                 </div>
             </section>
 
-            <!-- Leadership & Community Contributions -->
+            <!-- leadership -->
             <section id="leadership" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Leadership & Community Contributions</h2>
                 <div class="space-y-4 text-lg text-gray-400">
-                    <!-- Contribution Entry 1 -->
+                    <!-- 3sg -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">3rd Sergeant</h3>
                         <p class="text-red-400 font-medium">Republic of Singapore Air Force</p>
                         <p class="text-sm text-gray-500">Mar 2025 &ndash; Present</p>
                         <p class="text-gray-400 mt-2">Demonstrated leadership and management skills as a 3rd Sergeant, effectively managing a team of armament technicians in complex daily operations and safety protocols.</p>
                     </div>
-                    <!-- Contribution Entry 2 -->
+                    <!-- ncc -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Master Sergeant / Vice-President</h3>
                         <p class="text-red-400 font-medium">NCC (Land)</p>
                         <p class="text-sm text-gray-500">Jan 2021 &ndash; Dec 2022</p>
                         <p class="text-gray-400 mt-2">Led school’s NCC (Land) CCA as Unit Master Sergeant from 2021-2022, managing all internal and external activity planning and execution.</p>
                     </div>
-                    <!-- Contribution Entry 3 -->
+                    <!-- ndp23 -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Exco / Planner for NUS High NDP 2023</h3>
                         <p class="text-red-400 font-medium">NUS High</p>
                         <p class="text-sm text-gray-500">Mar 2023 &ndash; Aug 2023</p>
                         <p class="text-gray-400 mt-2">Served on the Planning & Training Exco for the school’s National Day Parade in 2023, collaborating across groups and directly managing the training and logistics for 200+ parade marchers. Participated as the parade's Regimental Sergeant-Major</p>
                     </div>
-                    <!-- Contribution Entry 4 -->
+                    <!-- shine -->
                     <div class="section-item">
                         <h3 class="text-xl font-semibold text-white">Volunteer</h3>
                         <p class="text-red-400 font-medium">SHINE</p>
@@ -602,7 +589,7 @@
                 </div>
             </section>
             
-            <!-- Activities and Interests -->
+            <!-- actvitiies -->
             <section id="interests" class="mb-16">
                 <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Activities and Interests</h2>
                 <div class="space-y-4 text-lg text-gray-400">
@@ -621,7 +608,7 @@
 
         </main>
         
-        <!-- Footer - Background adjusted for consistency -->
+        <!-- footer -->
         <footer class="bg-black-0 text-white py-8 mt-12">
             <div class="max-w-4xl mx-auto px-6 text-center">
                 <p class="text-sm text-gray-400 mb-4">Connect with me!</p>
@@ -644,14 +631,7 @@
 
     </div>
 <script>
-    /**
-     * Initializes a project carousel slider.
-     * @param {string} containerId - ID of the slides container (e.g., 'project-slides').
-     * @param {string} prevBtnId - ID of the previous button (e.g., 'prev-btn').
-     * @param {string} nextBtnId - ID of the next button (e.g., 'next-btn').
-     * @param {string} indicatorId - ID of the slide indicator (e.g., 'slide-indicator').
-     * @param {string} name - The name of the project type (e.g., 'Technical Project').
-     */
+
     function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId, name) {
         const slidesContainer = document.getElementById(containerId);
         const prevBtn = document.getElementById(prevBtnId);
@@ -668,14 +648,11 @@
         let currentSlide = 0;
 
         function updateSlide() {
-            // Calculate the horizontal translation needed
             const translateValue = -currentSlide * 100;
             slidesContainer.style.transform = `translateX(${translateValue}%)`;
             
-            // Update the indicator text
             indicator.textContent = `${currentSlide + 1} of ${totalSlides}`;
             
-            // Update button state (Disable at start/end)
             prevBtn.disabled = currentSlide === 0;
             nextBtn.disabled = currentSlide === totalSlides - 1;
             
@@ -697,16 +674,14 @@
             }
         });
 
-        // Initialize the carousel
         updateSlide();
     }
 
-    // Initialize both carousels using the function:
     
-    // 1. Technical Projects
+    // for tech projs
     initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator', 'Technical Project');
 
-    // 2. Other Projects (using the new -other IDs)
+    // for other projs
     initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other', 'Other Project');
 </script>
 
