@@ -314,245 +314,233 @@
             </section>
 
             <div class="flex justify-between items-start mb-4">
-    <h3 ...>Title</h3>
-    <div class="flex space-x-2"> ```
-with the new, robust stacked structure:
-```html
-<div class="mb-4">
-    <h3 ...>Title</h3>
-    <div class="flex flex-wrap gap-2 mt-2"> ```
-And changing all tag padding from `px-3 py-1` to **`px-2 py-1`** to prevent overflow.
 
-Here is the full, corrected HTML structure for your **Technical Projects** and **Other Projects** sections:
-
-```html
-<section id="projects" class="mb-16">
-    <h2 class="text-3xl font-bold text-gray-100 mb-8 border-b-2 border-red-400 pb-2">Technical Projects</h2>
-    <div class="relative w-full overflow-hidden">
-        
-        <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">C++-Accelerated Walk Forward Analysis</h3>
-                            
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Pandas/Numpy</span>
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">C++</span>
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-400 mb-4">“Built a C++-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.”</p>
-                        <div class="space-y-2">
-                            <a href="https://github.com/kaishx/paper_trader" class="block text-red-400 hover:text-red-300 font-medium">View Code (Github) &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                        <img src="assets/wfa.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Paper Trading Algorithm</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Pandas/Numpy</span>
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-400 mb-4">Developed a pairs trading algorithm that systematically monitors over 20 equity/ETF pairs for mean-reversion signals. The platform applies rigorous statistical filters to ensure high-confidence entry signals and executes trades automatically through Alpaca’s paper trading API, with performance updates posted to a Telegram channel.</p>
-                        <div class="space-y-2">
-                            <a href="https://github.com/kaishx/paper_trader" class="block text-red-400 hover:text-red-300 font-medium">View Code (Github) &rarr;</a>
-                            <a href="https://t.me/portfolio_value" class="block text-red-400 hover:text-red-300 font-medium">View Updates Channel (Telegram) &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                        <img src="assets/architecture.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Scrabble Word Trainer</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Asynchronous JS</span>
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-400 mb-4">Developed a high-speed Scrabble Trainer that increases player word recognition speed and competitive decision-making agility.</p>
-                        <div class="space-y-2">
-                            <a href="https://kaishx.github.io/scrabbletrainer/" class="block text-red-400 hover:text-red-300 font-medium">View Site &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                        <img src="assets/scrabble.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Fusion360 Modelling Project for Motorbike</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Fusion 360</span>
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-400 mb-4">[TO BE MODELLED, COMPLETION %: 0]</p>
-                        <div class="space-y-2">
-                            <a href="https://github.com/kaishx/Manga-Rater" class="block text-red-400 hover:text-red-300 font-medium">View Project Images (Imgur) &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                        <img src="" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Algorithmic Ranking System for Manga</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-400 mb-4">Developed a Python-based ELO system for comparative ranking of manga titles to address personal rating inflation by applying the ELO algorithm, hence normalizing scores for further data analysis.</p>
-                        <div class="space-y-2">
-                            <a href="https://github.com/kaishx/Manga-Rater" class="block text-red-400 hover:text-red-300 font-medium">View Code (GitHub) &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                        <img src="assets/manga_rater.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-        
-        <button id="prev-btn" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-        </button>
-        <button id="next-btn" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-        </button>
-        <div id="slide-indicator" class="text-center mt-4 text-gray-400">1 of 5</div>
-        
-    </div>
-</section>
-
----
-
-<section id="other-projects" class="mb-16">
-    <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Other Projects</h2>
-    
-    <div class="relative w-full overflow-hidden">
-        
-        <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                        <img src="assets/carou.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
+                <h2 class="text-3xl font-bold text-gray-100 mb-8 border-b-2 border-red-400 pb-2">Technical Projects</h2>
+                <div class="relative w-full overflow-hidden">
                     
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Online Marketplace Business</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Carousell</span>
-                            </div>
-                        </div>
-                        <p class="text-base text-gray-400 mb-4">From 2022 to 2024, generated over $2,500 in net profit and $1,200 in unsold inventory through specialized e-commerce ventures. This included successfully flipping low-value gaming accounts for higher prices and generating further profit by selling climbing shoes, leveraging personalized sizing and model advice to drive customer sales.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                        <img src="assets/TM.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                    
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Trackmania Map & Environment Design</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">In-Game Editor</span>
-                            </div>
-                        </div>
-                        <p class="text-base text-gray-400 mb-4">Designed and published over 10 custom Trackmania maps across varied difficulties. This work was validated by the community with awards for design quality and resulted in an offer for a commissioned role to develop technical maps for a dedicated gaming group.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                        <img src="assets/cards.jpeg" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                    
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Social Deduction Card Game Design & Manufacturing</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
+                    <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">C++-Accelerated Walk Forward Analysis</h3>
+                                        
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Pandas/Numpy</span>
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">C++</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-gray-400 mb-4">“Built a C++-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.”</p>
+                                    <div class="space-y-2">
+                                        <a href="https://github.com/kaishx/paper_trader" class="block text-red-400 hover:text-red-300 font-medium">View Code (Github) &rarr;</a>
+                                    </div>
                                 </div>
-                        </div>
-                        <p class="text-base text-gray-400 mb-4">Managed the complete development of an original social deduction card game, producing over 200 physical cards. The project featured rigorous balancing, iterative mechanical refinement based on 20+ participant playtests, and the implementation of efficient card manufacturing techniques.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-full">
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                    <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                        <img src="assets/manga_database.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                    </div>
-                    
-                    <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                        <div class="mb-4">
-                            <h3 class="text-xl sm:text-2xl font-semibold text-white">Google Sheets-based Manga Database</h3>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Google Sheets</span>
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
+                                    <img src="assets/wfa.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
                             </div>
                         </div>
-                        <p class="text-base text-gray-400 mb-4">Engineered a comprehensive Manga Database (1000+ titles) in Google Sheets to track granular consumption data and scores. This data was leveraged to generate complex analytical reports on key metrics like Score Distribution (Average/Median), Genre Performance, and title status tracking.</p>
-                    </div>
-                </div>
-            </div>
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Paper Trading Algorithm</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Pandas/Numpy</span>
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-gray-400 mb-4">Developed a pairs trading algorithm that systematically monitors over 20 equity/ETF pairs for mean-reversion signals. The platform applies rigorous statistical filters to ensure high-confidence entry signals and executes trades automatically through Alpaca’s paper trading API, with performance updates posted to a Telegram channel.</p>
+                                    <div class="space-y-2">
+                                        <a href="https://github.com/kaishx/paper_trader" class="block text-red-400 hover:text-red-300 font-medium">View Code (Github) &rarr;</a>
+                                        <a href="https://t.me/portfolio_value" class="block text-red-400 hover:text-red-300 font-medium">View Updates Channel (Telegram) &rarr;</a>
+                                    </div>
+                                </div>
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
+                                    <img src="assets/architecture.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Scrabble Word Trainer</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Asynchronous JS</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-gray-400 mb-4">Developed a high-speed Scrabble Trainer that increases player word recognition speed and competitive decision-making agility.</p>
+                                    <div class="space-y-2">
+                                        <a href="https://kaishx.github.io/scrabbletrainer/" class="block text-red-400 hover:text-red-300 font-medium">View Site &rarr;</a>
+                                    </div>
+                                </div>
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
+                                    <img src="assets/scrabble.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Fusion360 Modelling Project for Motorbike</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Fusion 360</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-gray-400 mb-4">[TO BE MODELLED, COMPLETION %: 0]</p>
+                                    <div class="space-y-2">
+                                        <a href="https://github.com/kaishx/Manga-Rater" class="block text-red-400 hover:text-red-300 font-medium">View Project Images (Imgur) &rarr;</a>
+                                    </div>
+                                </div>
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
+                                    <img src="" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                            </div>
+                        </div>
             
-        </div>
-        
-        <button id="prev-btn-other" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-        </button>
-        <button id="next-btn-other" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-        </button>
-        
-        <div id="slide-indicator-other" class="text-center mt-4 text-gray-400">1 of 4</div>
-        
-    </div>
-</section>
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Algorithmic Ranking System for Manga</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-gray-400 mb-4">Developed a Python-based ELO system for comparative ranking of manga titles to address personal rating inflation by applying the ELO algorithm, hence normalizing scores for further data analysis.</p>
+                                    <div class="space-y-2">
+                                        <a href="https://github.com/kaishx/Manga-Rater" class="block text-red-400 hover:text-red-300 font-medium">View Code (GitHub) &rarr;</a>
+                                    </div>
+                                </div>
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
+                                    <img src="assets/manga_rater.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <button id="prev-btn" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 ml-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button id="next-btn" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                    <div id="slide-indicator" class="text-center mt-4 text-gray-400">1 of 5</div>
+                    
+                </div>
+            </section>
+            
+            ---
+            
+            <section id="other-projects" class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Other Projects</h2>
+                
+                <div class="relative w-full overflow-hidden">
+                    
+                    <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
+                                    <img src="assets/carou.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                                
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Online Marketplace Business</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Carousell</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-base text-gray-400 mb-4">From 2022 to 2024, generated over $2,500 in net profit and $1,200 in unsold inventory through specialized e-commerce ventures. This included successfully flipping low-value gaming accounts for higher prices and generating further profit by selling climbing shoes, leveraging personalized sizing and model advice to drive customer sales.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
+                                    <img src="assets/TM.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                                
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Trackmania Map & Environment Design</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">In-Game Editor</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-base text-gray-400 mb-4">Designed and published over 10 custom Trackmania maps across varied difficulties. This work was validated by the community with awards for design quality and resulted in an offer for a commissioned role to develop technical maps for a dedicated gaming group.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
+                                    <img src="assets/cards.jpeg" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                                
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Social Deduction Card Game Design & Manufacturing</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            </div>
+                                    </div>
+                                    <p class="text-base text-gray-400 mb-4">Managed the complete development of an original social deduction card game, producing over 200 physical cards. The project featured rigorous balancing, iterative mechanical refinement based on 20+ participant playtests, and the implementation of efficient card manufacturing techniques.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0 w-full">
+                            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
+                                <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
+                                    <img src="assets/manga_database.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
+                                </div>
+                                
+                                <div class="md:w-1/2 md:h-96 overflow-y-auto">
+                                    <div class="mb-4">
+                                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Google Sheets-based Manga Database</h3>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Google Sheets</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-base text-gray-400 mb-4">Engineered a comprehensive Manga Database (1000+ titles) in Google Sheets to track granular consumption data and scores. This data was leveraged to generate complex analytical reports on key metrics like Score Distribution (Average/Median), Genre Performance, and title status tracking.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <button id="prev-btn-other" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 ml-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button id="next-btn-other" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                    
+                    <div id="slide-indicator-other" class="text-center mt-4 text-gray-400">1 of 4</div>
+                    
+                </div>
+            </section>
             
             <!-- awards -->
             <section id="awards" class="mb-16">
