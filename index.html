@@ -83,7 +83,7 @@
             <a href="#leadership" class="hover:text-[#e5e5e5] transition">Leadership</a>
         </div>
 
-        <button id="mobile-menu-btn" class="lg:hidden text-[#737373] hover:text-[#e5e5e5] focus:outline-none z-50">
+        <button id="mobile-menu-btn" class="lg:hidden text-[#737373] hover:text-[#e5e5e5] focus:outline-none z-50 relative">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
@@ -103,7 +103,7 @@
 </div>
 
 <header class="relative w-full h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
-    <canvas id="helix-canvas" class="absolute inset-0 w-full h-full z-0 opacity-40 pointer-events-none"></canvas>
+    <canvas id="data-stream-canvas" class="absolute inset-0 w-full h-full z-0 opacity-60 pointer-events-none"></canvas>
 
     <div class="relative z-10 max-w-4xl px-6 w-full text-left md:text-center">
         
@@ -413,9 +413,12 @@
                 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Online Marketplace Ventures</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Online Marketplace Ventures</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Carousell</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Managed a personal trading venture exploiting price spreads across niche digital assets and specialized equipment, achieving a 24x Return on Invested Capital (ROIC) ($150 to $3,700) over 19 months.</p>
                     </div>
@@ -426,9 +429,12 @@
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Trackmania Map & Environment Design</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Trackmania Map & Environment Design</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">In-Game Editor</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Designed and published over 10 custom Trackmania maps across varied difficulties. This work was validated by the community with awards for design quality and resulted in an offer for a commissioned role to develop technical maps for a dedicated gaming group.</p>
                     </div>
@@ -439,8 +445,10 @@
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Social Deduction Card Game Design & Manufacturing</h3>
-                        <div class="flex flex-wrap gap-2 mb-4"></div>
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Social Deduction Card Game Design & Manufacturing</h3>
+                        <div class="mb-4 mt-2">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
+                        </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Managed the complete development of an original social deduction card game, producing over 200 physical cards. The project featured rigorous balancing, iterative mechanical refinement based on 20+ participant playtests, and the implementation of efficient card manufacturing techniques.</p>
                     </div>
                     <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
@@ -450,9 +458,12 @@
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Google Sheets-based Manga Database</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Google Sheets-based Manga Database</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Google Sheets</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Engineered a comprehensive Manga Database (1000+ titles) in Google Sheets to track granular consumption data and scores. This data was leveraged to generate complex analytical reports on key metrics like Score Distribution (Average/Median), Genre Performance, and title status tracking.</p>
                     </div>
@@ -580,7 +591,6 @@
         mobileMenu.classList.toggle('hidden');
         mobileMenu.classList.toggle('flex');
         
-        // Toggle Icon (Hamburger to X)
         const svg = menuBtn.querySelector('svg');
         if (mobileMenu.classList.contains('hidden')) {
             svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
@@ -674,70 +684,111 @@
     initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other');
 
     // ----------------------------------------------------------------
-    // 4. Background Helix Canvas Engine
+    // 4. Background Data-Stream Canvas Engine
     // ----------------------------------------------------------------
-    const canvas = document.getElementById('helix-canvas');
+    const canvas = document.getElementById('data-stream-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
-    let time = 0;
+    let particles = [];
 
     function resizeCanvas() {
         width = canvas.width = canvas.offsetWidth;
         height = canvas.height = canvas.offsetHeight;
+        initParticles(); 
     }
     
     window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
 
-    function drawHelix() {
-        ctx.clearRect(0, 0, width, height);
-        
-        const centerX = width / 2;
-        const points = 120; // Number of dots per strand
-        const spacing = height / points;
-        const radius = Math.min(width, height) * 0.25; // Scale to screen size
-
-        for (let i = 0; i < points; i++) {
-            const y = i * spacing;
-            const phase = i * 0.08; // How tight the spiral is
-
-            // Strand 1 (Gray Data)
-            const x1 = Math.cos(phase + time) * radius;
-            const z1 = Math.sin(phase + time) * radius;
-            
-            // Strand 2 (Crimson Accents)
-            const x2 = Math.cos(phase + time + Math.PI) * radius;
-            const z2 = Math.sin(phase + time + Math.PI) * radius;
-
-            // Simple 3D to 2D perspective projection
-            const fov = 400;
-            
-            const scale1 = fov / (fov + z1);
-            const px1 = centerX + x1 * scale1;
-            
-            const scale2 = fov / (fov + z2);
-            const px2 = centerX + x2 * scale2;
-
-            const baseSize = 1.5;
-            
-            // Draw Strand 1
-            ctx.fillStyle = `rgba(229, 229, 229, ${0.1 + scale1 * 0.4})`; // #e5e5e5 fading
-            ctx.beginPath();
-            ctx.arc(px1, y, baseSize * scale1, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Draw Strand 2
-            ctx.fillStyle = `rgba(139, 0, 0, ${0.1 + scale2 * 0.4})`; // #8b0000 fading
-            ctx.beginPath();
-            ctx.arc(px2, y, baseSize * scale2, 0, Math.PI * 2);
-            ctx.fill();
+    class Particle {
+        constructor() {
+            this.reset(true);
         }
-        
-        time += 0.015; // Rotation speed
-        requestAnimationFrame(drawHelix);
+
+        reset(randomizePosition = false) {
+            // Spawn logic to ensure smooth continuous flow from top-right to bottom-left
+            if (randomizePosition) {
+                this.x = Math.random() * width * 1.5; 
+                this.y = Math.random() * height * 1.5 - height * 0.5;
+            } else {
+                if (Math.random() > 0.5) {
+                    this.x = Math.random() * width + width * 0.5;
+                    this.y = -50;
+                } else {
+                    this.x = width + 50;
+                    this.y = Math.random() * height - height * 0.5;
+                }
+            }
+
+            this.size = Math.random() * 15 + 10; // Length of the stick
+            this.thickness = Math.random() * 1.5 + 0.5;
+            this.speed = Math.random() * 1.5 + 0.5;
+            
+            // Vector pointing exactly bottom-left
+            this.vx = -this.speed;
+            this.vy = this.speed;
+
+            this.isRed = Math.random() > 0.85; // 15% chance for crimson accent
+            this.baseAlpha = Math.random() * 0.5 + 0.1;
+            
+            // Variables for the sparkling/twinkle effect
+            this.life = Math.random() * Math.PI * 2;
+            this.fadeSpeed = Math.random() * 0.05 + 0.02;
+            this.alpha = this.baseAlpha;
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.life += this.fadeSpeed;
+
+            // Twinkle effect using a sine wave
+            this.alpha = this.baseAlpha + Math.sin(this.life) * this.baseAlpha;
+
+            // Reset particle if it drifts off the left or bottom edge
+            if (this.x < -50 || this.y > height + 50) {
+                this.reset();
+            }
+        }
+
+        draw(ctx) {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            // Rotate canvas 135 degrees (3*PI/4) to align the stick drawing with the travel vector
+            ctx.rotate(Math.PI * 0.75); 
+            
+            if (this.isRed) {
+                ctx.fillStyle = `rgba(139, 0, 0, ${this.alpha})`;
+            } else {
+                ctx.fillStyle = `rgba(229, 229, 229, ${this.alpha})`;
+            }
+            
+            // Draw the stick
+            ctx.fillRect(-this.size/2, -this.thickness/2, this.size, this.thickness);
+            ctx.restore();
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        // Dynamically scale particle count based on screen size (max 300 to prevent lag)
+        const numParticles = Math.min(Math.floor((width * height) / 8000), 300); 
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+            p.update();
+            p.draw(ctx);
+        });
+        requestAnimationFrame(animate);
     }
     
-    drawHelix();
+    // Boot the engine
+    resizeCanvas();
+    animate();
 </script>
 
 </body>
