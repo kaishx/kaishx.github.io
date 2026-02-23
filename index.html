@@ -82,10 +82,29 @@
             <a href="#awards" class="hover:text-[#e5e5e5] transition">Awards</a>
             <a href="#leadership" class="hover:text-[#e5e5e5] transition">Leadership</a>
         </div>
+
+        <button id="mobile-menu-btn" class="lg:hidden text-[#737373] hover:text-[#e5e5e5] focus:outline-none z-50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
     </div>
 </nav>
 
-<header class="relative w-full h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16">
+<div id="mobile-menu" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-md z-40 hidden flex-col items-center justify-center space-y-8 text-sm uppercase tracking-widest">
+    <a href="#about" class="text-[#737373] hover:text-[#e5e5e5] transition">About</a>
+    <a href="#education" class="text-[#737373] hover:text-[#e5e5e5] transition">Edu</a>
+    <a href="#research" class="text-[#737373] hover:text-[#e5e5e5] transition">Research</a>
+    <a href="#experience" class="text-[#737373] hover:text-[#e5e5e5] transition">Exp</a>
+    <a href="#skills" class="text-[#737373] hover:text-[#e5e5e5] transition">Skills</a>
+    <a href="#projects" class="text-[#737373] hover:text-[#e5e5e5] transition">Projects</a>
+    <a href="#awards" class="text-[#737373] hover:text-[#e5e5e5] transition">Awards</a>
+    <a href="#leadership" class="text-[#737373] hover:text-[#e5e5e5] transition">Leadership</a>
+</div>
+
+<header class="relative w-full h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
+    <canvas id="helix-canvas" class="absolute inset-0 w-full h-full z-0 opacity-40 pointer-events-none"></canvas>
+
     <div class="relative z-10 max-w-4xl px-6 w-full text-left md:text-center">
         
         <div class="text-xs text-[#737373] mb-6 flex justify-start md:justify-center items-center gap-4">
@@ -105,12 +124,12 @@
         </p>
         
         <div class="flex items-center justify-start md:justify-center gap-6">
-            <a href="https://github.com/kaishx" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300">
+            <a href="https://github.com/kaishx" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300 relative z-20">
                 <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
                 </svg>
             </a>
-            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300">
+            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300 relative z-20">
                 <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
                 </svg>
@@ -123,7 +142,7 @@
 
     <section id="about" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 01 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 01 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">About Me</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -136,7 +155,7 @@
     
     <section id="education" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 02 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 02 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Education</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -169,7 +188,7 @@
 
     <section id="research" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 03 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 03 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Research</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -190,7 +209,7 @@
 
     <section id="experience" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 04 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 04 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Work Experience</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -251,21 +270,21 @@
 
     <section id="skills" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 05 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 05 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Skills & Certifications</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
         <div class="section-item space-y-8">
             <div>
-                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Skills</h3>
+                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Skills (By Proficiency)</h3>
                 <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Python (Proficient)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Excel VBA/Macros (Intermediate)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Pandas / NumPy (Intermediate)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">SQL (Intermediate)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Git / GitHub Pages (Intermediate)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">C++ (Basic)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Python</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Excel VBA/Macros</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Pandas / NumPy</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">SQL</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Git / GitHub Pages</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">C++</span>
                 </div>
             </div>
             <div>
@@ -290,7 +309,7 @@
 
     <section id="projects" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 06 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 06 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Technical Projects</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -300,11 +319,14 @@
                 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">C++-Accelerated Pairs Trading Walk Forward Analysis</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">C++-Accelerated Pairs Trading Walk Forward Analysis</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Pandas/Numpy</span>
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">C++</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Built a C++-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.</p>
                         <a href="https://github.com/kaishx/wfa" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Code & Write-Up (Github) ]</a>
@@ -316,10 +338,13 @@
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Pairs Trading Paper Trading Engine</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Pairs Trading Paper Trading Engine</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Pandas/Numpy</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Developed a pairs trading algorithm that systematically monitors over 20 equity/ETF pairs for mean-reversion signals. The platform applies rigorous statistical filters to ensure high-confidence entry signals and executes trades automatically through Alpaca’s paper trading API, with performance updates posted to a Telegram channel.</p>
                         <div class="flex flex-col gap-2">
@@ -334,9 +359,12 @@
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Scrabble Word Trainer</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Scrabble Word Trainer</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Asynchronous JS</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Developed a high-speed Scrabble Trainer that increases player word recognition speed and competitive decision-making agility.</p>
                         <a href="https://kaishx.github.io/scrabbletrainer/" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Site ]</a>
@@ -348,29 +376,18 @@
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
                     <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Fusion360 Modelling Project for Motorbike</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Fusion360 Modelling Project for Motorbike</h3>
+                        <div class="flex flex-wrap gap-2 mb-2">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Fusion 360</span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-[10px] px-2 py-1 border border-[#8b0000] text-[#e5e5e5] uppercase tracking-widest bg-[#8b0000]/20">Status: In Progress</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">This is currently in progress! Check back in a month or two to see the final model! I've added a progress pic just to fill the void.</p>
                         <a href="https://kaishx.github.io/#projects" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Project Images (Imgur) ]</a>
                     </div>
                     <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
                         <img src="assets/Motorcycle.png" alt="Motorcycle Render" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
-
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Algorithmic Ranking System for Manga</h3>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Developed a Python-based ELO system for comparative ranking of manga titles to address personal rating inflation by applying the ELO algorithm, hence normalizing scores for further data analysis.</p>
-                        <a href="https://github.com/kaishx/Manga-Rater" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Code (GitHub) ]</a>
-                    </div>
-                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
-                        <img src="assets/manga_rater.png" alt="Manga Rater" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
                     </div>
                 </div>
                 
@@ -386,7 +403,7 @@
 
     <section id="other-projects" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 07 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 07 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Other Projects</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -456,7 +473,7 @@
 
     <section id="awards" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 08 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 08 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Awards & Recognition</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -472,7 +489,7 @@
 
     <section id="leadership" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 09 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 09 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Leadership & Community Contributions</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -518,7 +535,7 @@
     
     <section id="interests" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 10 ]</span>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 10 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Activities and Interests</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
@@ -552,13 +569,41 @@
 </footer>
 
 <script>
-    // Scramble Effect for Multiple Elements
+    // ----------------------------------------------------------------
+    // 1. Mobile Menu Logic
+    // ----------------------------------------------------------------
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
+        
+        // Toggle Icon (Hamburger to X)
+        const svg = menuBtn.querySelector('svg');
+        if (mobileMenu.classList.contains('hidden')) {
+            svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
+        } else {
+            svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+        }
+    });
+
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+            menuBtn.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
+        });
+    });
+
+    // ----------------------------------------------------------------
+    // 2. Scramble Text Effect
+    // ----------------------------------------------------------------
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
 
     function scrambleText(element) {
         let iteration = 0;
-        
-        // Ensure each element has its own isolated interval so they don't break each other
         clearInterval(element.scrambleInterval);
         
         element.scrambleInterval = setInterval(() => {
@@ -575,19 +620,18 @@
             if(iteration >= element.dataset.value.length){
                 clearInterval(element.scrambleInterval);
             }
-            
-            // Speed of the reveal
             iteration += 1 / 3; 
         }, 30);
     }
 
-    // Trigger on all elements with .scramble-text class when page loads
     window.addEventListener('DOMContentLoaded', () => {
         const targets = document.querySelectorAll('.scramble-text');
         targets.forEach(target => scrambleText(target));
     });
 
-    // Reusable Carousel Logic
+    // ----------------------------------------------------------------
+    // 3. Carousel Logic
+    // ----------------------------------------------------------------
     function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId) {
         const slidesContainer = document.getElementById(containerId);
         const prevBtn = document.getElementById(prevBtnId);
@@ -628,6 +672,72 @@
 
     initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator');
     initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other');
+
+    // ----------------------------------------------------------------
+    // 4. Background Helix Canvas Engine
+    // ----------------------------------------------------------------
+    const canvas = document.getElementById('helix-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let time = 0;
+
+    function resizeCanvas() {
+        width = canvas.width = canvas.offsetWidth;
+        height = canvas.height = canvas.offsetHeight;
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawHelix() {
+        ctx.clearRect(0, 0, width, height);
+        
+        const centerX = width / 2;
+        const points = 120; // Number of dots per strand
+        const spacing = height / points;
+        const radius = Math.min(width, height) * 0.25; // Scale to screen size
+
+        for (let i = 0; i < points; i++) {
+            const y = i * spacing;
+            const phase = i * 0.08; // How tight the spiral is
+
+            // Strand 1 (Gray Data)
+            const x1 = Math.cos(phase + time) * radius;
+            const z1 = Math.sin(phase + time) * radius;
+            
+            // Strand 2 (Crimson Accents)
+            const x2 = Math.cos(phase + time + Math.PI) * radius;
+            const z2 = Math.sin(phase + time + Math.PI) * radius;
+
+            // Simple 3D to 2D perspective projection
+            const fov = 400;
+            
+            const scale1 = fov / (fov + z1);
+            const px1 = centerX + x1 * scale1;
+            
+            const scale2 = fov / (fov + z2);
+            const px2 = centerX + x2 * scale2;
+
+            const baseSize = 1.5;
+            
+            // Draw Strand 1
+            ctx.fillStyle = `rgba(229, 229, 229, ${0.1 + scale1 * 0.4})`; // #e5e5e5 fading
+            ctx.beginPath();
+            ctx.arc(px1, y, baseSize * scale1, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Strand 2
+            ctx.fillStyle = `rgba(139, 0, 0, ${0.1 + scale2 * 0.4})`; // #8b0000 fading
+            ctx.beginPath();
+            ctx.arc(px2, y, baseSize * scale2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        time += 0.015; // Rotation speed
+        requestAnimationFrame(drawHelix);
+    }
+    
+    drawHelix();
 </script>
 
 </body>
