@@ -47,12 +47,14 @@
             scroll-behavior: smooth;
         }
 
-        /* Custom scrollbar for inner boxes */
+        /* Custom Scrollbar styled for Brutalism */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: var(--bg); 
+            border-left: 1px solid var(--border);
         }
         ::-webkit-scrollbar-thumb {
             background: var(--border); 
@@ -65,16 +67,20 @@
 <body class="selection:bg-[#8b0000] selection:text-white">
 
 <nav class="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 border-b border-[#262626] backdrop-blur-sm">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#" class="text-[#e5e5e5] font-bold text-lg tracking-widest hover:text-[#8b0000] transition">
-            [ CKL_DEV ]
+            KAISHX.GITHUB.IO
         </a>
 
-        <div class="hidden md:flex space-x-6 text-[#737373] text-xs uppercase tracking-widest">
-            <a href="#about" class="hover:text-[#e5e5e5] transition">01. About</a>
-            <a href="#education" class="hover:text-[#e5e5e5] transition">02. Edu</a>
-            <a href="#experience" class="hover:text-[#e5e5e5] transition">03. Exp</a>
-            <a href="#projects" class="hover:text-[#e5e5e5] transition">04. Proj</a>
+        <div class="hidden lg:flex space-x-6 text-[#737373] text-xs uppercase tracking-widest">
+            <a href="#about" class="hover:text-[#e5e5e5] transition">About</a>
+            <a href="#education" class="hover:text-[#e5e5e5] transition">Edu</a>
+            <a href="#research" class="hover:text-[#e5e5e5] transition">Research</a>
+            <a href="#experience" class="hover:text-[#e5e5e5] transition">Exp</a>
+            <a href="#skills" class="hover:text-[#e5e5e5] transition">Skills</a>
+            <a href="#projects" class="hover:text-[#e5e5e5] transition">Projects</a>
+            <a href="#awards" class="hover:text-[#e5e5e5] transition">Awards</a>
+            <a href="#leadership" class="hover:text-[#e5e5e5] transition">Leadership</a>
         </div>
     </div>
 </nav>
@@ -83,21 +89,27 @@
     <div class="relative z-10 max-w-4xl px-6 w-full text-left md:text-center">
         
         <div class="text-xs text-[#737373] mb-6 flex justify-start md:justify-center items-center gap-4">
-            <span class="border border-[#262626] px-2 py-1 uppercase tracking-widest">Status: Active</span>
             <span class="border border-[#262626] px-2 py-1 uppercase tracking-widest">
-                Loc: <span id="location-text" data-value="SINGAPORE" class="text-[#8b0000] font-bold"></span>
+                LOC: <span id="location-text" data-value="SINGAPORE" class="text-[#8b0000] font-bold"></span>
             </span>
         </div>
 
         <h1 class="text-4xl sm:text-6xl font-bold mb-4 tracking-tight text-[#e5e5e5]">CHU KAI LE</h1>
         
-        <p class="text-sm sm:text-base text-[#737373] mb-10 tracking-widest uppercase">
-            NUS Engineering Scholar <span class="text-[#262626] mx-2">|</span> Computational Modeling <span class="text-[#262626] mx-2">|</span> Data Systems
+        <p class="text-sm sm:text-base text-[#737373] mb-8 tracking-widest uppercase">
+            NUS Engineering Scholar <span class="text-[#262626] mx-2">|</span> Computational Modeling <span class="text-[#262626] mx-2">|</span> Optimization & Data Systems
         </p>
         
-        <div class="flex flex-col sm:flex-row items-center justify-start md:justify-center gap-4">
-            <a href="https://www.linkedin.com/in/ckail/" class="w-full sm:w-auto border border-[#8b0000] text-[#e5e5e5] hover:bg-[#8b0000] transition px-8 py-3 text-xs tracking-widest uppercase font-bold text-center">
-                Initialize Contact &rarr;
+        <div class="flex items-center justify-start md:justify-center gap-6">
+            <a href="https://github.com/kaishx" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
+                </svg>
             </a>
         </div>
     </div>
@@ -108,12 +120,12 @@
     <section id="about" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 01 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Operational Overview</h2>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">About Me</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         <div class="section-item">
             <p class="text-sm sm:text-base text-[#a3a3a3] leading-relaxed">
-                I build systems at the intersection of finance, engineering, and data. My work spans algorithmic trading engines, performance‑critical C++/Python tooling, and projects that automate or optimize real‑world workflows. I operate with a focus on structural efficiency and quantitative improvement.
+                I enjoy building systems at the intersection of finance, engineering, and data. My work spans algorithmic trading engines, performance‑critical C++/Python tooling, and side projects that automate or optimize real‑world workflows. I'm always looking for more ways to make my life more interesting.
             </p>                
         </div>
     </section>
@@ -121,32 +133,52 @@
     <section id="education" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 02 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Academic Structure</h2>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Education</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
         <div class="space-y-0">
             <div class="section-item">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Incoming Engineering Undergraduate</h3>
-                    <p class="text-xs text-[#737373]">Aug 2026 &ndash; TBC</p>
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Incoming Engineering Undergraduate in 2026</h3>
+                    <p class="text-xs text-[#737373]">Aug 2026 &ndash; TBC | Singapore</p>
                 </div>
                 <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">National University of Singapore (NUS)</p>
                 <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5]">Major:</span> Mechanical Engineering & Computing (Double Major)</li>
-                    <li><span class="text-[#e5e5e5]">Program:</span> CDE Engineering Scholars Programme (Accelerated 3-year B.Eng.)</li>
+                    <li>Mechanical Engineering with a Double Major in Computing, under the CDE Engineering Scholars Programme (accelerated 3-year B.Eng.).</li>
                 </ul>
             </div>
             
             <div class="section-item">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Secondary/Pre-Tertiary</h3>
-                    <p class="text-xs text-[#737373]">Jan 2018 &ndash; Nov 2023</p>
+                    <p class="text-xs text-[#737373]">Jan 2018 &ndash; Nov 2023 | Singapore</p>
                 </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High School of Mathematics and Science</p>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High School of Mathematics and Science (NUSH)</p>
                 <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5]">Diploma:</span> High Distinction (Overall CAP: 4.5 / A-)</li>
-                    <li><span class="text-[#e5e5e5]">Major CAPs:</span> Chemistry (4.9), Mathematics (4.9), Physics (4.6)</li>
+                    <li>Graduated with a NUS High Diploma (High Distinction), Overall CAP: 4.5 / A-</li>
+                    <li>Major CAP: Chemistry - 4.9 / A+, Mathematics - 4.9 / A+, Physics - 4.6 / A</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="research" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 03 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Research</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        
+        <div class="space-y-0">
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Synthesis of Peptide Nanomaterials via Controlled Self-Assembly</h3>
+                    <p class="text-xs text-[#737373]">Apr 2022 &ndash; Aug 2023 | Singapore</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High / NUS</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li>Investigated whether amino acids could form cocrystals with the FF dipeptide to alter its self-assembly into peptide nanomaterials. Used computational screening (HSP, ΔpKa, Mercury) and SEM validation, finding that incompatible amino acids showed no morphological change, consistent with predictions.</li>
                 </ul>
             </div>
         </div>
@@ -154,33 +186,60 @@
 
     <section id="experience" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 03 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Professional Implementations</h2>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 04 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Work Experience</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
         <div class="space-y-0">
             <div class="section-item">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Air Force Electro-Armament Technician</h3>
-                    <p class="text-xs text-[#737373]">Aug 2024 &ndash; Present</p>
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Air Force Electro-Armament Technician (NS)</h3>
+                    <p class="text-xs text-[#737373]">Aug 2024 &ndash; Present | Singapore</p>
                 </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Republic of Singapore Air Force</p>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Republic of Singapore Air Force / 5th Ammunition Depot</p>
                 <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5]">Digitalization:</span> Automated 3,000+ stockcards using Excel Macros, reducing processing time by 85%.</li>
-                    <li><span class="text-[#e5e5e5]">Maintenance:</span> Serviced MK82/84 GP Bombs and countermeasures, ensuring 100% operational readiness.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Munitions Maintenance:</span> Maintained and serviced general-purpose bombs (MK82/84 GP Bombs) and aircraft countermeasures to ensure operational readiness.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Preventive Maintenance:</span> Conducted scheduled maintenance per technical manuals, achieving 100% serviceability.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Digitalization & Process Improvement:</span> Digitalized 3,000+ stockcards, improving inventory accuracy and reducing stockcard creation time by 85% using Excel Macros.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Logistics Operations:</span> Operated forklifts and buggies to move inventory safely and efficiently.</li>
                 </ul>
             </div>
             
             <div class="section-item">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Landscape Architecture Intern</h3>
-                    <p class="text-xs text-[#737373]">May 2023 &ndash; Jun 2023</p>
+                    <p class="text-xs text-[#737373]">May 2023 &ndash; Jun 2023 | Singapore</p>
                 </div>
                 <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Grant Associates</p>
                 <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5]">Ecological Data:</span> Collated research to guide design for a coral reef enclosure project.</li>
-                    <li><span class="text-[#e5e5e5]">Parametric Modeling:</span> Applied Rhino and Grasshopper for geometric design visualization.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Ecological Data:</span> Collated and presented research data to guide design decisions for the firm's first coral reef enclosure project in Singapore.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Parametric Modeling:</span> Applied Rhino and Grasshopper for geometric modeling and design visualization.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Urban Planning Knowledge:</span> Studied land use regulations and plant design principles for sustainable design.</li>
+                </ul>
+            </div>
+
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Part-time Supermarket Assistant</h3>
+                    <p class="text-xs text-[#737373]">Oct 2023 &ndash; Nov 2023 | Singapore</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Cold Storage</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li><span class="text-[#e5e5e5] font-bold">Inventory & Quality:</span> Maintained stock levels and conducted daily checks on perishable goods.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Customer Support:</span> Assisted customers with product queries and self-checkout systems.</li>
+                </ul>
+            </div>
+
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Part-time Production Operator</h3>
+                    <p class="text-xs text-[#737373]">Jun 2022 &ndash; Jul 2022 | Singapore</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">LF Logistics</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li><span class="text-[#e5e5e5] font-bold">Order Fulfillment:</span> Picked, packed, and sorted high-volume orders efficiently.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">Logistics Coordination:</span> Coordinated inbound/outbound shipments and resolved delivery issues.</li>
                 </ul>
             </div>
         </div>
@@ -188,31 +247,38 @@
 
     <section id="skills" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 04 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">System Capabilities</h2>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 05 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Skills & Certifications</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
-        <div class="section-item">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-xs font-bold text-[#8b0000] uppercase tracking-widest mb-4">Technical Stack</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">Python</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">C++</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">Pandas/NumPy</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">SQL</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">VBA/Macros</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">Git</span>
-                    </div>
+        <div class="section-item space-y-8">
+            <div>
+                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Skills</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Python (Proficient)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Excel VBA/Macros (Intermediate)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Pandas / NumPy (Intermediate)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">SQL (Intermediate)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Git / GitHub Pages (Intermediate)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">C++ (Basic)</span>
                 </div>
-                <div>
-                    <h3 class="text-xs font-bold text-[#8b0000] uppercase tracking-widest mb-4">Core Competencies</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-2 py-1 border border-[#262626] text-[#737373] text-xs">Data Optimization</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#737373] text-xs">Algorithm Design</span>
-                        <span class="px-2 py-1 border border-[#262626] text-[#737373] text-xs">Process Improvement</span>
-                    </div>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Analytical Skills</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Problem Solving</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Comparative Data Analysis</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Statistical Reporting</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Quantitative Process Improvement</span>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Certifications</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Foundational Data Analytics (Coursera)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Intermediate SQL (DataCamp)</span>
+                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Intermediate Python (DataCamp)</span>
                 </div>
             </div>
         </div>
@@ -220,24 +286,24 @@
 
     <section id="projects" class="mb-20">
         <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 05 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">System Portfolio</h2>
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 06 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Technical Projects</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
         <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a]">
-            
             <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
                 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-2">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Walk-Forward Analysis Engine</h3>
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">C++-Accelerated Pairs Trading Walk Forward Analysis</h3>
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">C++</span>
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Pandas/Numpy</span>
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">C++</span>
                         </div>
                         <p class="text-sm text-[#a3a3a3] mb-6">Built a C++-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.</p>
-                        <a href="https://github.com/kaishx/wfa" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Source ]</a>
+                        <a href="https://github.com/kaishx/wfa" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Code & Write-Up (Github) ]</a>
                     </div>
                     <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
                         <img src="assets/wfa.png" alt="WFA Engine" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
@@ -245,56 +311,244 @@
                 </div>
 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-2">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Pairs Trading Paper Engine</h3>
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Pairs Trading Paper Trading Engine</h3>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Alpaca API</span>
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Pandas/Numpy</span>
                         </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Algorithm systematically monitors 20+ equity/ETF pairs for mean-reversion signals. Applies rigorous statistical filters and executes trades automatically through Alpaca’s API, posting telemetry to Telegram.</p>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Developed a pairs trading algorithm that systematically monitors over 20 equity/ETF pairs for mean-reversion signals. The platform applies rigorous statistical filters to ensure high-confidence entry signals and executes trades automatically through Alpaca’s paper trading API, with performance updates posted to a Telegram channel.</p>
                         <div class="flex flex-col gap-2">
-                            <a href="https://github.com/kaishx/paper_trader" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Source ]</a>
-                            <a href="https://t.me/portfolio_value" class="text-xs text-[#737373] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Telemetry ]</a>
+                            <a href="https://github.com/kaishx/paper_trader" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Code (Github) ]</a>
+                            <a href="https://t.me/portfolio_value" class="text-xs text-[#737373] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Updates Channel (Telegram) ]</a>
                         </div>
                     </div>
                     <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
                         <img src="assets/architecture.png" alt="Architecture" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
                     </div>
                 </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Scrabble Word Trainer</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Asynchronous JS</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Developed a high-speed Scrabble Trainer that increases player word recognition speed and competitive decision-making agility.</p>
+                        <a href="https://kaishx.github.io/scrabbletrainer/" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Site ]</a>
+                    </div>
+                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
+                        <img src="assets/scrabble.png" alt="Scrabble Trainer" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Fusion360 Modelling Project for Motorbike</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Fusion 360</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">This is currently in progress! Check back in a month or two to see the final model! I've added a progress pic just to fill the void.</p>
+                        <a href="https://kaishx.github.io/#projects" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Project Images (Imgur) ]</a>
+                    </div>
+                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
+                        <img src="assets/Motorcycle.png" alt="Motorcycle Render" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Algorithmic Ranking System for Manga</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Developed a Python-based ELO system for comparative ranking of manga titles to address personal rating inflation by applying the ELO algorithm, hence normalizing scores for further data analysis.</p>
+                        <a href="https://github.com/kaishx/Manga-Rater" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Code (GitHub) ]</a>
+                    </div>
+                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
+                        <img src="assets/manga_rater.png" alt="Manga Rater" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
                 
             </div>
             
             <div class="absolute bottom-0 left-0 w-full border-t border-[#262626] bg-[#050505] flex justify-between items-center px-4 py-2">
-                <button id="prev-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">
-                    &lt; Prev
-                </button>
-                <div id="slide-indicator" class="text-xs text-[#737373] font-mono tracking-widest">
-                    1 / 2
-                </div>
-                <button id="next-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">
-                    Next &gt;
-                </button>
+                <button id="prev-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">&lt; Prev</button>
+                <div id="slide-indicator" class="text-xs text-[#737373] font-mono tracking-widest"></div>
+                <button id="next-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">Next &gt;</button>
             </div>
         </div>
     </section>
+
+    <section id="other-projects" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 07 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Other Projects</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        
+        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a]">
+            <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
+                
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Online Marketplace Ventures</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Carousell</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Managed a personal trading venture exploiting price spreads across niche digital assets and specialized equipment, achieving a 24x Return on Invested Capital (ROIC) ($150 to $3,700) over 19 months.</p>
+                    </div>
+                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
+                        <img src="assets/carou.png" alt="Carousell" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Trackmania Map & Environment Design</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">In-Game Editor</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Designed and published over 10 custom Trackmania maps across varied difficulties. This work was validated by the community with awards for design quality and resulted in an offer for a commissioned role to develop technical maps for a dedicated gaming group.</p>
+                    </div>
+                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
+                        <img src="assets/TM.png" alt="Trackmania" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Social Deduction Card Game Design & Manufacturing</h3>
+                        <div class="flex flex-wrap gap-2 mb-4"></div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Managed the complete development of an original social deduction card game, producing over 200 physical cards. The project featured rigorous balancing, iterative mechanical refinement based on 20+ participant playtests, and the implementation of efficient card manufacturing techniques.</p>
+                    </div>
+                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
+                        <img src="assets/cards.jpeg" alt="Card Game" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Google Sheets-based Manga Database</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Google Sheets</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Engineered a comprehensive Manga Database (1000+ titles) in Google Sheets to track granular consumption data and scores. This data was leveraged to generate complex analytical reports on key metrics like Score Distribution (Average/Median), Genre Performance, and title status tracking.</p>
+                    </div>
+                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
+                        <img src="assets/manga_database.png" alt="Manga Database" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="absolute bottom-0 left-0 w-full border-t border-[#262626] bg-[#050505] flex justify-between items-center px-4 py-2">
+                <button id="prev-btn-other" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">&lt; Prev</button>
+                <div id="slide-indicator-other" class="text-xs text-[#737373] font-mono tracking-widest"></div>
+                <button id="next-btn-other" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">Next &gt;</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="awards" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 08 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Awards & Recognition</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        <div class="section-item">
+            <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-3">
+                <li><span class="text-[#e5e5e5] font-bold">NUS CDE Engineering Scholars Scholarship (2026-2029)</span> &ndash; NUS' Highly selective bond-free scholarship for top engineering talent.</li>
+                <li><span class="text-[#e5e5e5] font-bold">NUS High School Commendation Award (2021-2022)</span> &ndash; Leadership</li>
+                <li><span class="text-[#e5e5e5] font-bold">5th Place, NUS Chem-Engineering Challenge (2022)</span> &ndash; (Top 5%, out of 100+ teams), challenge included various optimization and analysis tasks.</li>
+                <li><span class="text-[#e5e5e5] font-bold">Singapore Mathematical Olympiad (Junior), Silver (2019)</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="leadership" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 09 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Leadership & Community Contributions</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        
+        <div class="space-y-0">
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">3rd Sergeant</h3>
+                    <p class="text-xs text-[#737373]">Mar 2025 &ndash; Present</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Republic of Singapore Air Force</p>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed">Demonstrated leadership and management skills as a 3rd Sergeant, effectively managing a team of armament technicians in complex daily operations and safety protocols.</p>
+            </div>
+            
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Master Sergeant / Vice-President</h3>
+                    <p class="text-xs text-[#737373]">Jan 2021 &ndash; Dec 2022</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NCC (Land)</p>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed">Led school’s NCC (Land) CCA as Unit Master Sergeant from 2021-2022, managing all internal and external activity planning and execution.</p>
+            </div>
+            
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Exco / Planner for NUS High NDP 2023</h3>
+                    <p class="text-xs text-[#737373]">Mar 2023 &ndash; Aug 2023</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High</p>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed">Served on the Planning & Training Exco for the school’s National Day Parade in 2023, collaborating across groups and directly managing the training and logistics for 200+ parade marchers. Participated as the parade's Regimental Sergeant-Major.</p>
+            </div>
+            
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Volunteer</h3>
+                    <p class="text-xs text-[#737373]">Oct 2023 &ndash; Oct 2023</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">SHINE</p>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed">Collaborated with my club to organize a full-day event for mentally challenged children from SHINE. Planned games and spent the day paired one-on-one with a participant, ensuring they had a fun, engaging, and inclusive experience on campus.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="interests" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 10 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Activities and Interests</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        <div class="section-item">
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Valorant (Peaked Top 0.5%)</span>
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Trackmania (Peaked Asia Top 1%, SG Top 3)</span>
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Bouldering</span>
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Mixology</span>
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Motorcycles</span>
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Manga</span>
+                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Scrabble</span>
+            </div>
+        </div>
+    </section>
+
 </main>
         
 <footer class="bg-[#050505] border-t border-[#262626] text-[#737373] py-12 mt-12">
     <div class="max-w-4xl mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
         <div class="mb-6 md:mb-0">
-            <p class="text-xs tracking-widest uppercase mb-2 text-[#e5e5e5]">System Terminated</p>
-            <p class="text-xs">&copy; 2025 CHU KAI LE. Built for precise execution.</p>
+            <p class="text-xs">&copy; 2025 CHU KAI LE. Built with HTML and Tailwind CSS.</p>
+            <p class="text-xs mt-2">chukaile.work@gmail.com</p>
         </div>
         
         <div class="flex space-x-6 text-xs tracking-widest uppercase font-bold">
-            <a href="https://github.com/kaishx" target="_blank" class="hover:text-[#8b0000] transition">GitHub</a>
-            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="hover:text-[#8b0000] transition">LinkedIn</a>
+            <a href="https://github.com/kaishx" target="_blank" class="hover:text-[#e5e5e5] transition">GitHub</a>
+            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="hover:text-[#e5e5e5] transition">LinkedIn</a>
         </div>
     </div>
 </footer>
 
 <script>
-    // 1. Location Scramble Decode Effect
+    // Location Scramble Decode Effect
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
     let interval = null;
     const target = document.getElementById("location-text");
@@ -310,23 +564,22 @@
                     if(index < iteration) {
                         return element.dataset.value[index];
                     }
-                    return letters[Math.floor(Math.random() * 42)]; // 42 is length of letters string
+                    return letters[Math.floor(Math.random() * 42)];
                 })
                 .join("");
             
             if(iteration >= element.dataset.value.length){
                 clearInterval(interval);
             }
-            iteration += 1 / 3; // speed of decoding
+            iteration += 1 / 3; 
         }, 30);
     }
 
-    // Trigger scramble on load
     window.addEventListener('DOMContentLoaded', () => {
         scrambleText(target);
     });
 
-    // 2. Carousel Logic (Refined)
+    // Reusable Carousel Logic
     function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId) {
         const slidesContainer = document.getElementById(containerId);
         const prevBtn = document.getElementById(prevBtnId);
@@ -366,6 +619,7 @@
     }
 
     initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator');
+    initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other');
 </script>
 
 </body>
