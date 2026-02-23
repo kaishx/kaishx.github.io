@@ -35,13 +35,24 @@
             border-radius: 0;
             padding: 2rem;
             margin-bottom: -1px;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, transform 0.5s ease-out, opacity 0.5s ease-out; /* Added transform/opacity for scroll reveal */
         }
 
         .section-item:hover {
             border-color: var(--accent-crimson);
             z-index: 10;
             position: relative;
+        }
+        
+        /* Scroll Reveal Utility Classes */
+        .reveal-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         html {
@@ -63,6 +74,18 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--text-muted); 
         }
+        
+        /* Back to top button specific styles */
+        #back-to-top {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+        }
+        
+        #back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="selection:bg-[#8b0000] selection:text-white">
@@ -75,14 +98,14 @@
         </a>
 
         <div class="hidden lg:flex space-x-6 text-[#737373] text-xs uppercase tracking-widest">
-            <a href="#about" class="hover:text-[#e5e5e5] transition">About</a>
-            <a href="#education" class="hover:text-[#e5e5e5] transition">Edu</a>
-            <a href="#research" class="hover:text-[#e5e5e5] transition">Research</a>
-            <a href="#experience" class="hover:text-[#e5e5e5] transition">Exp</a>
-            <a href="#skills" class="hover:text-[#e5e5e5] transition">Skills</a>
-            <a href="#projects" class="hover:text-[#e5e5e5] transition">Projects</a>
-            <a href="#awards" class="hover:text-[#e5e5e5] transition">Awards</a>
-            <a href="#leadership" class="hover:text-[#e5e5e5] transition">Leadership</a>
+            <a href="#about" class="nav-link hover:text-[#e5e5e5] transition" data-target="about">About</a>
+            <a href="#education" class="nav-link hover:text-[#e5e5e5] transition" data-target="education">Edu</a>
+            <a href="#research" class="nav-link hover:text-[#e5e5e5] transition" data-target="research">Research</a>
+            <a href="#experience" class="nav-link hover:text-[#e5e5e5] transition" data-target="experience">Exp</a>
+            <a href="#skills" class="nav-link hover:text-[#e5e5e5] transition" data-target="skills">Skills</a>
+            <a href="#projects" class="nav-link hover:text-[#e5e5e5] transition" data-target="projects">Projects</a>
+            <a href="#awards" class="nav-link hover:text-[#e5e5e5] transition" data-target="awards">Awards</a>
+            <a href="#leadership" class="nav-link hover:text-[#e5e5e5] transition" data-target="leadership">Leadership</a>
         </div>
 
         <button id="mobile-menu-btn" class="lg:hidden text-[#737373] hover:text-[#e5e5e5] focus:outline-none z-50 relative">
@@ -94,17 +117,17 @@
 </nav>
 
 <div id="mobile-menu" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-md z-40 hidden flex-col items-center justify-center space-y-8 text-sm uppercase tracking-widest">
-    <a href="#about" class="text-[#737373] hover:text-[#e5e5e5] transition">About</a>
-    <a href="#education" class="text-[#737373] hover:text-[#e5e5e5] transition">Edu</a>
-    <a href="#research" class="text-[#737373] hover:text-[#e5e5e5] transition">Research</a>
-    <a href="#experience" class="text-[#737373] hover:text-[#e5e5e5] transition">Exp</a>
-    <a href="#skills" class="text-[#737373] hover:text-[#e5e5e5] transition">Skills</a>
-    <a href="#projects" class="text-[#737373] hover:text-[#e5e5e5] transition">Projects</a>
-    <a href="#awards" class="text-[#737373] hover:text-[#e5e5e5] transition">Awards</a>
-    <a href="#leadership" class="text-[#737373] hover:text-[#e5e5e5] transition">Leadership</a>
+    <a href="#about" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="about">About</a>
+    <a href="#education" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="education">Edu</a>
+    <a href="#research" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="research">Research</a>
+    <a href="#experience" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="experience">Exp</a>
+    <a href="#skills" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="skills">Skills</a>
+    <a href="#projects" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="projects">Projects</a>
+    <a href="#awards" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="awards">Awards</a>
+    <a href="#leadership" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="leadership">Leadership</a>
 </div>
 
-<header class="relative w-full h-[50vh] md:h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
+<header id="hero" class="relative w-full h-[50vh] md:h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
     <canvas id="helix-stars-canvas" class="absolute inset-0 w-full h-full z-0 opacity-70 pointer-events-none"></canvas>
 
     <div class="relative z-10 max-w-5xl px-6 w-full text-left md:text-center">
@@ -142,20 +165,20 @@
         
 <main class="max-w-5xl mx-auto px-6 py-16 sm:py-24">
 
-    <section id="about" class="mb-20">
+    <section id="about" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 01 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">About Me</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
-        <div class="section-item">
+        <div class="section-item reveal-hidden">
             <p class="text-sm sm:text-base text-[#a3a3a3] leading-relaxed">
                 I enjoy building systems at the intersection of finance, engineering, and data. My work spans algorithmic trading engines, performance‑critical C++/Python tooling, and side projects that automate or optimize real‑world workflows. I'm always looking for more ways to make my life more interesting.
             </p>                
         </div>
     </section>
     
-    <section id="education" class="mb-20">
+    <section id="education" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 02 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Education</h2>
@@ -163,7 +186,7 @@
         </div>
         
         <div class="space-y-0">
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Incoming Engineering Undergraduate in 2026</h3>
                     <p class="text-xs text-[#737373]">Aug 2026 &ndash; TBC | Singapore</p>
@@ -174,7 +197,7 @@
                 </ul>
             </div>
             
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Secondary/Pre-Tertiary</h3>
                     <p class="text-xs text-[#737373]">Jan 2018 &ndash; Nov 2023 | Singapore</p>
@@ -188,7 +211,7 @@
         </div>
     </section>
 
-    <section id="research" class="mb-20">
+    <section id="research" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 03 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Research</h2>
@@ -196,7 +219,7 @@
         </div>
         
         <div class="space-y-0">
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Synthesis of Peptide Nanomaterials via Controlled Self-Assembly</h3>
                     <p class="text-xs text-[#737373]">Apr 2022 &ndash; Aug 2023 | Singapore</p>
@@ -209,7 +232,7 @@
         </div>
     </section>
 
-    <section id="experience" class="mb-20">
+    <section id="experience" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 04 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Work Experience</h2>
@@ -217,7 +240,7 @@
         </div>
         
         <div class="space-y-0">
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Air Force Electro-Armament Technician (NS)</h3>
                     <p class="text-xs text-[#737373]">Aug 2024 &ndash; Present | Singapore</p>
@@ -231,7 +254,7 @@
                 </ul>
             </div>
             
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Landscape Architecture Intern</h3>
                     <p class="text-xs text-[#737373]">May 2023 &ndash; Jun 2023 | Singapore</p>
@@ -244,7 +267,7 @@
                 </ul>
             </div>
 
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Part-time Supermarket Assistant</h3>
                     <p class="text-xs text-[#737373]">Oct 2023 &ndash; Nov 2023 | Singapore</p>
@@ -256,7 +279,7 @@
                 </ul>
             </div>
 
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Part-time Production Operator</h3>
                     <p class="text-xs text-[#737373]">Jun 2022 &ndash; Jul 2022 | Singapore</p>
@@ -270,14 +293,14 @@
         </div>
     </section>
 
-    <section id="skills" class="mb-20">
+    <section id="skills" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 05 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Skills & Certifications</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
-        <div class="section-item space-y-8">
+        <div class="section-item space-y-8 reveal-hidden">
             <div>
                 <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Skills (By Proficiency)</h3>
                 <div class="flex flex-wrap gap-2">
@@ -309,14 +332,14 @@
         </div>
     </section>
 
-    <section id="projects" class="mb-20">
+    <section id="projects" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 06 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Technical Projects</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
-        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a]">
+        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a] reveal-hidden section-item p-0">
             <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
                 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
@@ -403,14 +426,13 @@
         </div>
     </section>
 
-    <section id="other-projects" class="mb-20">
-        <div class="flex items-center gap-4 mb-8">
+    <section id="other-projects" class="mb-20"> <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 07 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Other Projects</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
         
-        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a]">
+        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a] reveal-hidden section-item p-0">
             <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
                 
                 <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
@@ -484,13 +506,13 @@
         </div>
     </section>
 
-    <section id="awards" class="mb-20">
+    <section id="awards" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 08 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Awards & Recognition</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
-        <div class="section-item">
+        <div class="section-item reveal-hidden">
             <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-3">
                 <li><span class="text-[#e5e5e5] font-bold">NUS CDE Engineering Scholars Scholarship (2026-2029)</span> &ndash; NUS' Highly selective bond-free scholarship for top engineering talent.</li>
                 <li><span class="text-[#e5e5e5] font-bold">NUS High School Commendation Award (2021-2022)</span> &ndash; Leadership</li>
@@ -500,7 +522,7 @@
         </div>
     </section>
 
-    <section id="leadership" class="mb-20">
+    <section id="leadership" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 09 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Leadership & Community Contributions</h2>
@@ -508,7 +530,7 @@
         </div>
         
         <div class="space-y-0">
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">3rd Sergeant</h3>
                     <p class="text-xs text-[#737373]">Mar 2025 &ndash; Present</p>
@@ -517,7 +539,7 @@
                 <p class="text-[#a3a3a3] text-sm leading-relaxed">Demonstrated leadership and management skills as a 3rd Sergeant, effectively managing a team of armament technicians in complex daily operations and safety protocols.</p>
             </div>
             
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Master Sergeant / Vice-President</h3>
                     <p class="text-xs text-[#737373]">Jan 2021 &ndash; Dec 2022</p>
@@ -526,7 +548,7 @@
                 <p class="text-[#a3a3a3] text-sm leading-relaxed">Led school’s NCC (Land) CCA as Unit Master Sergeant from 2021-2022, managing all internal and external activity planning and execution.</p>
             </div>
             
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Exco / Planner for NUS High NDP 2023</h3>
                     <p class="text-xs text-[#737373]">Mar 2023 &ndash; Aug 2023</p>
@@ -535,7 +557,7 @@
                 <p class="text-[#a3a3a3] text-sm leading-relaxed">Served on the Planning & Training Exco for the school’s National Day Parade in 2023, collaborating across groups and directly managing the training and logistics for 200+ parade marchers. Participated as the parade's Regimental Sergeant-Major.</p>
             </div>
             
-            <div class="section-item">
+            <div class="section-item reveal-hidden">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                     <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Volunteer</h3>
                     <p class="text-xs text-[#737373]">Oct 2023 &ndash; Oct 2023</p>
@@ -546,13 +568,13 @@
         </div>
     </section>
     
-    <section id="interests" class="mb-20">
+    <section id="interests" class="mb-20 scroll-section">
         <div class="flex items-center gap-4 mb-8">
             <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 10 ]</span>
             <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Activities and Interests</h2>
             <div class="h-[1px] bg-[#262626] flex-grow"></div>
         </div>
-        <div class="section-item">
+        <div class="section-item reveal-hidden">
             <div class="flex flex-wrap gap-2">
                 <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Valorant (Peaked Top 0.5%)</span>
                 <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Trackmania (Peaked Asia Top 1%, SG Top 3)</span>
@@ -580,6 +602,12 @@
         </div>
     </div>
 </footer>
+
+<a href="#hero" id="back-to-top" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-[#262626] text-[#737373] hover:text-[#e5e5e5] hover:border-[#8b0000] p-3 z-50 transition-colors duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 15l7-7 7 7"></path>
+    </svg>
+</a>
 
 <script>
     // mobile menu logic
@@ -678,6 +706,73 @@
 
     initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator');
     initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other');
+
+    // Scroll Reveal Logic (Intersection Observer)
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.remove('reveal-hidden');
+                entry.target.classList.add('reveal-visible');
+                revealObserver.unobserve(entry.target); // Stop observing once revealed
+            }
+        });
+    }, {
+        threshold: 0.1, // Trigger when 10% of the item is visible
+        rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the bottom
+    });
+
+    document.querySelectorAll('.reveal-hidden').forEach(el => revealObserver.observe(el));
+
+    // Scrollspy Logic & Back to Top Visibility
+    const sections = document.querySelectorAll('.scroll-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const backToTopBtn = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        
+        // Back to top visibility
+        if (window.scrollY > 500) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+
+        // Scrollspy targeting
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('text-[#8b0000]'); // Remove active color
+            if (link.dataset.target === current) {
+                link.classList.add('text-[#8b0000]'); // Add active color
+            }
+        });
+    });
+
+    // Custom Smooth Scrolling for Anchor Links (replaces standard scroll-behavior: smooth for better control without easing curves)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                // Adjust for fixed navbar height (approx 80px)
+                const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
 
     // background helix & stars engine
     const canvas = document.getElementById('helix-stars-canvas');
