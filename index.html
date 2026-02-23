@@ -102,7 +102,7 @@
     <a href="#leadership" class="text-[#737373] hover:text-[#e5e5e5] transition">Leadership</a>
 </div>
 
-<header class="relative w-full h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
+<header class="relative w-full h-[50vh] md:h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
     <canvas id="helix-stars-canvas" class="absolute inset-0 w-full h-full z-0 opacity-70 pointer-events-none"></canvas>
 
     <div class="relative z-10 max-w-4xl px-6 w-full text-left md:text-center">
@@ -704,14 +704,13 @@
         constructor() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.size = Math.random() * 1.5 + 0.5; // Small dots
-            this.isRed = Math.random() > 0.85; // 15% chance to be a crimson star
+            this.size = Math.random() * 1.5 + 0.5;
+            this.isRed = Math.random() > 0.85; 
             this.phase = Math.random() * Math.PI * 2;
             this.speed = Math.random() * 0.03 + 0.01;
         }
         draw(ctx) {
             this.phase += this.speed;
-            // Opacity smoothly pulses between 0.1 and 0.9 using a sine wave
             let alpha = 0.1 + ((Math.sin(this.phase) + 1) / 2) * 0.8; 
             ctx.fillStyle = this.isRed ? `rgba(139, 0, 0, ${alpha})` : `rgba(229, 229, 229, ${alpha})`;
             ctx.beginPath();
@@ -722,7 +721,6 @@
 
     function initStars() {
         stars = [];
-        // Scale star count based on screen size (max 250)
         const numStars = Math.min(Math.floor((width * height) / 5000), 250); 
         for (let i = 0; i < numStars; i++) {
             stars.push(new Star());
@@ -731,31 +729,35 @@
 
     function drawHelix() {
         ctx.save();
-        // Move origin to center of screen
         ctx.translate(width / 2, height / 2);
         
-        // Calculate precise angle so the X-axis points from Top-Right to Bottom-Left
         const angle = Math.atan2(height / 2, -width / 2);
         ctx.rotate(angle);
 
         const length = Math.sqrt(width * width + height * height);
-        const points = Math.floor(length / 22); // Distance between helix segments
+        
+        // RESPONSIVE MATH: Tighter twists and smaller sticks on mobile so it looks like DNA
+        const isMobile = width < 768;
+        const pointSpacing = isMobile ? 12 : 22; 
+        const twistSpeed = isMobile ? 0.35 : 0.2; 
+        const radiusMultiplier = isMobile ? 0.2 : 0.15; 
+        const baseStickLength = isMobile ? 8 : 14;
+        const baseStickThickness = isMobile ? 1.5 : 2;
+
+        const points = Math.floor(length / pointSpacing);
         const startX = -length / 2;
-        const radius = Math.min(width, height) * 0.15; // Width of the spiral
+        const radius = Math.min(width, height) * radiusMultiplier;
 
         for (let i = 0; i < points; i++) {
-            const x = startX + i * 22;
-            const phase = i * 0.2 - time; // Phase offsets rotation to create 3D spin
+            const x = startX + i * pointSpacing;
+            const phase = i * twistSpeed - time;
 
-            // Math for Strand 1
             const y1 = Math.cos(phase) * radius;
             const z1 = Math.sin(phase) * radius;
 
-            // Math for Strand 2 (offset by 180 degrees)
             const y2 = Math.cos(phase + Math.PI) * radius;
             const z2 = Math.sin(phase + Math.PI) * radius;
 
-            // Simple 3D projection logic
             const fov = 400;
             const scale1 = fov / (fov + z1);
             const scale2 = fov / (fov + z2);
@@ -763,7 +765,7 @@
             const py1 = y1 * scale1;
             const py2 = y2 * scale2;
 
-            // Draw structural rung connecting the two strands
+            // Rung connecting strands
             ctx.beginPath();
             ctx.moveTo(x, py1);
             ctx.lineTo(x, py2);
@@ -771,15 +773,15 @@
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Draw Strand 1 (White/Gray Sticks)
-            const stickLength1 = 14 * scale1;
-            const stickHeight1 = 2 * scale1;
+            // Strand 1 (White)
+            const stickLength1 = baseStickLength * scale1;
+            const stickHeight1 = baseStickThickness * scale1;
             ctx.fillStyle = `rgba(229, 229, 229, ${0.1 + scale1 * 0.7})`;
             ctx.fillRect(x - stickLength1 / 2, py1 - stickHeight1 / 2, stickLength1, stickHeight1);
 
-            // Draw Strand 2 (Crimson Sticks)
-            const stickLength2 = 14 * scale2;
-            const stickHeight2 = 2 * scale2;
+            // Strand 2 (Crimson)
+            const stickLength2 = baseStickLength * scale2;
+            const stickHeight2 = baseStickThickness * scale2;
             ctx.fillStyle = `rgba(139, 0, 0, ${0.1 + scale2 * 0.7})`;
             ctx.fillRect(x - stickLength2 / 2, py2 - stickHeight2 / 2, stickLength2, stickHeight2);
         }
@@ -789,17 +791,14 @@
     function animate() {
         ctx.clearRect(0, 0, width, height);
         
-        // 1. Render ambient twinkling stars in background
         stars.forEach(star => star.draw(ctx));
-
-        // 2. Render rotating diagonal helix structure in foreground
         drawHelix();
         
-        time += 0.015; // Speed of the rotation spin
+        // SLOWED DOWN: Was 0.015, now 0.005 for a slow, ambient drift
+        time += 0.005; 
         requestAnimationFrame(animate);
     }
     
-    // Boot the engine
     resizeCanvas();
     animate();
 </script>
