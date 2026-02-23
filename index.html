@@ -27,13 +27,13 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Brutalist Box Layout */
+        /* brutalist box layout */
         .section-item {
             background-color: var(--surface);
             border: 1px solid var(--border);
             border-radius: 0;
             padding: 2rem;
-            margin-bottom: -1px; /* Overlap borders slightly */
+            margin-bottom: -1px;
             transition: border-color 0.3s ease;
         }
 
@@ -47,7 +47,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Custom Scrollbar styled for Brutalism */
+        /* custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -580,9 +580,7 @@
 </footer>
 
 <script>
-    // ----------------------------------------------------------------
-    // 1. Mobile Menu Logic
-    // ----------------------------------------------------------------
+    // mobile menu logic
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileLinks = mobileMenu.querySelectorAll('a');
@@ -607,9 +605,7 @@
         });
     });
 
-    // ----------------------------------------------------------------
-    // 2. Scramble Text Effect
-    // ----------------------------------------------------------------
+    // scramble text effect
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
 
     function scrambleText(element) {
@@ -639,9 +635,7 @@
         targets.forEach(target => scrambleText(target));
     });
 
-    // ----------------------------------------------------------------
-    // 3. Carousel Logic
-    // ----------------------------------------------------------------
+    // carousel logic
     function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId) {
         const slidesContainer = document.getElementById(containerId);
         const prevBtn = document.getElementById(prevBtnId);
@@ -683,9 +677,7 @@
     initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator');
     initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other');
 
-    // ----------------------------------------------------------------
-    // 4. Background Helix & Twinkling Stars Engine
-    // ----------------------------------------------------------------
+    // background helix & stars engine
     const canvas = document.getElementById('helix-stars-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -736,12 +728,12 @@
 
         const length = Math.sqrt(width * width + height * height);
         
-        // RESPONSIVE MATH: Tighter twists and smaller sticks on mobile so it looks like DNA
+        // dynamic math for mobile to ensure helix visibility
         const isMobile = width < 768;
-        const pointSpacing = isMobile ? 12 : 22; 
-        const twistSpeed = isMobile ? 0.35 : 0.2; 
-        const radiusMultiplier = isMobile ? 0.2 : 0.15; 
-        const baseStickLength = isMobile ? 8 : 14;
+        const pointSpacing = isMobile ? 15 : 22; 
+        const twistSpeed = isMobile ? 0.3 : 0.2; 
+        const radiusMultiplier = isMobile ? 0.18 : 0.15; 
+        const baseStickLength = isMobile ? 10 : 14;
         const baseStickThickness = isMobile ? 1.5 : 2;
 
         const points = Math.floor(length / pointSpacing);
@@ -765,7 +757,6 @@
             const py1 = y1 * scale1;
             const py2 = y2 * scale2;
 
-            // Rung connecting strands
             ctx.beginPath();
             ctx.moveTo(x, py1);
             ctx.lineTo(x, py2);
@@ -773,13 +764,11 @@
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Strand 1 (White)
             const stickLength1 = baseStickLength * scale1;
             const stickHeight1 = baseStickThickness * scale1;
             ctx.fillStyle = `rgba(229, 229, 229, ${0.1 + scale1 * 0.7})`;
             ctx.fillRect(x - stickLength1 / 2, py1 - stickHeight1 / 2, stickLength1, stickHeight1);
 
-            // Strand 2 (Crimson)
             const stickLength2 = baseStickLength * scale2;
             const stickHeight2 = baseStickThickness * scale2;
             ctx.fillStyle = `rgba(139, 0, 0, ${0.1 + scale2 * 0.7})`;
@@ -794,7 +783,6 @@
         stars.forEach(star => star.draw(ctx));
         drawHelix();
         
-        // SLOWED DOWN: Was 0.015, now 0.005 for a slow, ambient drift
         time += 0.005; 
         requestAnimationFrame(animate);
     }
