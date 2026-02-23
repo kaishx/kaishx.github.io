@@ -3,670 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CKL's Portfolio</title>
+    <title>CHU KAI LE | Portfolio</title>
     
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* font */
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap');
+        
         :root {
-            --bg: #0a0a0a;
+            --bg: #050505;
+            --surface: #0a0a0a;
             --border: #262626;
             --text-main: #e5e5e5;
             --text-muted: #737373;
-            --accent: #ff3b3b; /* Keep a tiny bit of red for your personality */
+            --accent-crimson: #8b0000; 
         }
-        
+
         body {
             background-color: var(--bg);
             color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace; /* Change your Google Font to this */
+            font-family: 'JetBrains Mono', monospace;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        /* The "Box" look */
+
+        /* Brutalist Box Layout */
         .section-item {
-            background: transparent;
+            background-color: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 0; /* Remove rounded corners for a sharper look */
+            border-radius: 0;
             padding: 2rem;
-            margin-bottom: -1px; /* Overlap borders for that grid effect */
+            margin-bottom: -1px; /* Overlap borders slightly */
+            transition: border-color 0.3s ease;
         }
 
-        .hero-section {
+        .section-item:hover {
+            border-color: var(--accent-crimson);
+            z-index: 10;
+            position: relative;
         }
 
-        .project-card-border {
-            border-top-color: var(--primary-accent) !important;
-        }
-        
         html {
             scroll-behavior: smooth;
         }
+
+        /* Custom scrollbar for inner boxes */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border); 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted); 
+        }
     </style>
 </head>
-<body>
+<body class="selection:bg-[#8b0000] selection:text-white">
 
-<nav class="fixed top-0 left-0 w-full z-50 bg-[#1a0000]/90 border-b border-red-700 shadow-[0_0_20px_#ff1a1a]">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-
-        <a href="#" class="text-red-400 font-extrabold text-xl tracking-wide hover:text-red-300 transition">
-            kaishx.github.io
+<nav class="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 border-b border-[#262626] backdrop-blur-sm">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#" class="text-[#e5e5e5] font-bold text-lg tracking-widest hover:text-[#8b0000] transition">
+            [ CKL_DEV ]
         </a>
 
-        <div class="hidden md:flex space-x-8 text-gray-300 text-sm font-medium">
-            <a href="#education" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Education</a>
-            <a href="#research" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Research</a>
-            <a href="#experience" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Experience</a>
-            <a href="#skills" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Skills</a>
-            <a href="#projects" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Projects</a>
-            <a href="#awards" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Awards</a>
-            <a href="#leadership" class="hover:text-red-400 hover:drop-shadow-[0_0_6px_#ff3b3b] transition">Leadership</a>
+        <div class="hidden md:flex space-x-6 text-[#737373] text-xs uppercase tracking-widest">
+            <a href="#about" class="hover:text-[#e5e5e5] transition">01. About</a>
+            <a href="#education" class="hover:text-[#e5e5e5] transition">02. Edu</a>
+            <a href="#experience" class="hover:text-[#e5e5e5] transition">03. Exp</a>
+            <a href="#projects" class="hover:text-[#e5e5e5] transition">04. Proj</a>
         </div>
     </div>
 </nav>
 
-<!-- dont edit the synthwave anymore it finally fing works -->
-<header class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-black">
-
-  <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-900/40 to-black z-0"></div>
-
-  <div class="absolute inset-0 floor">
-    </div>
-
-<div class="relative z-10 max-w-4xl px-6 text-center text-red-200">
-    <h1 class="text-4xl sm:text-6xl font-extrabold mb-2 tracking-tight neon-text">Chu Kai Le</h1>
-    <p class="text-lg sm:text-2xl font-light opacity-90 neon-text">
-        NUS Engineering Scholar | Computational Modeling | Optimization & Data Systems
-    </p>
-    
-    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-      
-      <a href="https://www.linkedin.com/in/ckail/" class="w-full sm:w-auto bg-red-700/80 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-red-600 neon-button flex items-center justify-center">
-        Contact Me via LinkedIn!
-      </a>
-<!--
-      <a href="assets/quant_resume.pdf" download class="w-full sm:w-auto bg-gray-900/80 border border-red-500/50 text-red-100 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-800 neon-button flex items-center justify-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        Download my quant resume! (pdf)
-      </a>
-        <a href="https://www.linkedin.com/in/ckail/" download class="w-full sm:w-auto bg-gray-900/80 border border-red-500/50 text-red-100 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-800 neon-button flex items-center justify-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        Download my engineering resume! (pdf) [Coming Soon!]
-      </a>
--->
-    </div>
-
-  </div>
-    
-
-  <style>
-    :root {
-      --synth-red-strong: #FF1A1A;
-      --synth-red-medium: #FF4D4D;
-      --synth-red-light: #FF6666;
-      
-      --line-width: 24px;
-      --grid-line-color: rgba(255, 77, 77, 0.7);
-      
-      --v-line-spacing: 160px;
-      --h-line-spacing: 140px;
-    }
-
-    .floor {
-      perspective: 1600px;
-      perspective-origin: 50% 100%;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      transform-style: preserve-3d;
-    }
-    
-    .floor::before,
-    .floor::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: -100%;
-      width: 300%;
-      height: 200%;
-      transform-origin: bottom center;
-      filter: drop-shadow(0 0 6px var(--synth-red-medium));
-    }
-      
-    .floor::before {
-      background-image: repeating-linear-gradient(
-          to right,
-          var(--grid-line-color) 0,
-          var(--grid-line-color) var(--line-width),
-          transparent var(--line-width),
-          transparent var(--v-line-spacing)
-        ),
-        /* static horizon line so that the vertical lines dont jut out when the newest one goes down, quick ez fix*/
-        linear-gradient(
-          to bottom,
-          var(--grid-line-color) 0,
-          var(--grid-line-color) var(--line-width),
-          transparent var(--line-width)
-        );
+<header class="relative w-full h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16">
+    <div class="relative z-10 max-w-4xl px-6 w-full text-left md:text-center">
         
-      background-size: var(--v-line-spacing) 100%, 100% 100%; 
+        <div class="text-xs text-[#737373] mb-6 flex justify-start md:justify-center items-center gap-4">
+            <span class="border border-[#262626] px-2 py-1 uppercase tracking-widest">Status: Active</span>
+            <span class="border border-[#262626] px-2 py-1 uppercase tracking-widest">
+                Loc: <span id="location-text" data-value="SINGAPORE" class="text-[#8b0000] font-bold"></span>
+            </span>
+        </div>
 
-      background-position: 0 0, 0 0; 
-      
-      transform: rotateX(70deg);
-    }
-
-    .floor::after {
-      background-image: repeating-linear-gradient(
-          to bottom,
-          var(--grid-line-color) 0,
-          var(--grid-line-color) var(--line-width),
-          transparent var(--line-width),
-          transparent var(--h-line-spacing)
-        );
-      background-size: 100% var(--h-line-spacing);
-      transform: rotateX(70deg);
-      animation: driveForward 0.7s linear infinite;
-    }
-
-    @keyframes driveForward {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 0 var(--h-line-spacing);
-      }
-    }
-
-    .neon-text {
-      text-shadow: 0 0 2px var(--synth-red-strong), 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-medium), 0 0 12px var(--synth-red-light);
-    }
-    .neon-button {
-      box-shadow: 0 0 3px var(--synth-red-strong), 0 0 6px var(--synth-red-medium), 0 0 9px var(--synth-red-light);
-      transition: all 0.3s ease-in-out;
-    }
-    .neon-button:hover {
-      box-shadow: 0 0 4px var(--synth-red-strong), 0 0 8px var(--synth-red-medium), 0 0 12px var(--synth-red-light);
-      transform: scale(1.05);
-    }
-  </style>
+        <h1 class="text-4xl sm:text-6xl font-bold mb-4 tracking-tight text-[#e5e5e5]">CHU KAI LE</h1>
+        
+        <p class="text-sm sm:text-base text-[#737373] mb-10 tracking-widest uppercase">
+            NUS Engineering Scholar <span class="text-[#262626] mx-2">|</span> Computational Modeling <span class="text-[#262626] mx-2">|</span> Data Systems
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-start md:justify-center gap-4">
+            <a href="https://www.linkedin.com/in/ckail/" class="w-full sm:w-auto border border-[#8b0000] text-[#e5e5e5] hover:bg-[#8b0000] transition px-8 py-3 text-xs tracking-widest uppercase font-bold text-center">
+                Initialize Contact &rarr;
+            </a>
+        </div>
+    </div>
 </header>
         
-        <main class="max-w-4xl mx-auto px-6 py-12 sm:py-20">
+<main class="max-w-4xl mx-auto px-6 py-16 sm:py-24">
 
-            <!-- abiout section -->
-            <section id="about" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">About Me</h2>
-                <div class="space-y-4 text-lg text-gray-400">
-                    <p>I enjoy building systems at the intersection of finance, engineering, and data. My work spans algorithmic trading engines, performance‑critical C++/Python tooling, and side projects that automate or optimize real‑world workflows. I'm always looking for more ways to make my life more interesting.</p>                
-                </div>
-            </section>
-            
-            <!-- education section -->
-            <section id="education" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Education</h2>
-                <div class="space-y-6">
-                    <!-- uni -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Incoming Engineering Undergraduate in 2026</h3>
-                        <p class="text-red-400 font-medium">National University of Singapore (NUS)</p>
-                        <p class="text-sm text-gray-500">Aug 2026 &ndash; TBC | Singapore </p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                                <li>Mechanical Engineering with a Double Major in Computing, under the CDE Engineering Scholars Programme (accelerated 3-year B.Eng.).</li>
-                        </ul>
-                    </div>
-                    <!-- hs -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Secondary/Pre-Tertiary</h3>
-                        <p class="text-red-400 font-medium">NUS High School of Mathematics and Science (NUSH)</p>
-                        <p class="text-sm text-gray-500">Jan 2018 &ndash; Nov 2023 | Singapore</p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                            <li>Graduated with a NUS High Diploma (High Distinction), Overall CAP: 4.5 / A-</li>
-                            <li>Major CAP: Chemistry - 4.9 / A+, Mathematics - 4.9 / A+, Physics - 4.6 / A</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- research -->
-            <section id="research" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Research</h2>
-                <div class="space-y-6">
-                    <!-- research in hs -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Synthesis of Peptide Nanomaterials via Controlled Self-Assembly</h3>
-                        <p class="text-red-400 font-medium">NUS High / NUS</p>
-                        <p class="text-sm text-gray-500">Apr 2022 &ndash; Aug 2023 | Singapore </p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                            <li>Investigated whether amino acids could form cocrystals with the FF dipeptide to alter its self-assembly into peptide nanomaterials. Used computational screening (HSP, ΔpKa, Mercury) and SEM validation, finding that incompatible amino acids showed no morphological change, consistent with predictions.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- experience -->
-            <section id="experience" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Work Experience</h2>
-                <div class="space-y-6">
-                    <!-- aft -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Air Force Electro-Armament Technician (NS)</h3>
-                        <p class="text-red-400 font-medium">Republic of Singapore Air Force / 5th Ammunition Depot</p>
-                        <p class="text-sm text-gray-500">Aug 2024 &ndash; Present | Singapore</p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                            <li><span class="font-semibold text-white">Munitions Maintenance</span>: Maintained and serviced general-purpose bombs (MK82/84 GP Bombs) and aircraft countermeasures to ensure operational readiness.</li>
-                            <li><span class="font-semibold text-white">Preventive Maintenance</span>: Conducted scheduled maintenance per technical manuals, achieving 100% serviceability.</li>
-                            <li><span class="font-semibold text-white">Digitalization & Process Improvement</span>: Digitalized 3,000+ stockcards, improving inventory accuracy and reducing stockcard creation time by 85% using Excel Macros.</li>
-                            <li><span class="font-semibold text-white">Logistics Operations</span>: Operated forklifts and buggies to move inventory safely and efficiently.</li>
-                        </ul>
-                    </div>
-                    <!-- grant -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Landscape Architecture Intern</h3>
-                        <p class="text-red-400 font-medium">Grant Associates</p>
-                        <p class="text-sm text-gray-500">May 2023 &ndash; Jun 2023 | Singapore</p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                            <li><span class="font-semibold text-white">Ecological Data</span>: Collated and presented research data to guide design decisions for the firm's first coral reef enclosure project in Singapore.</li>
-                            <li><span class="font-semibold text-white">Parametric Modeling</span>: Applied Rhino and Grasshopper for geometric modeling and design visualization.</li>
-                            <li><span class="font-semibold text-white">Urban Planning Knowledge</span>: Studied land use regulations and plant design principles for sustainable design.</li>
-                        </ul>
-                    </div>
-                    <!-- cold storage -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Part-time Supermarket Assistant</h3>
-                        <p class="text-red-400 font-medium">Cold Storage</p>
-                        <p class="text-sm text-gray-500">Oct 2023 &ndash; Nov 2023 | Singapore</p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                            <li><span class="font-semibold text-white">Inventory & Quality</span>: Maintained stock levels and conducted daily checks on perishable goods.</li>
-                            <li><span class="font-semibold text-white">Customer Support</span>: Assisted customers with product queries and self-checkout systems.</li>
-                        </ul>
-                    </div>
-                    <!-- warehouse -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Part-time Production Operator</h3>
-                        <p class="text-red-400 font-medium">LF Logistics</p>
-                        <p class="text-sm text-gray-500">Jun 2022 &ndash; Jul 2022 | Singapore</p>
-                        <ul class="list-disc list-inside text-gray-400 mt-2 ml-4 space-y-1 text-base">
-                            <li><span class="font-semibold text-white">Order Fulfillment</span>: Picked, packed, and sorted high-volume orders efficiently.</li>
-                            <li><span class="font-semibold text-white">Logistics Coordination</span>: Coordinated inbound/outbound shipments and resolved delivery issues.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-
-            <!-- skills -->
-            <section id="skills" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Skills & Certifications</h2>
-                
-                <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-white mb-3">Technical Skills</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <!-- technical skills -->
-                        <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">Python (Proficient)</span>
-                        <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">Excel VBA/Macros (Intermediate)</span>
-                        <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">Pandas / NumPy (Intermediate)</span>
-                        <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">SQL (Intermediate)</span>
-                        <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">Git / GitHub Pages (Intermediate)</span>
-                        <span class="px-4 py-1 bg-red-900 text-red-300 rounded-full text-sm font-medium">C++ (Basic)</span>
-                    </div>
-                </div>
-                <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-white mb-3">Analytical Skills</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <!-- soft skills -->
-                        <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Problem Solving</span>
-                        <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Comparative Data Analysis</span>
-                        <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Statistical Reporting</span>
-                        <span class="px-4 py-1 bg-orange-900 text-orange-300 rounded-full text-sm font-medium">Quantitative Process Improvement</span>
-                    </div>
-                </div>
-                <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-white mb-3">Technical Certifications</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <!-- certs -->
-                        <span class="px-4 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm font-medium">Foundational Data Analytics (Coursera)</span>
-                        <span class="px-4 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm font-medium">Intermediate SQL (DataCamp)</span>
-                        <span class="px-4 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm font-medium">Intermediate Python (DataCamp)</span>
-                    </div>
-                </div>
-            </section>
-
-        <!-- technical projs -->
-        <section id="projects" class="mb-16">
-            <h2 class="text-3xl font-bold text-gray-100 mb-8 border-b-2 border-red-400 pb-2">Technical Projects</h2>
-            <div class="relative w-full overflow-hidden">
-                
-                <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">C++-Accelerated Pairs Trading Walk Forward Analysis</h3>
-                                    
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Pandas/Numpy</span>
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">C++</span>
-                                    </div>
-                                </div>
-                                
-                                <p class="text-gray-400 mb-4">Built a C++-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.</p>
-                                <div class="space-y-2">
-                                    <a href="https://github.com/kaishx/wfa" class="block text-red-400 hover:text-red-300 font-medium">View Code & Write-Up (Github) &rarr;</a>
-                                </div>
-                            </div>
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                                <img src="assets/wfa.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Pairs Trading Paper Trading Engine</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Pandas/Numpy</span>
-                                    </div>
-                                </div>
-                                
-                                <p class="text-gray-400 mb-4">Developed a pairs trading algorithm that systematically monitors over 20 equity/ETF pairs for mean-reversion signals. The platform applies rigorous statistical filters to ensure high-confidence entry signals and executes trades automatically through Alpaca’s paper trading API, with performance updates posted to a Telegram channel.</p>
-                                <div class="space-y-2">
-                                    <a href="https://github.com/kaishx/paper_trader" class="block text-red-400 hover:text-red-300 font-medium">View Code (Github) &rarr;</a>
-                                    <a href="https://t.me/portfolio_value" class="block text-red-400 hover:text-red-300 font-medium">View Updates Channel (Telegram) &rarr;</a>
-                                </div>
-                            </div>
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                                <img src="assets/architecture.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Scrabble Word Trainer</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Asynchronous JS</span>
-                                    </div>
-                                </div>
-                                
-                                <p class="text-gray-400 mb-4">Developed a high-speed Scrabble Trainer that increases player word recognition speed and competitive decision-making agility.</p>
-                                <div class="space-y-2">
-                                    <a href="https://kaishx.github.io/scrabbletrainer/" class="block text-red-400 hover:text-red-300 font-medium">View Site &rarr;</a>
-                                </div>
-                            </div>
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                                <img src="assets/scrabble.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Fusion360 Modelling Project for Motorbike</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Fusion 360</span>
-                                    </div>
-                                </div>
-                                
-                                <p class="text-gray-400 mb-4">This is currently in progress! Check back in a month or two to see the final model! I've added a progress pic just to fill the void.</p>
-                                <div class="space-y-2">
-                                    <a href="https://kaishx.github.io/#projects" class="block text-red-400 hover:text-red-300 font-medium">View Project Images (Imgur) &rarr;</a>
-                                </div>
-                            </div>
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                                <img src="assets/Motorcycle.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                        </div>
-                    </div>
+    <section id="about" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 01 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Operational Overview</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        <div class="section-item">
+            <p class="text-sm sm:text-base text-[#a3a3a3] leading-relaxed">
+                I build systems at the intersection of finance, engineering, and data. My work spans algorithmic trading engines, performance‑critical C++/Python tooling, and projects that automate or optimize real‑world workflows. I operate with a focus on structural efficiency and quantitative improvement.
+            </p>                
+        </div>
+    </section>
+    
+    <section id="education" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 02 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Academic Structure</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
         
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Algorithmic Ranking System for Manga</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Python</span>
-                                    </div>
-                                </div>
-                                
-                                <p class="text-gray-400 mb-4">Developed a Python-based ELO system for comparative ranking of manga titles to address personal rating inflation by applying the ELO algorithm, hence normalizing scores for further data analysis.</p>
-                                <div class="space-y-2">
-                                    <a href="https://github.com/kaishx/Manga-Rater" class="block text-red-400 hover:text-red-300 font-medium">View Code (GitHub) &rarr;</a>
-                                </div>
-                            </div>
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder">
-                                <img src="assets/manga_rater.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
+        <div class="space-y-0">
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Incoming Engineering Undergraduate</h3>
+                    <p class="text-xs text-[#737373]">Aug 2026 &ndash; TBC</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">National University of Singapore (NUS)</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li><span class="text-[#e5e5e5]">Major:</span> Mechanical Engineering & Computing (Double Major)</li>
+                    <li><span class="text-[#e5e5e5]">Program:</span> CDE Engineering Scholars Programme (Accelerated 3-year B.Eng.)</li>
+                </ul>
+            </div>
+            
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Secondary/Pre-Tertiary</h3>
+                    <p class="text-xs text-[#737373]">Jan 2018 &ndash; Nov 2023</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High School of Mathematics and Science</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li><span class="text-[#e5e5e5]">Diploma:</span> High Distinction (Overall CAP: 4.5 / A-)</li>
+                    <li><span class="text-[#e5e5e5]">Major CAPs:</span> Chemistry (4.9), Mathematics (4.9), Physics (4.6)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 03 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Professional Implementations</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        
+        <div class="space-y-0">
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Air Force Electro-Armament Technician</h3>
+                    <p class="text-xs text-[#737373]">Aug 2024 &ndash; Present</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Republic of Singapore Air Force</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li><span class="text-[#e5e5e5]">Digitalization:</span> Automated 3,000+ stockcards using Excel Macros, reducing processing time by 85%.</li>
+                    <li><span class="text-[#e5e5e5]">Maintenance:</span> Serviced MK82/84 GP Bombs and countermeasures, ensuring 100% operational readiness.</li>
+                </ul>
+            </div>
+            
+            <div class="section-item">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Landscape Architecture Intern</h3>
+                    <p class="text-xs text-[#737373]">May 2023 &ndash; Jun 2023</p>
+                </div>
+                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Grant Associates</p>
+                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
+                    <li><span class="text-[#e5e5e5]">Ecological Data:</span> Collated research to guide design for a coral reef enclosure project.</li>
+                    <li><span class="text-[#e5e5e5]">Parametric Modeling:</span> Applied Rhino and Grasshopper for geometric design visualization.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 04 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">System Capabilities</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        
+        <div class="section-item">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xs font-bold text-[#8b0000] uppercase tracking-widest mb-4">Technical Stack</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">Python</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">C++</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">Pandas/NumPy</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">SQL</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">VBA/Macros</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#e5e5e5] text-xs">Git</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-[#8b0000] uppercase tracking-widest mb-4">Core Competencies</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 border border-[#262626] text-[#737373] text-xs">Data Optimization</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#737373] text-xs">Algorithm Design</span>
+                        <span class="px-2 py-1 border border-[#262626] text-[#737373] text-xs">Process Improvement</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1">[ 05 ]</span>
+            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">System Portfolio</h2>
+            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        </div>
+        
+        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a]">
+            
+            <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
+                
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-2">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Walk-Forward Analysis Engine</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">C++</span>
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Built a C++-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.</p>
+                        <a href="https://github.com/kaishx/wfa" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Source ]</a>
+                    </div>
+                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
+                        <img src="assets/wfa.png" alt="WFA Engine" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
+                </div>
+
+                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
+                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-2">
+                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-4">Pairs Trading Paper Engine</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
+                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Alpaca API</span>
+                        </div>
+                        <p class="text-sm text-[#a3a3a3] mb-6">Algorithm systematically monitors 20+ equity/ETF pairs for mean-reversion signals. Applies rigorous statistical filters and executes trades automatically through Alpaca’s API, posting telemetry to Telegram.</p>
+                        <div class="flex flex-col gap-2">
+                            <a href="https://github.com/kaishx/paper_trader" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Source ]</a>
+                            <a href="https://t.me/portfolio_value" class="text-xs text-[#737373] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Telemetry ]</a>
                         </div>
                     </div>
-                    
+                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
+                        <img src="assets/architecture.png" alt="Architecture" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
+                    </div>
                 </div>
-                
-                <button id="prev-btn" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                </button>
-                <button id="next-btn" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                </button>
-                <div id="slide-indicator" class="text-center mt-4 text-gray-400">1 of 5</div>
                 
             </div>
-        </section>
-        
-        
-        <section id="other-projects" class="mb-16">
-            <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Other Projects</h2>
             
-            <div class="relative w-full overflow-hidden">
-                
-                <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                                <img src="assets/carou.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                            
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Online Marketplace Ventures</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Carousell</span>
-                                    </div>
-                                </div>
-                                <p class="text-base text-gray-400 mb-4">Managed a personal trading venture exploiting price spreads across niche digital assets and specialized equipment, achieving a 24x Return on Invested Capital (ROIC) ($150 to $3,700) over 19 months.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                                <img src="assets/TM.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                            
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Trackmania Map & Environment Design</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">In-Game Editor</span>
-                                    </div>
-                                </div>
-                                <p class="text-base text-gray-400 mb-4">Designed and published over 10 custom Trackmania maps across varied difficulties. This work was validated by the community with awards for design quality and resulted in an offer for a commissioned role to develop technical maps for a dedicated gaming group.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                                <img src="assets/cards.jpeg" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                            
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Social Deduction Card Game Design & Manufacturing</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        </div>
-                                </div>
-                                <p class="text-base text-gray-400 mb-4">Managed the complete development of an original social deduction card game, producing over 200 physical cards. The project featured rigorous balancing, iterative mechanical refinement based on 20+ participant playtests, and the implementation of efficient card manufacturing techniques.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-full">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg border-t-4 border-red-500 project-card-border md:flex md:space-x-8">
-                            <div class="md:w-1/2 flex items-center justify-center bg-gray-900 rounded-lg h-64 md:h-auto image-placeholder mb-6 md:mb-0">
-                                <img src="assets/manga_database.png" alt="ERROR" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                            
-                            <div class="md:w-1/2 md:h-96 overflow-y-auto">
-                                <div class="mb-4">
-                                    <h3 class="text-xl sm:text-2xl font-semibold text-white">Google Sheets-based Manga Database</h3>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="text-sm font-medium text-white bg-red-600 rounded-full px-2 py-1">Google Sheets</span>
-                                    </div>
-                                </div>
-                                <p class="text-base text-gray-400 mb-4">Engineered a comprehensive Manga Database (1000+ titles) in Google Sheets to track granular consumption data and scores. This data was leveraged to generate complex analytical reports on key metrics like Score Distribution (Average/Median), Genre Performance, and title status tracking.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                <button id="prev-btn-other" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            <div class="absolute bottom-0 left-0 w-full border-t border-[#262626] bg-[#050505] flex justify-between items-center px-4 py-2">
+                <button id="prev-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">
+                    &lt; Prev
                 </button>
-                <button id="next-btn-other" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700/50 hover:bg-red-700/80 p-3 rounded-full text-white z-20 transition duration-300 mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                <div id="slide-indicator" class="text-xs text-[#737373] font-mono tracking-widest">
+                    1 / 2
+                </div>
+                <button id="next-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">
+                    Next &gt;
                 </button>
-                
-                <div id="slide-indicator-other" class="text-center mt-4 text-gray-400">1 of 4</div>
-                
             </div>
-        </section>
-                    
-            <!-- awards -->
-            <section id="awards" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Awards & Recognition</h2>
-                <div class="space-y-4 text-lg text-gray-400">
-                    <ul class="list-disc list-inside ml-4 space-y-2">
-                        <li>NUS CDE Engineering Scholars Scholarship (2026-2029) &ndash; NUS' Highly selective bond-free scholarship for top engineering talent.</li>
-                        <li>NUS High School Commendation Award (2021-2022) &ndash; Leadership</li>
-                        <li>5th Place, NUS Chem-Engineering Challenge (2022) &ndash; (Top 5%, out of 100+ teams), challenge included various optimization and analysis tasks.</li>
-                        <li>Singapore Mathematical Olympiad (Junior), Silver (2019)</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- leadership -->
-            <section id="leadership" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Leadership & Community Contributions</h2>
-                <div class="space-y-4 text-lg text-gray-400">
-                    <!-- 3sg -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">3rd Sergeant</h3>
-                        <p class="text-red-400 font-medium">Republic of Singapore Air Force</p>
-                        <p class="text-sm text-gray-500">Mar 2025 &ndash; Present</p>
-                        <p class="text-gray-400 mt-2">Demonstrated leadership and management skills as a 3rd Sergeant, effectively managing a team of armament technicians in complex daily operations and safety protocols.</p>
-                    </div>
-                    <!-- ncc -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Master Sergeant / Vice-President</h3>
-                        <p class="text-red-400 font-medium">NCC (Land)</p>
-                        <p class="text-sm text-gray-500">Jan 2021 &ndash; Dec 2022</p>
-                        <p class="text-gray-400 mt-2">Led school’s NCC (Land) CCA as Unit Master Sergeant from 2021-2022, managing all internal and external activity planning and execution.</p>
-                    </div>
-                    <!-- ndp23 -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Exco / Planner for NUS High NDP 2023</h3>
-                        <p class="text-red-400 font-medium">NUS High</p>
-                        <p class="text-sm text-gray-500">Mar 2023 &ndash; Aug 2023</p>
-                        <p class="text-gray-400 mt-2">Served on the Planning & Training Exco for the school’s National Day Parade in 2023, collaborating across groups and directly managing the training and logistics for 200+ parade marchers. Participated as the parade's Regimental Sergeant-Major</p>
-                    </div>
-                    <!-- shine -->
-                    <div class="section-item">
-                        <h3 class="text-xl font-semibold text-white">Volunteer</h3>
-                        <p class="text-red-400 font-medium">SHINE</p>
-                        <p class="text-sm text-gray-500">Oct 2023 &ndash; Oct 2023</p>
-                        <p class="text-gray-400 mt-2">I collaborated with my club to organize a full-day event for mentally challenged children from SHINE. I planned games and spent the day paired one-on-one with a participant, ensuring they had a fun, engaging, and inclusive experience on campus.</p>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- actvitiies -->
-            <section id="interests" class="mb-16">
-                <h2 class="text-3xl font-bold text-gray-100 mb-6 border-b-2 border-red-400 pb-2">Activities and Interests</h2>
-                <div class="space-y-4 text-lg text-gray-400">
-                    <div class="flex flex-wrap gap-3 mt-4">
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Valorant (Peaked Top 0.5%)</span>
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Trackmania (Peaked Asia Top 1%, SG Top 3)</span>
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Bouldering</span>
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Mixology</span>
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Motorcycles</span>
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Manga</span>
-                        <span class="px-4 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium">Scrabble</span>
-                    </div>
-                </div>
-            </section>
-            
-
-        </main>
+        </div>
+    </section>
+</main>
         
-        <!-- footer -->
-        <footer class="bg-black-0 text-white py-8 mt-12">
-            <div class="max-w-4xl mx-auto px-6 text-center">
-                <p class="text-sm text-gray-400 mb-4">Connect with me!</p>
-                
-                <div class="flex flex-col space-y-2 mb-6">
-                    <a href="https://github.com/kaishx" target="_blank" class="text-red-400 hover:text-red-300 font-medium transition duration-300">
-                        GitHub (kaishx)
-                    </a>
-                    <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="text-red-400 hover:text-red-300 font-medium transition duration-300">
-                        LinkedIn
-                    </a>
-                    
-                    <p class="text-gray-400">Email: chukaile.work@gmail.com</p>
-                </div>
-                
-                <p class="mt-6 text-xs text-gray-500">&copy; 2025 Chu Kai Le. Built with HTML and Tailwind CSS.</p>
-            </div>
-        </footer>
-
+<footer class="bg-[#050505] border-t border-[#262626] text-[#737373] py-12 mt-12">
+    <div class="max-w-4xl mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+            <p class="text-xs tracking-widest uppercase mb-2 text-[#e5e5e5]">System Terminated</p>
+            <p class="text-xs">&copy; 2025 CHU KAI LE. Built for precise execution.</p>
+        </div>
+        
+        <div class="flex space-x-6 text-xs tracking-widest uppercase font-bold">
+            <a href="https://github.com/kaishx" target="_blank" class="hover:text-[#8b0000] transition">GitHub</a>
+            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="hover:text-[#8b0000] transition">LinkedIn</a>
+        </div>
     </div>
-<script>
+</footer>
 
-    function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId, name) {
+<script>
+    // 1. Location Scramble Decode Effect
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let interval = null;
+    const target = document.getElementById("location-text");
+
+    function scrambleText(element) {
+        let iteration = 0;
+        clearInterval(interval);
+        
+        interval = setInterval(() => {
+            element.innerText = element.dataset.value
+                .split("")
+                .map((letter, index) => {
+                    if(index < iteration) {
+                        return element.dataset.value[index];
+                    }
+                    return letters[Math.floor(Math.random() * 42)]; // 42 is length of letters string
+                })
+                .join("");
+            
+            if(iteration >= element.dataset.value.length){
+                clearInterval(interval);
+            }
+            iteration += 1 / 3; // speed of decoding
+        }, 30);
+    }
+
+    // Trigger scramble on load
+    window.addEventListener('DOMContentLoaded', () => {
+        scrambleText(target);
+    });
+
+    // 2. Carousel Logic (Refined)
+    function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId) {
         const slidesContainer = document.getElementById(containerId);
         const prevBtn = document.getElementById(prevBtnId);
         const nextBtn = document.getElementById(nextBtnId);
         const indicator = document.getElementById(indicatorId);
         
-        if (!slidesContainer || !prevBtn || !nextBtn) {
-            console.error(`Carousel initialization failed for ID: ${containerId}`);
-            return;
-        }
+        if (!slidesContainer || !prevBtn || !nextBtn) return;
 
         const slides = slidesContainer.querySelectorAll('.flex-shrink-0');
         const totalSlides = slides.length;
@@ -675,14 +342,10 @@
         function updateSlide() {
             const translateValue = -currentSlide * 100;
             slidesContainer.style.transform = `translateX(${translateValue}%)`;
-            
-            indicator.textContent = `${currentSlide + 1} of ${totalSlides}`;
+            indicator.textContent = `[ ${currentSlide + 1} / ${totalSlides} ]`;
             
             prevBtn.disabled = currentSlide === 0;
             nextBtn.disabled = currentSlide === totalSlides - 1;
-            
-            prevBtn.style.opacity = prevBtn.disabled ? 0.4 : 1;
-            nextBtn.style.opacity = nextBtn.disabled ? 0.4 : 1;
         }
 
         nextBtn.addEventListener('click', () => {
@@ -702,12 +365,7 @@
         updateSlide();
     }
 
-    
-    // for tech projs
-    initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator', 'Technical Project');
-
-    // for other projs
-    initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other', 'Other Project');
+    initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator');
 </script>
 
 </body>
