@@ -600,33 +600,33 @@
 </main>
         
 <footer class="bg-[#050505] border-t border-[#262626] text-[#737373] py-12 mt-12 relative overflow-hidden">
-    <div class="absolute inset-0 z-0 opacity-[0.05] pointer-events-none">
-        <img src="assets/world-map.png" alt="" class="w-full h-full object-cover">
+    <div class="max-w-5xl mx-auto px-6 relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
         
-        <div class="absolute" style="top: 66%; left: 72%;">
-            <span class="relative flex h-3 w-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8b0000] opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-[#8b0000]"></span>
-            </span>
-        </div>
-    </div>
-
-    <div class="max-w-5xl mx-auto px-6 relative z-10 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-            <p class="text-xs">&copy; 2026 CHU KAI LE. Built with HTML and Tailwind CSS.</p>
+        <div class="text-center md:text-left order-1">
+            <p class="text-xs">© 2026 CHU KAI LE</p>
             <p class="text-[11px] font-mono tracking-widest text-[#8b0000] uppercase mt-2">
                 LOC: SINGAPORE // 1.2974° N, 103.7777° E
             </p>
             <p class="text-xs mt-2">chukaile.work@gmail.com</p>
         </div>
+
+        <div class="relative w-48 h-24 hidden md:block opacity-20 order-2">
+            <img src="assets/world-map.png" alt="" class="w-full h-full object-contain filter grayscale invert">
+            <div class="absolute" style="top: 61%; left: 74%;">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8b0000] opacity-90"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[#8b0000]"></span>
+                </span>
+            </div>
+        </div>
         
-        <div class="flex space-x-6 text-xs tracking-widest uppercase font-bold">
-            <a href="https://github.com/kaishx" target="_blank" class="hover:text-[#e5e5e5] transition border-b border-transparent hover:border-[#8b0000]">GitHub</a>
-            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="hover:text-[#e5e5e5] transition border-b border-transparent hover:border-[#8b0000]">LinkedIn</a>
+        <div class="flex space-x-6 text-xs tracking-widest uppercase font-bold order-3">
+            <a href="https://github.com/kaishx" target="_blank" class="hover:text-[#e5e5e5] transition border-b border-transparent hover:border-[#8b0000]">GITHUB</a>
+            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="hover:text-[#e5e5e5] transition border-b border-transparent hover:border-[#8b0000]">LINKEDIN</a>
         </div>
     </div>
 </footer>
-
+    
 <a href="#hero" id="back-to-top" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-[#262626] text-[#737373] hover:text-[#e5e5e5] hover:border-[#8b0000] p-3 z-50 transition-colors duration-300">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 15l7-7 7 7"></path>
