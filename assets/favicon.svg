@@ -1,30 +1,26 @@
-<!-- Note: Rigid Square requires an Adobe Fonts or MyFonts license to load via @font-face -->
-<svg xmlns="http://www.w3.org" viewBox="60 60 392 392">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 392 392">
   <defs>
     <style>
-      @import url("https://use.typekit.net"); /* Replace with your actual font provider link */
-      
       .crimson-fill { fill: #8b0000; } 
-      .gray-fill { fill: #e5e5e5; }
-      
-      .rigid-font {
-        font-family: "rigid-square", sans-serif; /* Official family name for Rigid Square */
-        font-weight: 700;
-        font-size: 345px; /* Adjusted to fill the viewbox */
-      }
+      .gray-fill { fill: #e5e5e5; }   
     </style>
   </defs>
 
-  <!-- Corner Accents -->
   <polygon class="gray-fill" points="262,80 432,80 432,250 382,250 382,130 262,130" />
+
   <polygon class="gray-fill" points="80,262 130,262 130,382 250,382 250,432 80,432" />
 
-  <!-- The 'K' -->
-  <text 
-    x="50%" 
-    y="52%" 
-    class="crimson-fill rigid-font" 
-    text-anchor="middle" 
-    dominant-baseline="central"
-    style="transform-box: fill-box; transform-origin: center; transform: scale(1.15, 1);">K</text>
+  <path class="crimson-fill" d="
+    M 170,165 
+    h 50 
+    v 70 
+    l 60,-70 
+    h 60 
+    l -70,85 
+    l 80,95 
+    h -60 
+    l -60,-80 
+    v 80 
+    h -50 
+    Z" />
 </svg>
