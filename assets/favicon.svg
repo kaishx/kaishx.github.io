@@ -2,7 +2,7 @@
   <defs>
     <style>
       .crimson-fill { fill: #8b0000; } 
-      .gray-fill { fill: #e5e5e5; }    
+      .gray-fill { fill: #e5e5e5; }   
     </style>
   </defs>
 
@@ -10,5 +10,5 @@
 
   <polygon class="gray-fill" points="80,262 130,262 130,382 250,382 250,432 80,432" />
 
-  <text x="256" y="251" class="crimson-fill" font-family="JetBrains Mono, monospace, sans-serif" font-weight="bold" font-size="320" text-anchor="middle" dominant-baseline="central">K</text>
+  <text x="256" y="251" class="crimson-fill" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="250" text-anchor="middle" dominant-baseline="central">K</text>
 </svg>
