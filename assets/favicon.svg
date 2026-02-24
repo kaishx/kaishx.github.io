@@ -10,5 +10,5 @@
 
   <polygon class="gray-fill" points="80,262 130,262 130,382 250,382 250,432 80,432" />
 
-  <text x="256" y="251" class="crimson-fill" font-family="'Courier New', Courier, monospace" font-weight="bold" font-size="250" text-anchor="middle" dominant-baseline="central">K</text>
+  <text x="256" y="251" class="crimson-fill" font-family="Consolas, 'Lucida Console', Monaco, monospace" font-weight="bold" font-size="260" text-anchor="middle" dominant-baseline="central">K</text>
 </svg>
