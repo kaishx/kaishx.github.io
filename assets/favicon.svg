@@ -1,19 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 392 392">
   <defs>
     <style>
-      .accent { fill: #8b0000; } 
-      .bracket { fill: #e5e5e5; }   
+      .crimson-fill { fill: #8b0000; } 
+      .gray-fill { fill: #e5e5e5; }   
     </style>
   </defs>
 
-  <polygon class="bracket" points="250,50 350,50 350,150 310,150 310,90 250,90" />
+  <polygon class="gray-fill" points="262,80 432,80 432,250 382,250 382,130 262,130" />
 
-  <polygon class="bracket" points="50,250 90,250 90,310 150,310 150,350 50,350" />
+  <polygon class="gray-fill" points="80,262 130,262 130,382 250,382 250,432 80,432" />
 
-  <text x="200" y="215" class="accent" 
-        font-family="Consolas, Monaco, 'Lucida Console', monospace" 
-        font-weight="900" 
-        font-size="280" 
-        text-anchor="middle" 
-        dominant-baseline="central">K</text>
+  <path class="crimson-fill" d="
+    M 180,160 
+    h 50 
+    v 70 
+    l 60,-70 
+    h 60 
+    l -70,85 
+    l 70,85 
+    h -60 
+    l -60,-70 
+    v 70 
+    h -50 
+    Z" />
 </svg>
