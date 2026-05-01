@@ -264,9 +264,12 @@
                 </div>
                 <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Genk Capital</p>
                 <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Developed a Stylized Facts testing Suite in Python to validate stylized facts across 38+ tickers, utilizing GARCH (1,1) for volatility filtering.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Engineered a volatility-based regime switching model with 900-point parameter sweeps and Transaction Cost Analysis.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Achieved a 0.9 Sharpe (unleveraged) vs. SPY's 0.7 through structural safe-asset rotation strategies.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">></span> Developed a microstructure signal predicting price-level collapses in large-tick assets, generating a 19 percentage-point spread in 30-second persistent collapse rates across 250 episodes and ~106 trading days of L2 data.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">></span> Engineered a passive spread-capture execution framework using a 3-outcome race condition model (fill / adverse / flat), achieving positive net expected value across all queue positions in high-volume regimes after transaction costs.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">></span> Replicated and generalized the signal across instruments with differing microstructure dynamics, re-deriving parameters from scratch and validating positive net EV across both market regimes and all queue positions.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">></span> Conducted survival analysis on ~605K L2 book updates, identifying a 97ms median time-to-collapse after threshold crossing and validating the signal’s real-time operational viability.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">></span> Performed 7×7 execution parameter sweeps across queue positions and blackout windows for multiple instruments and market regimes, identifying fill probability as the dominant driver of net EV sensitivity.</li>
+                    <li><span class="text-[#e5e5e5] font-bold">></span> Evaluated 7 signal refinements and 6 execution filters within a net EV framework, isolating consistently profitable filters while documenting regime-dependent and non-persistent effects.</li>
                 </ul>
             </div>
             
