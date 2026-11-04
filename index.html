@@ -1,943 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHU KAI LE | Portfolio</title>
-    
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-    
-    <link rel="alternate icon" href="assets/favicon.ico" type="image/x-icon"> 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap');
-        
-        :root {
-            --bg: #050505;
-            --surface: #0a0a0a;
-            --border: #262626;
-            --text-main: #e5e5e5;
-            --text-muted: #737373;
-            --accent-crimson: #8b0000; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chu Kai Le — Engineering, computing and quantitative research</title>
+<meta name="description" content="Chu Kai Le: Mechanical Engineering and Computing at NUS (CDE Engineering Scholar). Trading systems, market microstructure research and engineering projects. Singapore.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* Bold editorial: Anton display type over a navy / sage palette, asymmetric layouts, slow reveals. */
+:root {
+  --navy: #171e19; --sage: #b7c6c2; --white: #ffffff; --taupe: #9f8d8b; --beige: #d7c5b2;
+  --cyan: #d5f4f9; --blue: #bbe2f5; --charcoal: #302b2f; --ink-muted: #4c4a4b; --line-dark: rgba(255,255,255,.14);
+  --line-light: rgba(23,30,25,.16); --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --display: 'Anton', Impact, 'Arial Narrow', sans-serif; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--navy); color: var(--white); font: 400 17px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased; cursor: crosshair; overflow-x: hidden;
+}
+a { color: inherit; cursor: crosshair; }
+img { display: block; max-width: 100%; }
+::selection { background: var(--sage); color: var(--navy); }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
-            -webkit-font-smoothing: antialiased;
-        }
+.display { font-family: var(--display); text-transform: uppercase; letter-spacing: -0.02em; line-height: .88; font-weight: 400; margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+.wrap { width: min(1320px, 100% - 48px); margin-inline: auto; }
+section { position: relative; }
+.dark { background: var(--navy); color: var(--white); }
+.light { background: var(--white); color: var(--navy); }
+.sage { background: var(--sage); color: var(--navy); }
+.beige { background: #efe7de; color: var(--navy); }
+.muted-d { color: rgba(255,255,255,.62); }
+.muted-l { color: var(--ink-muted); }
 
-        /* brutalist box layout */
-        .section-item {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 0;
-            padding: 2rem;
-            margin-bottom: -1px;
-            transition: border-color 0.3s ease, transform 0.5s ease-out, opacity 0.5s ease-out; /* Added transform/opacity for scroll reveal */
-        }
+/* ---------------------------------------------------------------- navigation (inverts over any background) */
+.nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 50; mix-blend-mode: difference; color: #fff; pointer-events: none;
+}
+.nav .wrap { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+.nav a { pointer-events: auto; text-decoration: none; }
+.nav .mark { font-family: var(--display); font-size: 26px; letter-spacing: .02em; }
+.nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { font-size: 13px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; position: relative; }
+.nav ul a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -4px; height: 1px; background: currentColor; transition: right .5s var(--ease); }
+.nav ul a:hover::after { right: 0; }
 
-        .section-item:hover {
-            border-color: var(--accent-crimson);
-            z-index: 10;
-            position: relative;
-        }
-        
-        /* Scroll Reveal Utility Classes */
-        .reveal-hidden {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .reveal-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* ---------------------------------------------------------------- ambient orbs */
+.orb { position: absolute; width: 384px; height: 384px; border-radius: 50%; filter: blur(120px); opacity: .2; pointer-events: none; animation: float 6s ease-in-out infinite; }
+.orb.a { background: var(--sage); top: -80px; right: 6%; }
+.orb.b { background: var(--cyan); bottom: 4%; left: -120px; animation-delay: -2s; }
+.orb.c { background: var(--taupe); top: 40%; right: 30%; animation-delay: -4s; width: 300px; height: 300px; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        html {
-            scroll-behavior: smooth;
-        }
+/* ---------------------------------------------------------------- reveal on scroll */
+.reveal { opacity: 0; transform: translateY(10px); transition: opacity 1000ms var(--ease), transform 1000ms var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 120ms; } .reveal.d2 { transition-delay: 240ms; } .reveal.d3 { transition-delay: 360ms; }
 
-        /* custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg); 
-            border-left: 1px solid var(--border);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border); 
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted); 
-        }
-        
-        /* Back to top button specific styles */
-        #back-to-top {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, background-color 0.3s ease;
-        }
-        
-        #back-to-top.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    </style>
+/* ---------------------------------------------------------------- hero */
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; padding: 120px 0 48px; }
+.hero .meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--line-dark); padding-top: 18px; }
+.hero h1 { font-size: clamp(88px, 18vw, 300px); margin: 0 0 28px -0.04em; }
+.hero h1 span { display: block; }
+.hero h1 .outline { color: transparent; -webkit-text-stroke: 1.5px var(--sage); }
+.hero .lede { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: end; margin-bottom: 48px; }
+.hero .lede p { font-size: clamp(18px, 1.6vw, 22px); font-weight: 300; max-width: 34ch; margin: 0; }
+.hero .lede p b { font-weight: 600; color: var(--sage); }
+.logs { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line-dark); }
+.logs li { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 9px 0 9px 18px; font-size: 14px; }
+.logs time { color: var(--sage); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; padding-top: 2px; }
+.status { display: inline-flex; align-items: center; gap: 10px; }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: #7fe0a8; box-shadow: 0 0 0 0 rgba(127,224,168,.6); animation: pulse 2.4s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(127,224,168,0); } 100% { box-shadow: 0 0 0 0 rgba(127,224,168,0); } }
+
+/* ---------------------------------------------------------------- section headings */
+.head { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: end; padding: 120px 0 56px; }
+.head .num { font-family: var(--display); font-size: 22px; }
+.head h2 { font-size: clamp(64px, 9vw, 150px); }
+.head p { grid-column: 2; max-width: 52ch; margin: 18px 0 0; }
+
+/* ---------------------------------------------------------------- work: asymmetric masonry */
+.grid { columns: 3 340px; column-gap: 28px; padding-bottom: 120px; }
+.card { break-inside: avoid; margin: 0 0 28px; border: 1px solid var(--line-light); background: var(--white); }
+.card .media { position: relative; overflow: hidden; aspect-ratio: var(--ratio, 4 / 3); background: var(--tone, var(--sage)); }
+.card .media img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: transform .9s var(--ease), filter .9s var(--ease); }
+.card:hover .media img { transform: scale(1.1); filter: grayscale(0); }
+.card .type { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 22px; }
+.card .type .big { font-family: var(--display); font-size: clamp(64px, 7vw, 120px); line-height: .85; letter-spacing: -0.02em; }
+.card .type .small { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.card .media.has-img .type { display: none; }
+.card .overlay { position: absolute; inset: 0; background: rgba(23,30,25,.6); opacity: 0; display: grid; place-items: center; transition: opacity .5s var(--ease); }
+.card a.view:hover .overlay, .card a.view:focus-visible .overlay { opacity: 1; }
+.card .overlay span {
+  width: 96px; height: 96px; border-radius: 50%; background: var(--white); color: var(--navy); display: grid; place-items: center;
+  font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; transform: scale(.6); transition: transform .5s var(--ease);
+}
+.card a.view:hover .overlay span { transform: scale(1); }
+.card .body { padding: 22px 22px 26px; }
+.card h3 { font-family: var(--display); font-size: 30px; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1; margin: 6px 0 12px; }
+.card p { margin: 0; font-size: 15px; color: var(--ink-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.tags span { border: 1px solid var(--line-light); padding: 3px 10px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--charcoal); }
+
+/* ---------------------------------------------------------------- featured: asymmetric */
+.feature { padding: 140px 0; overflow: hidden; }
+.feature .grid2 { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; }
+.feature h2 { font-size: clamp(56px, 8vw, 132px); margin: 18px 0 32px; }
+.feature ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line-dark); }
+.feature li { padding: 16px 0; border-bottom: 1px solid var(--line-dark); color: rgba(255,255,255,.78); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-content: start; }
+.stat { border: 1px solid var(--line-dark); padding: 26px 24px; background: rgba(255,255,255,.02); }
+.stat:nth-child(2) { transform: translateY(64px); } .stat:nth-child(4) { transform: translateY(64px); }
+.stat b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(52px, 5.6vw, 92px); line-height: .9; color: var(--sage); letter-spacing: -0.02em; }
+.stat span { display: block; margin-top: 12px; font-size: 14px; color: rgba(255,255,255,.7); }
+
+/* ---------------------------------------------------------------- record (education, experience, leadership) */
+.record { padding-bottom: 120px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 64px; }
+.block h3 { font-size: 13px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; margin: 0 0 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line-light); }
+.item { display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line-light); }
+.item time { font-size: 13px; font-weight: 600; letter-spacing: .06em; color: var(--ink-muted); padding-top: 4px; }
+.item h4 { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.3; }
+.item .org { margin: 2px 0 8px; color: var(--ink-muted); font-size: 15px; }
+.item p { margin: 0; font-size: 15px; }
+.block + .block { margin-top: 56px; }
+
+/* ---------------------------------------------------------------- capabilities */
+.caps { padding-bottom: 120px; }
+.caps .rows { border-top: 1px solid var(--line-light); }
+.cap { display: grid; grid-template-columns: 120px 1.1fr 2fr; gap: 24px; padding: 30px 0; border-bottom: 1px solid var(--line-light); align-items: baseline; transition: padding .6s var(--ease); }
+.cap:hover { padding-left: 18px; }
+.cap .n { font-family: var(--display); font-size: 22px; }
+.cap h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(32px, 3.6vw, 56px); line-height: .95; margin: 0; letter-spacing: -0.01em; }
+.cap ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 10px; }
+.cap li { border: 1px solid rgba(23,30,25,.35); padding: 6px 14px; font-size: 14px; border-radius: 999px; }
+
+/* ---------------------------------------------------------------- recognition carousel */
+.recog { padding: 120px 0 140px; overflow: hidden; }
+.slides { position: relative; min-height: 340px; }
+/* the old slide fades out first, then the new one rises in: never two big figures on top of each other */
+.slide { position: absolute; inset: 0; display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: end; opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity .35s ease, transform .35s ease, visibility 0s linear .35s; pointer-events: none; }
+.slide.on { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity .9s var(--ease) .35s, transform .9s var(--ease) .35s, visibility 0s; }
+.slide .fig { font-family: var(--display); text-transform: uppercase; font-size: clamp(88px, 13vw, 220px); line-height: .82; letter-spacing: -0.03em; color: var(--sage); }
+.slide h3 { font-size: clamp(22px, 2.2vw, 30px); font-weight: 600; margin: 0 0 10px; line-height: 1.25; }
+.slide p { margin: 0; color: rgba(255,255,255,.7); max-width: 44ch; }
+.controls { display: flex; align-items: center; gap: 18px; margin-top: 56px; }
+.controls button { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--line-dark); background: transparent; color: #fff; font-size: 18px; cursor: crosshair; transition: background .5s var(--ease), color .5s var(--ease); }
+.controls button:hover { background: var(--white); color: var(--navy); }
+.dots { display: flex; gap: 8px; margin-left: 12px; }
+.dots i { width: 28px; height: 2px; background: rgba(255,255,255,.25); transition: background .5s var(--ease); }
+.dots i.on { background: var(--sage); }
+
+/* ---------------------------------------------------------------- footer */
+footer { padding: 120px 0 40px; overflow: hidden; }
+footer .big { display: block; font-size: clamp(80px, 17vw, 290px); text-decoration: none; margin: 28px 0 40px -0.03em; transition: color .6s var(--ease); }
+footer .big:hover { color: var(--sage); }
+footer .links { display: flex; flex-wrap: wrap; gap: 14px 32px; padding: 26px 0; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+footer .links a { text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+footer .links a:hover { color: var(--sage); }
+.marquee { overflow: hidden; white-space: nowrap; padding: 26px 0; border-bottom: 1px solid var(--line-dark); }
+.marquee div { display: inline-block; animation: slide 40s linear infinite; }
+.marquee span { font-family: var(--display); text-transform: uppercase; font-size: 28px; margin-right: 44px; color: rgba(255,255,255,.55); }
+.marquee span::after { content: "✦"; font-family: var(--body); font-size: 14px; color: var(--sage); margin-left: 44px; vertical-align: middle; }
+@keyframes slide { to { transform: translateX(-50%); } }
+.fine { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 22px; font-size: 13px; color: rgba(255,255,255,.55); }
+
+/* ---------------------------------------------------------------- cursor ring (pointer devices only) */
+.ring { position: fixed; top: 0; left: 0; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1px solid #fff; border-radius: 50%; pointer-events: none; z-index: 60; mix-blend-mode: difference; opacity: 0; transition: width .4s var(--ease), height .4s var(--ease), margin .4s var(--ease), opacity .4s; display: none; }
+.ring.live { opacity: 1; }
+.ring.big { width: 72px; height: 72px; margin: -36px 0 0 -36px; }
+@media (hover: hover) and (pointer: fine) { .ring { display: block; } }
+
+/* ---------------------------------------------------------------- small screens */
+@media (max-width: 900px) {
+  body { font-size: 16px; }
+  .nav ul { gap: 16px; } .nav ul li:nth-child(n+4) { display: none; }
+  .hero .lede, .feature .grid2, .cols, .slide { grid-template-columns: 1fr; }
+  .head { grid-template-columns: 1fr; padding: 88px 0 40px; } .head p { grid-column: 1; }
+  .stat:nth-child(2), .stat:nth-child(4) { transform: none; }
+  .cap { grid-template-columns: 1fr; gap: 12px; }
+  .item { grid-template-columns: 1fr; gap: 6px; }
+  .slides { min-height: 460px; }
+  .block + .block, .cols > div + div { margin-top: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
 </head>
-<body class="selection:bg-[#8b0000] selection:text-white">
+<body>
 
-<nav class="fixed top-0 left-0 w-full z-50 bg-[#050505]/95 border-b border-[#262626] backdrop-blur-sm">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" class="flex items-center gap-3 text-[#e5e5e5] font-bold text-lg tracking-widest hover:text-[#8b0000] transition group">
-            <img src="assets/favicon.svg" alt="Portfolio Logo" class="w-8 h-8 group-hover:opacity-80 transition duration-300">
-            <span>KAISHX.GITHUB.IO</span>
-        </a>
-
-        <div class="hidden lg:flex space-x-6 text-[#737373] text-xs uppercase tracking-widest">
-            <a href="#about" class="nav-link hover:text-[#e5e5e5] transition" data-target="about">About</a>
-            <a href="#education" class="nav-link hover:text-[#e5e5e5] transition" data-target="education">Education</a>
-            <a href="#research" class="nav-link hover:text-[#e5e5e5] transition" data-target="research">Research</a>
-            <a href="#experience" class="nav-link hover:text-[#e5e5e5] transition" data-target="experience">Experience</a>
-            <a href="#skills" class="nav-link hover:text-[#e5e5e5] transition" data-target="skills">Skills</a>
-            <a href="#projects" class="nav-link hover:text-[#e5e5e5] transition" data-target="projects">Projects</a>
-            <a href="#awards" class="nav-link hover:text-[#e5e5e5] transition" data-target="awards">Awards</a>
-            <a href="#leadership" class="nav-link hover:text-[#e5e5e5] transition" data-target="leadership">Leadership</a>
-        </div>
-
-        <button id="mobile-menu-btn" class="lg:hidden text-[#737373] hover:text-[#e5e5e5] focus:outline-none z-50 relative">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
-    </div>
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Chu Kai Le, back to the top">CKL</a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#genk">Internship</a></li>
+      <li><a href="#record">Record</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
 </nav>
+<div class="ring" aria-hidden="true"></div>
 
-<div id="mobile-menu" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-md z-40 hidden flex-col items-center justify-center space-y-8 text-sm uppercase tracking-widest">
-    <a href="#about" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="about">About</a>
-    <a href="#education" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="education">Education</a>
-    <a href="#research" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="research">Research</a>
-    <a href="#experience" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="experience">Experience</a>
-    <a href="#skills" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="skills">Skills</a>
-    <a href="#projects" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="projects">Projects</a>
-    <a href="#awards" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="awards">Awards</a>
-    <a href="#leadership" class="mobile-nav-link text-[#737373] hover:text-[#e5e5e5] transition" data-target="leadership">Leadership</a>
-</div>
+<main id="top">
 
-<header id="hero" class="relative w-full h-[50vh] md:h-[60vh] flex items-center justify-center border-b border-[#262626] bg-[#050505] mt-16 overflow-hidden">
-    <canvas id="helix-stars-canvas" class="absolute inset-0 w-full h-full z-0 opacity-70 pointer-events-none"></canvas>
-
-    <div class="relative z-10 max-w-5xl px-6 w-full text-left md:text-center">
-        
-        <div class="text-xs text-[#737373] mb-6 flex justify-start md:justify-center items-center gap-4">
-            <span class="border border-[#262626] px-2 py-1 uppercase tracking-widest">
-                LOC: <span data-value="SINGAPORE" class="text-[#8b0000] font-bold scramble-text">SINGAPORE</span>
-            </span>
-        </div>
-
-        <h1 class="text-4xl sm:text-6xl font-bold mb-4 tracking-tight text-[#e5e5e5] scramble-text" data-value="CHU KAI LE">CHU KAI LE</h1>
-        
-        <p class="text-sm sm:text-base text-[#737373] mb-8 tracking-widest uppercase flex flex-wrap items-center justify-start md:justify-center">
-            <span class="scramble-text" data-value="Mechanical Engineering">Mechanical Engineering</span> 
-            <span class="text-[#262626] mx-2">|</span> 
-            <span class="scramble-text" data-value="Quantitative Finance">Quantitative Finance</span>
-        </p>
-        
-        <div class="flex items-center justify-start md:justify-center gap-6">
-            <a href="https://github.com/kaishx" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300 relative z-20">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
-                </svg>
-            </a>
-            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="text-[#737373] hover:text-[#e5e5e5] transition duration-300 relative z-20">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
-                </svg>
-            </a>
-        </div>
+<!-- ================================================================ hero -->
+<section class="hero dark">
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="wrap">
+    <h1 class="display reveal"><span>Chu</span><span class="outline">Kai Le</span></h1>
+    <div class="lede">
+      <p class="reveal d1">Mechanical Engineering with a Second Major in Computing at <b>NUS</b>, on the CDE Engineering Scholars
+        Programme. I build trading systems, research market microstructure, and like making things that work in the real
+        world.</p>
+      <ol class="logs reveal d2" aria-label="Latest">
+        <li><time>Aug 2026</time><span>Started at NUS: B.Eng. Mechanical Engineering, Second Major in Computing.</span></li>
+        <li><time>May 2026</time><span>123rd of 18,803 teams at IMC Prosperity 04.</span></li>
+        <li><time>May 2026</time><span>Finished my quantitative research internship at Genk Capital.</span></li>
+        <li><time>Apr 2026</time><span>SAF National Serviceman of the Year.</span></li>
+      </ol>
     </div>
-</header>
-        
-<main class="max-w-5xl mx-auto px-6 pb-16 sm:pb-24 relative z-20">
-    <div class="pt-12 mb-16">
-        <div class="bg-[#0a0a0a] border border-[#262626] border-l-4 border-l-[#8b0000] p-6 shadow-2xl">
-            <h3 class="text-[12px] uppercase tracking-[0.3em] text-[#e5e5e5] mb-4 font-bold">Latest Logs</h3>
-            <ul class="text-xs sm:text-sm space-y-3 font-mono">
-                <li class="flex items-start gap-3">
-                    <span class="text-[#737373] shrink-0 font-bold"> May 2026 // </span>
-                    <span class="text-[#a3a3a3]">Placed 123rd/18803 teams at IMC Prosperity 04.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-[#737373] shrink-0 font-bold"> May 2026 // </span>
-                    <span class="text-[#a3a3a3]">Finished Quantitative Research Internship @ Genk Capital.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-[#737373] shrink-0 font-bold"> Apr 2026 // </span>
-                    <span class="text-[#a3a3a3]">Awarded Army NSF of the Year.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-[#737373] shrink-0 font-bold"> Feb 2026 // </span>
-                    <span class="text-[#a3a3a3]">Commenced Quantitative Research Internship @ Genk Capital.</span>
-                </li>
-            </ul>
-        </div>
+    <div class="meta eyebrow muted-d reveal d3">
+      <span class="status"><i></i>Open to internships · Summer 2027</span>
+      <span>Singapore · 1.2974° N, 103.7777° E</span>
+      <span>Scroll ↓</span>
     </div>
+  </div>
+</section>
 
-    <section id="about" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 01 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">About Me</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
-        </div>
-        <div class="section-item reveal-hidden">
-            <p class="text-sm sm:text-base text-[#a3a3a3] leading-relaxed">
-                I enjoy researching models and creating things at the intersection of finance, engineering, and data. My work spans algorithmic trading engines, quantitative research and side projects that automate things for me!
-            </p>                
-        </div>
-    </section>
-    
-    <section id="education" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 02 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Education</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
-        </div>
-        
-        <div class="space-y-0">
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Incoming Engineering Undergraduate in 2026</h3>
-                    <p class="text-xs text-[#737373]">Aug 2026 &ndash; TBC | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">National University of Singapore (NUS)</p>
-                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li>Mechanical Engineering with a Double Major in Computing, under the CDE Engineering Scholars Programme (accelerated 3-year B.Eng.).</li>
-                </ul>
-            </div>
-            
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Secondary/Pre-Tertiary</h3>
-                    <p class="text-xs text-[#737373]">Jan 2018 &ndash; Nov 2023 | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High School of Mathematics and Science (NUSH)</p>
-                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li>Graduated with a NUS High Diploma (High Distinction), Overall CAP: 4.5 / A-</li>
-                    <li>Major CAP: Chemistry - 4.9 / A+, Mathematics - 4.9 / A+, Physics - 4.6 / A</li>
-                </ul>
-            </div>
-        </div>
-    </section>
+<!-- ================================================================ work -->
+<section class="light" id="work">
+  <div class="wrap">
+    <div class="head">
+      <span class="num reveal">01</span>
+      <h2 class="display reveal">Selected work</h2>
+      <p class="muted-l reveal d1">Trading systems and research, an engineering build, and the things I make for fun.</p>
+    </div>
+    <div class="grid">
 
-    <section id="research" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 03 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Research</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+      <article class="card reveal">
+        <div class="media" style="--ratio: 4 / 5; --tone: var(--sage)">
+          <div class="type"><span class="small">IMC Prosperity 04 · 2026</span><span class="big">123<br><span style="font-size:.38em">of 18,803</span></span></div>
         </div>
-        
-        <div class="space-y-0">
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Synthesis of Peptide Nanomaterials via Controlled Self-Assembly</h3>
-                    <p class="text-xs text-[#737373]">Apr 2022 &ndash; Aug 2023 | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High / NUS</p>
-                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li>Investigated whether amino acids could form cocrystals with the FF dipeptide to alter its self-assembly into peptide nanomaterials. Used computational screening (HSP, ΔpKa, Mercury) and SEM validation, finding that incompatible amino acids showed no morphological change, consistent with predictions.</li>
-                </ul>
-            </div>
+        <div class="body">
+          <span class="eyebrow muted-l">Competition</span>
+          <h3>IMC Prosperity 04</h3>
+          <p>Placed 123rd of 18,803 teams in IMC's global algorithmic trading competition, leading strategy for a five-person
+            team of IMO, IOI and IChO gold medallists.</p>
+          <div class="tags"><span>Python</span><span>Algorithmic trading</span><span>Team lead</span></div>
         </div>
-    </section>
+      </article>
 
-    <section id="experience" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 04 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Work Experience</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+      <article class="card reveal d1">
+        <a class="view" href="https://github.com/kaishx/wfa" target="_blank" rel="noopener">
+          <div class="media" style="--ratio: 4 / 3; --tone: var(--charcoal)">
+            <img src="assets/wfa.png" alt="Walk-forward analysis engine results" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">
+            <div class="type" style="color:var(--sage)"><span class="small">Python · Numba</span><span class="big">WFA</span></div>
+            <div class="overlay"><span>View</span></div>
+          </div>
+        </a>
+        <div class="body">
+          <span class="eyebrow muted-l">Research engine</span>
+          <h3>Walk-forward analysis for pairs trading</h3>
+          <p>A Numba-accelerated walk-forward engine that picks stable, mean-reverting pairs with a Kalman filter, z-score
+            signals and ADF / Hurst checks, fast enough for thousands of backtests.</p>
+          <div class="tags"><span>Python</span><span>Numba</span><span>Pandas / NumPy</span></div>
         </div>
-        
-        <div class="space-y-0">
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Quantitative Research Intern</h3>
-                    <p class="text-xs text-[#737373]">Feb 2026 &ndash; Present | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Genk Capital</p>
-                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Developed a microstructure signal predicting price-level collapses in large-tick assets, producing a 19 percentage-point spread in persistent collapse rates across 250 episodes and ~106 trading days of L2 data.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Engineered a passive spread-capture execution model using a 3-outcome race condition framework, achieving positive net expected value across all queue positions after transaction costs.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Conducted survival analysis on ~605K L2 book updates, identifying a 97ms median time-to-collapse after threshold crossing and validating real-time tradability.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Replicated and generalized the signal across instruments with different microstructure dynamics, achieving positive net EV across market regimes and queue positions.</li>
-                </ul>
-            </div>
-            
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Air Force Electro-Armament Technician (NS)</h3>
-                    <p class="text-xs text-[#737373]">Aug 2024 &ndash; Jan 2026 | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Republic of Singapore Air Force / 5th Ammunition Depot</p>
-                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Maintained and serviced general-purpose bombs (MK82/84 GP Bombs) and aircraft countermeasures to 100% servicability to ensure operational readiness.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Digitalized 3,000+ stockcards, improving inventory accuracy and reducing stockcard creation time by 85% using Excel Macros.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Operated forklifts and buggies to move inventory safely and efficiently.</li>
-                </ul>
-            </div>
-            
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Landscape Architecture Intern</h3>
-                    <p class="text-xs text-[#737373]">May 2023 &ndash; Jun 2023 | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Grant Associates</p>
-                <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-2">
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Collated and presented research data to guide design decisions for the firm's first coral reef enclosure project in Singapore.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Applied Rhino and Grasshopper for geometric modeling and design visualization.</li>
-                    <li><span class="text-[#e5e5e5] font-bold">></span> Studied land use regulations and plant design principles for sustainable design.</li>
-                </ul>
-            </div>
+      </article>
 
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Part-time Supermarket Assistant</h3>
-                    <p class="text-xs text-[#737373]">Oct 2023 &ndash; Nov 2023 | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-0">Cold Storage</p>
-            </div>
-
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Part-time Production Operator</h3>
-                    <p class="text-xs text-[#737373]">Jun 2022 &ndash; Jul 2022 | Singapore</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-0">LF Logistics</p>
-            </div>
+      <article class="card reveal d2">
+        <div class="media" style="--ratio: 1 / 1; --tone: var(--navy)">
+          <div class="type" style="color:var(--cyan)"><span class="small">Live · crypto & US equity perpetuals</span><span class="big">330+<br><span style="font-size:.38em">instruments</span></span></div>
         </div>
-    </section>
-
-    <section id="skills" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 05 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Skills & Certifications</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+        <div class="body">
+          <span class="eyebrow muted-l">Systems</span>
+          <h3>Live trading systems</h3>
+          <p>Market-making strategies tested across crypto and US equity perpetuals, with state reconciliation, state
+            tracking, data-staleness guards and circuit breakers, on a real-time market data feed I built across venues.</p>
+          <div class="tags"><span>Python</span><span>Linux</span><span>VPS</span></div>
         </div>
-        
-        <div class="section-item space-y-8 reveal-hidden">
-            <div>
-                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Quantitative Methods</h3>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Statistical Inference</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Time-Series + Tick-Data Analysis</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Walk-Forward Analysis</span>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Skills (By Descending Proficiency)</h3>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Python (Numba)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Pandas / NumPy</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">SQL</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Excel VBA/Macros</span>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Tools & Environment</h3>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Linux (i3wm)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Git / GitHub Pages</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Bash / Zsh</span>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-sm font-bold text-[#e5e5e5] uppercase mb-3">Technical Certifications</h3>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Foundational Data Analytics (Coursera)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Intermediate SQL (DataCamp)</span>
-                    <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-xs">Intermediate Python (DataCamp)</span>
-                </div>
-            </div>
-        </div>
-    </section>
+      </article>
 
-    <section id="projects" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 06 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Technical Projects</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+      <article class="card reveal">
+        <a class="view" href="https://github.com/kaishx/paper_trader" target="_blank" rel="noopener">
+          <div class="media" style="--ratio: 16 / 10; --tone: var(--blue)">
+            <div class="type" style="color:var(--navy)"><span class="small">Alpaca · Telegram</span><span class="big">20+<br><span style="font-size:.38em">pairs watched</span></span></div>
+            <div class="overlay"><span>View</span></div>
+          </div>
+        </a>
+        <div class="body">
+          <span class="eyebrow muted-l">Automation</span>
+          <h3>Pairs trading paper engine</h3>
+          <p>Watches 20+ equity and ETF pairs for mean reversion, filters signals statistically, trades through Alpaca's
+            paper trading API and posts its performance to a Telegram channel.</p>
+          <div class="tags"><span>Python</span><span>APIs</span></div>
         </div>
-        
-        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a] reveal-hidden section-item p-0">
-            <div id="project-slides" class="flex transition-transform duration-500 ease-in-out">
-                
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Numba-Accelerated Pairs Trading Walk Forward Analysis</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Pandas/Numpy</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Built a Numba-accelerated Walk-Forward Analysis engine for pairs trading. Uses Kalman filter, Z-score signals, and statistical checks (ADF/Hurst) to pick stable, mean-reverting pairs. Optimized for thousands of backtests in real time.</p>
-                        <a href="https://github.com/kaishx/wfa" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View GitHub & Write-Up ]</a>
-                    </div>
-                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
-                        <img src="assets/wfa.png" alt="WFA Engine" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
+      </article>
 
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Pairs Trading Paper Trading Engine</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Python</span>
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Pandas/Numpy</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Developed a pairs trading algorithm that systematically monitors over 20 equity/ETF pairs for mean-reversion signals. The platform applies rigorous statistical filters to ensure high-confidence entry signals and executes trades automatically through Alpaca’s paper trading API, with performance updates posted to a Telegram channel.</p>
-                        <div class="flex flex-col gap-2">
-                            <a href="https://github.com/kaishx/paper_trader" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Github ]</a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
-                        <img src="assets/architecture.png" alt="Architecture" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
-
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Scrabble Word Trainer</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Asynchronous JS</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Developed a high-speed Scrabble Trainer that increases player word recognition speed and competitive decision-making agility.</p>
-                        <a href="https://kaishx.github.io/scrabbletrainer/" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Site ]</a>
-                    </div>
-                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
-                        <img src="assets/scrabble.png" alt="Scrabble Trainer" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
-
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Fusion360 Modelling Project for Motorbike</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Fusion 360</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#8b0000] text-[#e5e5e5] uppercase tracking-widest bg-[#8b0000]/20">Status: In Progress</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">This is currently in progress! Check back in a month or two to see the final model! I've added a progress pic just to fill the void.</p>
-                        <a href="https://kaishx.github.io/#projects" class="text-xs text-[#8b0000] hover:text-[#e5e5e5] font-bold tracking-widest uppercase transition">[ View Project Images (Imgur) ]</a>
-                    </div>
-                    <div class="md:w-1/2 mt-6 md:mt-0 bg-[#050505] border border-[#262626] flex items-center justify-center p-2">
-                        <img src="assets/Motorcycle.png" alt="Motorcycle Render" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="absolute bottom-0 left-0 w-full border-t border-[#262626] bg-[#050505] flex justify-between items-center px-4 py-2">
-                <button id="prev-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">&lt; Prev</button>
-                <div id="slide-indicator" class="text-xs text-[#737373] font-mono tracking-widest"></div>
-                <button id="next-btn" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">Next &gt;</button>
-            </div>
+      <article class="card reveal d1">
+        <div class="media" style="--ratio: 5 / 4; --tone: var(--beige)">
+          <div class="type" style="color:var(--navy)"><span class="small">Order books · 15+ venues</span><span class="big">OFI</span></div>
         </div>
-    </section>
+        <div class="body">
+          <span class="eyebrow muted-l">Research</span>
+          <h3>Market microstructure research</h3>
+          <p>Screened perpetuals across 15+ venues by spread, order-flow imbalance and lead-lag to separate market-making
+            opportunity from adverse selection, then backtested with plateau checks and single-trade-dominance tests.</p>
+          <div class="tags"><span>Statistics</span><span>Tick data</span></div>
+        </div>
+      </article>
 
-    <section id="other-projects" class="mb-20"> <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 07 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Other Projects</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+      <article class="card reveal d2">
+        <a class="view" href="https://kaishx.github.io/scrabbletrainer/" target="_blank" rel="noopener">
+          <div class="media" style="--ratio: 4 / 3; --tone: var(--cyan)">
+            <img src="assets/scrabble.png" alt="Scrabble word trainer" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">
+            <div class="type" style="color:var(--navy)"><span class="small">Web app</span><span class="big">Q·Z·X</span></div>
+            <div class="overlay"><span>Play</span></div>
+          </div>
+        </a>
+        <div class="body">
+          <span class="eyebrow muted-l">Web</span>
+          <h3>Scrabble word trainer</h3>
+          <p>A fast trainer for recognising valid words, built to sharpen competitive play.</p>
+          <div class="tags"><span>JavaScript</span></div>
         </div>
-        
-        <div class="relative w-full overflow-hidden border border-[#262626] bg-[#0a0a0a] reveal-hidden section-item p-0">
-            <div id="project-slides-other" class="flex transition-transform duration-500 ease-in-out">
-                
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Online Marketplace Ventures</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Carousell</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#8b0000] text-[#e5e5e5] uppercase tracking-widest bg-[#8b0000]/20">Status: In Progress</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Managed a personal trading venture exploiting price spreads across niche digital assets and specialized equipment, achieving a 24x Return on Invested Capital (ROIC) ($150 to $3,700) over 19 months.</p>
-                    </div>
-                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
-                        <img src="assets/carou.png" alt="Carousell" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
+      </article>
 
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Trackmania Map & Environment Design</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">In-Game Editor</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#8b0000] text-[#e5e5e5] uppercase tracking-widest bg-[#8b0000]/20">Status: In Progress</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Designed and published over 10 custom Trackmania maps across varied difficulties. This work was validated by the community with awards for design quality and resulted in an offer for a commissioned role to develop technical maps for a dedicated gaming group.</p>
-                    </div>
-                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
-                        <img src="assets/TM.png" alt="Trackmania" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
+      <article class="card reveal">
+        <div class="media" style="--ratio: 4 / 3; --tone: var(--taupe)">
+          <div class="type" style="color:var(--white)"><span class="small">NUS · EG1311 Design and Make</span><span class="big">Build</span></div>
+        </div>
+        <div class="body">
+          <span class="eyebrow muted-l">Engineering</span>
+          <h3>Autonomous robot</h3>
+          <p>A team build of an Arduino-controlled autonomous robot at NUS. I designed its chassis and catapult mechanism and
+            contributed to the electronics; we completed the project.</p>
+          <div class="tags"><span>Mechanical design</span><span>Arduino</span></div>
+        </div>
+      </article>
 
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Social Deduction Card Game Design & Manufacturing</h3>
-                        <div class="mb-4 mt-2">
-                            <span class="text-[10px] px-2 py-1 border border-[#262626] text-[#737373] uppercase tracking-widest bg-[#0a0a0a]">Status: Completed</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Managed the complete development of an original social deduction card game, producing over 200 physical cards. The project featured rigorous balancing, iterative mechanical refinement based on 20+ participant playtests, and the implementation of efficient card manufacturing techniques.</p>
-                    </div>
-                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
-                        <img src="assets/cards.jpeg" alt="Card Game" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
+      <article class="card reveal d1">
+        <div class="media" style="--ratio: 3 / 4; --tone: var(--charcoal)">
+          <img src="assets/TM.png" alt="A custom Trackmania map" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">
+          <div class="type" style="color:var(--sage)"><span class="small">In-game editor</span><span class="big">10+<br><span style="font-size:.38em">maps</span></span></div>
+        </div>
+        <div class="body">
+          <span class="eyebrow muted-l">Design</span>
+          <h3>Trackmania maps</h3>
+          <p>Ten-plus published maps across difficulty levels, recognised by the community for design and followed by an
+            offer of a commissioned role building technical maps.</p>
+        </div>
+      </article>
 
-                <div class="flex-shrink-0 w-full p-6 md:flex md:space-x-8">
-                    <div class="md:w-1/2 md:h-80 overflow-y-auto pr-4 order-2 md:order-1 mt-6 md:mt-0">
-                        <h3 class="text-xl font-bold text-[#e5e5e5] mb-2">Google Sheets-based Manga Database</h3>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="text-xs border border-[#262626] text-[#737373] px-2 py-1">Google Sheets</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-[10px] px-2 py-1 border border-[#8b0000] text-[#e5e5e5] uppercase tracking-widest bg-[#8b0000]/20">Status: In Progress</span>
-                        </div>
-                        <p class="text-sm text-[#a3a3a3] mb-6">Engineered a comprehensive Manga Database (1000+ titles) in Google Sheets to track granular consumption data and scores. This data was leveraged to generate complex analytical reports on key metrics like Score Distribution (Average/Median), Genre Performance, and title status tracking.</p>
-                    </div>
-                    <div class="md:w-1/2 bg-[#050505] border border-[#262626] flex items-center justify-center p-2 order-1 md:order-2">
-                        <img src="assets/manga_database.png" alt="Manga Database" class="object-cover w-full h-full opacity-80 grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                </div>
+      <article class="card reveal d2">
+        <div class="media" style="--ratio: 4 / 3; --tone: var(--beige)">
+          <img src="assets/cards.jpeg" alt="Cards from an original social deduction game" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">
+          <div class="type" style="color:var(--navy)"><span class="small">Board games</span><span class="big">200+<br><span style="font-size:.38em">cards</span></span></div>
+        </div>
+        <div class="body">
+          <span class="eyebrow muted-l">Product</span>
+          <h3>A social deduction card game</h3>
+          <p>An original game taken from rules to 200+ printed cards, balanced over 20+ playtests.</p>
+        </div>
+      </article>
 
-            </div>
-            
-            <div class="absolute bottom-0 left-0 w-full border-t border-[#262626] bg-[#050505] flex justify-between items-center px-4 py-2">
-                <button id="prev-btn-other" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">&lt; Prev</button>
-                <div id="slide-indicator-other" class="text-xs text-[#737373] font-mono tracking-widest"></div>
-                <button id="next-btn-other" class="text-[#737373] hover:text-[#e5e5e5] disabled:opacity-30 transition font-mono text-sm uppercase">Next &gt;</button>
-            </div>
+      <article class="card reveal">
+        <div class="media" style="--ratio: 16 / 10; --tone: var(--sage)">
+          <img src="assets/carou.png" alt="Carousell listings" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">
+          <div class="type" style="color:var(--navy)"><span class="small">19 months</span><span class="big">$150 → $3,700</span></div>
         </div>
-    </section>
+        <div class="body">
+          <span class="eyebrow muted-l">Trading</span>
+          <h3>Marketplace ventures</h3>
+          <p>Trading price spreads in niche digital assets and specialised equipment on Carousell: $150 to $3,700 over 19
+            months.</p>
+        </div>
+      </article>
 
-    <section id="awards" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 08 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Awards & Recognition</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+      <article class="card reveal d1">
+        <div class="media" style="--ratio: 4 / 3; --tone: var(--blue)">
+          <img src="assets/manga_database.png" alt="Manga database dashboard in Google Sheets" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">
+          <div class="type" style="color:var(--navy)"><span class="small">Google Sheets</span><span class="big">1,000+<br><span style="font-size:.38em">titles</span></span></div>
         </div>
-        <div class="section-item reveal-hidden">
-            <ul class="list-square list-inside text-[#a3a3a3] text-sm space-y-3">
-                <li><span class="text-[#e5e5e5] font-bold">NUS CDE Engineering Scholars Scholarship (2026-2029)</span> &ndash; NUS' Highly selective bond-free scholarship for top engineering talent.</li>
-                <li><span class="text-[#e5e5e5] font-bold">123rd Place, IMC Prosperity 04 (2026)</span> &ndash; Placed 123rd/18803 teams as a High School Graduate in IMC Prosperity 04. Led a team of IMO, IOI and IChO gold medalists.</li>
-                <li><span class="text-[#e5e5e5] font-bold">NSF of the Year (2026)</span> &ndash; Awarded to top 0.25% of National Full-time Servicemen.</li>
-                <li><span class="text-[#e5e5e5] font-bold">NUS High School Commendation Award (2021-2022)</span> &ndash; Leadership</li>
-                <li><span class="text-[#e5e5e5] font-bold">5th Place, NUS Chem-Engineering Challenge (2022)</span> &ndash; (Top 5%, out of 100+ teams), challenge included various optimization and analysis tasks.</li>
-                <li><span class="text-[#e5e5e5] font-bold">Singapore Mathematical Olympiad (Junior), Silver (2019)</span></li>
-            </ul>
+        <div class="body">
+          <span class="eyebrow muted-l">Data</span>
+          <h3>Manga database</h3>
+          <p>1,000+ titles tracked with scores, with reports on score distribution, genres and status.</p>
         </div>
-    </section>
+      </article>
 
-    <section id="leadership" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 09 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Leadership & Community Contributions</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ featured: the internship -->
+<section class="feature dark" id="genk">
+  <div class="orb b" style="left:auto;right:-140px;top:10%"></div>
+  <div class="wrap grid2">
+    <div>
+      <span class="eyebrow muted-d reveal">02 · Featured · Feb – May 2026</span>
+      <h2 class="display reveal d1">Quant research<br>at Genk Capital</h2>
+      <ul class="reveal d2">
+        <li>Derived a microstructure signal for price-level collapses in large-tick assets: a consistent 19-point lift in
+          collapse persistence across every flow regime (40% to 59% in the tradable regime).</li>
+        <li>Modelled passive spread-capture entries as three outcomes (fill, adverse selection, flat) and showed positive
+          net expected value at every queue position after taker fees.</li>
+        <li>Survival analysis on 605K Level-2 updates: a 97 ms median time-to-collapse, fast but usable in real time.</li>
+        <li>Parameter sweeps across regimes and instruments showed fill probability as the main driver of expected value.</li>
+      </ul>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><b>+19pp</b><span>lift in collapse persistence</span></div>
+      <div class="stat reveal d1"><b>106</b><span>days of L2 order-book data</span></div>
+      <div class="stat reveal d2"><b>605K</b><span>order-book updates analysed</span></div>
+      <div class="stat reveal d3"><b>97ms</b><span>median time to collapse</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ record -->
+<section class="beige" id="record">
+  <div class="wrap record">
+    <div class="head">
+      <span class="num reveal">03</span>
+      <h2 class="display reveal">Record</h2>
+    </div>
+    <div class="cols">
+      <div>
+        <div class="block reveal">
+          <h3>Education</h3>
+          <div class="item"><time>2026 – 2029</time><div><h4>National University of Singapore</h4>
+            <div class="org">B.Eng. Mechanical Engineering, Second Major in Computing · accelerated three-year programme</div>
+            <p>CDE Engineering Scholars Programme (full-ride, non-bonded).</p></div></div>
+          <div class="item"><time>2018 – 2023</time><div><h4>NUS High School of Mathematics and Science</h4>
+            <div class="org">NUS High Diploma (High Distinction) · overall CAP 4.5</div>
+            <p>Major CAP: Mathematics 4.9, Chemistry 4.9, Physics 4.6.</p></div></div>
         </div>
-        
-        <div class="space-y-0">
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">3rd Sergeant</h3>
-                    <p class="text-xs text-[#737373]">Mar 2025 &ndash; Jan 2026</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">Republic of Singapore Air Force</p>
-                <p class="text-[#a3a3a3] text-sm leading-relaxed">Demonstrated leadership and management skills as a 3rd Sergeant, effectively managing a team of armament technicians in complex daily operations and safety protocols.</p>
-            </div>
-            
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Master Sergeant / Vice-President</h3>
-                    <p class="text-xs text-[#737373]">Jan 2021 &ndash; Dec 2022</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NCC (Land)</p>
-                <p class="text-[#a3a3a3] text-sm leading-relaxed">Led school’s NCC (Land) CCA as Unit Master Sergeant from 2021-2022, managing all internal and external activity planning and execution.</p>
-            </div>
-            
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Exco / Planner for NUS High NDP 2023</h3>
-                    <p class="text-xs text-[#737373]">Mar 2023 &ndash; Aug 2023</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">NUS High</p>
-                <p class="text-[#a3a3a3] text-sm leading-relaxed">Served on the Planning & Training Exco for the school’s National Day Parade in 2023, collaborating across groups and directly managing the training and logistics for 200+ parade marchers. Participated as the parade's Regimental Sergeant-Major.</p>
-            </div>
-            
-            <div class="section-item reveal-hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 class="text-base font-bold text-[#e5e5e5] uppercase">Volunteer</h3>
-                    <p class="text-xs text-[#737373]">Oct 2023 &ndash; Oct 2023</p>
-                </div>
-                <p class="text-xs text-[#8b0000] font-bold uppercase tracking-widest mb-4">SHINE</p>
-                <p class="text-[#a3a3a3] text-sm leading-relaxed">Collaborated with my club to organize a full-day event for mentally challenged children from SHINE. Planned games and spent the day paired one-on-one with a participant, ensuring they had a fun, engaging, and inclusive experience on campus.</p>
-            </div>
+        <div class="block reveal">
+          <h3>Research</h3>
+          <div class="item"><time>2022 – 2023</time><div><h4>Peptide nanomaterials by controlled self-assembly</h4>
+            <div class="org">NUS High · NUS</div>
+            <p>Tested whether amino acids could co-crystallise with the FF dipeptide to change its self-assembly, screening
+              candidates computationally (HSP, ΔpKa, Mercury) and checking with SEM: the incompatible ones showed no change,
+              as predicted.</p></div></div>
         </div>
-    </section>
-    
-    <section id="interests" class="mb-20 scroll-section">
-        <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs text-[#737373] border border-[#262626] px-2 py-1 shrink-0 whitespace-nowrap">[ 10 ]</span>
-            <h2 class="text-lg uppercase tracking-widest font-bold text-[#e5e5e5]">Activities and Interests</h2>
-            <div class="h-[1px] bg-[#262626] flex-grow"></div>
+      </div>
+      <div>
+        <div class="block reveal d1">
+          <h3>Experience</h3>
+          <div class="item"><time>Feb – May 2026</time><div><h4>Quantitative Research Intern</h4><div class="org">Genk Capital</div>
+            <p>Microstructure signal research on Level-2 order-book data (above).</p></div></div>
+          <div class="item"><time>2024 – 2026</time><div><h4>Air Force Electro-Armament Technician</h4>
+            <div class="org">Republic of Singapore Air Force · full-time National Service</div>
+            <p>Munitions and aircraft countermeasure maintenance; moved the depot's stock records onto Excel with macros;
+              led a team of armament technicians as a 3rd Sergeant. SAF National Serviceman of the Year (2026).</p></div></div>
+          <div class="item"><time>May – Jun 2023</time><div><h4>Landscape Architecture Intern</h4><div class="org">Grant Associates</div>
+            <p>Research support for a coral reef enclosure design project.</p></div></div>
+          <div class="item"><time>2022 – 2023</time><div><h4>Part-time</h4><div class="org">Cold Storage · LF Logistics</div>
+            <p>Supermarket assistant and production operator.</p></div></div>
         </div>
-        <div class="section-item reveal-hidden">
-            <div class="flex flex-wrap gap-2">
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Valorant (Peaked Top 0.8%)</span>
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Trackmania (Peaked Asia Top 1%, SG Top 1)</span>
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Bouldering</span>
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Mixology</span>
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Motorcycles</span>
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Manga</span>
-                <span class="px-3 py-1 border border-[#262626] text-[#a3a3a3] text-sm">Scrabble</span>
-            </div>
+        <div class="block reveal d1">
+          <h3>Leadership</h3>
+          <div class="item"><time>2023</time><div><h4>Regimental Sergeant-Major, NUS High NDP</h4>
+            <div class="org">Planning &amp; Training Exco</div><p>Training and logistics for 200+ parade marchers.</p></div></div>
+          <div class="item"><time>2021 – 2022</time><div><h4>Unit Master Sergeant &amp; Vice-President</h4>
+            <div class="org">NCC (Land), NUS High</div><p>Planned and ran the unit's internal and external activities.</p></div></div>
+          <div class="item"><time>2023</time><div><h4>Volunteer, SHINE</h4>
+            <div class="org">Full-day campus event</div><p>Paired one-to-one with a participant for a day of games we planned.</p></div></div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ capabilities -->
+<section class="sage" id="skills">
+  <div class="wrap caps">
+    <div class="head">
+      <span class="num reveal">04</span>
+      <h2 class="display reveal">Capabilities</h2>
+    </div>
+    <div class="rows">
+      <div class="cap reveal"><span class="n">A</span><h3>Quantitative</h3>
+        <ul><li>Statistical inference</li><li>Time-series &amp; tick data</li><li>Walk-forward analysis</li><li>Market microstructure</li><li>Survival analysis</li></ul></div>
+      <div class="cap reveal"><span class="n">B</span><h3>Software</h3>
+        <ul><li>Python (Pandas, NumPy, Numba)</li><li>SQL</li><li>Excel VBA &amp; macros</li><li>Git</li><li>Bash / Zsh</li></ul></div>
+      <div class="cap reveal"><span class="n">C</span><h3>Systems</h3>
+        <ul><li>Linux (i3wm)</li><li>SSH</li><li>VPS deployment</li><li>Real-time data feeds</li></ul></div>
+      <div class="cap reveal"><span class="n">D</span><h3>Engineering</h3>
+        <ul><li>Mechanical engineering (NUS)</li><li>Mechanism design</li><li>Arduino</li></ul></div>
+      <div class="cap reveal"><span class="n">E</span><h3>Certificates</h3>
+        <ul><li>Foundational Data Analytics (Coursera)</li><li>Intermediate SQL (DataCamp)</li><li>Intermediate Python (DataCamp)</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ recognition -->
+<section class="recog dark" aria-roledescription="carousel" aria-label="Recognition">
+  <div class="orb a" style="top:auto;bottom:-120px;right:20%"></div>
+  <div class="wrap">
+    <div class="head" style="padding-top:0">
+      <span class="num reveal">05</span>
+      <h2 class="display reveal">Recognition</h2>
+    </div>
+    <div class="slides" aria-live="polite">
+      <div class="slide on"><div class="fig">123rd</div><div><h3>IMC Prosperity 04 (2026)</h3>
+        <p>Out of 18,803 teams, as a high school graduate, leading a team of IMO, IOI and IChO gold medallists.</p></div></div>
+      <div class="slide"><div class="fig">Top 0.25%</div><div><h3>SAF National Serviceman of the Year (2026)</h3>
+        <p>Awarded to the top 0.25% of full-time national servicemen.</p></div></div>
+      <div class="slide"><div class="fig">Full ride</div><div><h3>NUS CDE Engineering Scholars Programme</h3>
+        <p>A selective, bond-free engineering scholarship, 2026 – 2029.</p></div></div>
+      <div class="slide"><div class="fig">5th</div><div><h3>NUS Chem-Engineering Challenge (2022)</h3>
+        <p>Top 5% of 100+ teams, across optimisation and analysis tasks.</p></div></div>
+      <div class="slide"><div class="fig">Silver</div><div><h3>Singapore Mathematical Olympiad, Junior (2019)</h3>
+        <p>And the NUS High School Commendation Award for leadership (2021 – 2022).</p></div></div>
+    </div>
+    <div class="controls">
+      <button type="button" data-step="-1" aria-label="Previous">←</button>
+      <button type="button" data-step="1" aria-label="Next">→</button>
+      <div class="dots" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
 
 </main>
-    
-<footer class="bg-[#050505] border-t border-[#262626] text-[#737373] py-10 mt-12">
-    <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 items-center gap-6">
-        
-        <div class="text-center md:text-left">
-            <p class="text-xs">© 2026 CHU KAI LE</p>
-            <p class="text-[11px] font-mono tracking-widest text-[#8b0000] uppercase mt-2">
-                LOC: 1.2974° N, 103.7777° E
-            </p>
-            <p class="text-xs mt-2 hover:text-[#e5e5e5] transition-colors cursor-default">chukaile.work@gmail.com</p>
-        </div>
 
-        <div class="relative w-full max-w-[400px] mx-auto opacity-75">
-            <img src="assets/world-map.png" alt="World Map" class="w-full h-auto">
-            
-            <div class="absolute" style="top: 67%; left: 76%;">
-                <span class="relative flex h-2 w-2 -ml-1 -mt-1">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8b0000] opacity-95"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[#8b0000]"></span>
-                </span>
-            </div>
-        </div>
-        
-        <div class="flex justify-center md:justify-end space-x-8 text-xs tracking-widest uppercase font-bold">
-            <a href="https://github.com/kaishx" target="_blank" class="hover:text-[#e5e5e5] transition-all border-b border-transparent hover:border-[#8b0000] pb-1">GITHUB</a>
-            <a href="https://www.linkedin.com/in/ckail/" target="_blank" class="hover:text-[#e5e5e5] transition-all border-b border-transparent hover:border-[#8b0000] pb-1">LINKEDIN</a>
-        </div>
-
+<!-- ================================================================ footer -->
+<footer class="dark" id="contact">
+  <div class="wrap">
+    <span class="eyebrow muted-d">06 · Contact</span>
+    <a class="big display" href="mailto:chukaile.work@gmail.com">Say hello</a>
+    <div class="links">
+      <a href="mailto:chukaile.work@gmail.com">chukaile.work@gmail.com</a>
+      <a href="https://www.linkedin.com/in/ckail/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://github.com/kaishx" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
+    <div class="marquee" aria-label="Interests">
+      <div><span>Bouldering V7</span><span>Trackmania · SG top 1</span><span>Valorant · top 0.8%</span><span>Motorcycles</span><span>Mixology</span><span>Manga</span><span>Scrabble</span><span>Bouldering V7</span><span>Trackmania · SG top 1</span><span>Valorant · top 0.8%</span><span>Motorcycles</span><span>Mixology</span><span>Manga</span><span>Scrabble</span></div>
+    </div>
+    <div class="fine"><span>© 2026 Chu Kai Le</span><span>Singapore · 1.2974° N, 103.7777° E</span></div>
+  </div>
 </footer>
-    
-<a href="#hero" id="back-to-top" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-[#262626] text-[#737373] hover:text-[#e5e5e5] hover:border-[#8b0000] p-3 z-50 transition-colors duration-300">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 15l7-7 7 7"></path>
-    </svg>
-</a>
 
 <script>
-    // mobile menu logic
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = mobileMenu.querySelectorAll('a');
+// reveal on scroll
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
+  { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-        mobileMenu.classList.toggle('flex');
-        
-        const svg = menuBtn.querySelector('svg');
-        if (mobileMenu.classList.contains('hidden')) {
-            svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
-        } else {
-            svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-        }
-    });
+// recognition carousel: arrows, dots, every 6 s (paused while hovered or when motion is reduced)
+(() => {
+  const slides = [...document.querySelectorAll('.slide')], dots = document.querySelector('.dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let at = 0, timer;
+  const show = i => { at = (i + slides.length) % slides.length;
+    slides.forEach((s, k) => { s.classList.toggle('on', k === at); s.setAttribute('aria-hidden', k !== at); });
+    [...dots.children].forEach((d, k) => d.classList.toggle('on', k === at)); };
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const play = () => { clearInterval(timer); if (!still) timer = setInterval(() => show(at + 1), 6000); };
+  document.querySelectorAll('.controls button').forEach(b => b.addEventListener('click', () => { show(at + Number(b.dataset.step)); play(); }));
+  const box = document.querySelector('.recog');
+  box.addEventListener('mouseenter', () => clearInterval(timer)); box.addEventListener('mouseleave', play);
+  show(0); play();
+})();
 
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            mobileMenu.classList.remove('flex');
-            menuBtn.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
-        });
-    });
-
-    // scramble text effect
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-
-    function scrambleText(element) {
-        let iteration = 0;
-        clearInterval(element.scrambleInterval);
-        
-        element.scrambleInterval = setInterval(() => {
-            element.innerText = element.dataset.value
-                .split("")
-                .map((letter, index) => {
-                    if(index < iteration) {
-                        return element.dataset.value[index];
-                    }
-                    return letters[Math.floor(Math.random() * 42)];
-                })
-                .join("");
-            
-            if(iteration >= element.dataset.value.length){
-                clearInterval(element.scrambleInterval);
-            }
-            iteration += 1 / 3; 
-        }, 30);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        const targets = document.querySelectorAll('.scramble-text');
-        targets.forEach(target => scrambleText(target));
-    });
-
-    // carousel logic
-    function initCarousel(containerId, prevBtnId, nextBtnId, indicatorId) {
-        const slidesContainer = document.getElementById(containerId);
-        const prevBtn = document.getElementById(prevBtnId);
-        const nextBtn = document.getElementById(nextBtnId);
-        const indicator = document.getElementById(indicatorId);
-        
-        if (!slidesContainer || !prevBtn || !nextBtn) return;
-
-        const slides = slidesContainer.querySelectorAll('.flex-shrink-0');
-        const totalSlides = slides.length;
-        let currentSlide = 0;
-
-        function updateSlide() {
-            const translateValue = -currentSlide * 100;
-            slidesContainer.style.transform = `translateX(${translateValue}%)`;
-            indicator.textContent = `[ ${currentSlide + 1} / ${totalSlides} ]`;
-            
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === totalSlides - 1;
-        }
-
-        nextBtn.addEventListener('click', () => {
-            if (currentSlide < totalSlides - 1) {
-                currentSlide++;
-                updateSlide();
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (currentSlide > 0) {
-                currentSlide--;
-                updateSlide();
-            }
-        });
-
-        updateSlide();
-    }
-
-    initCarousel('project-slides', 'prev-btn', 'next-btn', 'slide-indicator');
-    initCarousel('project-slides-other', 'prev-btn-other', 'next-btn-other', 'slide-indicator-other');
-
-    // Scroll Reveal Logic (Intersection Observer)
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.remove('reveal-hidden');
-                entry.target.classList.add('reveal-visible');
-                revealObserver.unobserve(entry.target); // Stop observing once revealed
-            }
-        });
-    }, {
-        threshold: 0.1, // Trigger when 10% of the item is visible
-        rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the bottom
-    });
-
-    document.querySelectorAll('.reveal-hidden').forEach(el => revealObserver.observe(el));
-
-    // Scrollspy Logic & Back to Top Visibility
-    const sections = document.querySelectorAll('.scroll-section');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const backToTopBtn = document.getElementById('back-to-top');
-
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        // Back to top visibility
-        if (window.scrollY > 500) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-
-        // Scrollspy targeting
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - 200)) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('text-[#8b0000]'); // Remove active color
-            if (link.dataset.target === current) {
-                link.classList.add('text-[#8b0000]'); // Add active color
-            }
-        });
-    });
-
-    // Custom Smooth Scrolling for Anchor Links (replaces standard scroll-behavior: smooth for better control without easing curves)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                // Adjust for fixed navbar height (approx 80px)
-                const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // background helix & stars engine
-    const canvas = document.getElementById('helix-stars-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let stars = [];
-    let time = 0;
-
-    function resizeCanvas() {
-        width = canvas.width = canvas.offsetWidth;
-        height = canvas.height = canvas.offsetHeight;
-        initStars();
-    }
-    
-    window.addEventListener('resize', resizeCanvas);
-
-    class Star {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.size = Math.random() * 1.5 + 0.5;
-            this.isRed = Math.random() > 0.85; 
-            this.phase = Math.random() * Math.PI * 2;
-            this.speed = Math.random() * 0.03 + 0.01;
-        }
-        draw(ctx) {
-            this.phase += this.speed;
-            let alpha = 0.1 + ((Math.sin(this.phase) + 1) / 2) * 0.8; 
-            ctx.fillStyle = this.isRed ? `rgba(139, 0, 0, ${alpha})` : `rgba(229, 229, 229, ${alpha})`;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function initStars() {
-        stars = [];
-        const numStars = Math.min(Math.floor((width * height) / 5000), 250); 
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
-        }
-    }
-
-    function drawHelix() {
-        ctx.save();
-        ctx.translate(width / 2, height / 2);
-        
-        const angle = Math.atan2(height / 2, -width / 2);
-        ctx.rotate(angle);
-
-        const length = Math.sqrt(width * width + height * height);
-        
-        // dynamic math for mobile to ensure helix visibility
-        const isMobile = width < 768;
-        const pointSpacing = isMobile ? 15 : 22; 
-        const twistSpeed = isMobile ? 0.3 : 0.2; 
-        const radiusMultiplier = isMobile ? 0.18 : 0.15; 
-        const baseStickLength = isMobile ? 10 : 14;
-        const baseStickThickness = isMobile ? 1.5 : 2;
-
-        const points = Math.floor(length / pointSpacing);
-        const startX = -length / 2;
-        const radius = Math.min(width, height) * radiusMultiplier;
-
-        for (let i = 0; i < points; i++) {
-            const x = startX + i * pointSpacing;
-            const phase = i * twistSpeed - time;
-
-            const y1 = Math.cos(phase) * radius;
-            const z1 = Math.sin(phase) * radius;
-
-            const y2 = Math.cos(phase + Math.PI) * radius;
-            const z2 = Math.sin(phase + Math.PI) * radius;
-
-            const fov = 400;
-            const scale1 = fov / (fov + z1);
-            const scale2 = fov / (fov + z2);
-
-            const py1 = y1 * scale1;
-            const py2 = y2 * scale2;
-
-            ctx.beginPath();
-            ctx.moveTo(x, py1);
-            ctx.lineTo(x, py2);
-            ctx.strokeStyle = `rgba(229, 229, 229, ${0.05 * ((scale1 + scale2)/2)})`; 
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            const stickLength1 = baseStickLength * scale1;
-            const stickHeight1 = baseStickThickness * scale1;
-            ctx.fillStyle = `rgba(229, 229, 229, ${0.1 + scale1 * 0.7})`;
-            ctx.fillRect(x - stickLength1 / 2, py1 - stickHeight1 / 2, stickLength1, stickHeight1);
-
-            const stickLength2 = baseStickLength * scale2;
-            const stickHeight2 = baseStickThickness * scale2;
-            ctx.fillStyle = `rgba(139, 0, 0, ${0.1 + scale2 * 0.7})`;
-            ctx.fillRect(x - stickLength2 / 2, py2 - stickHeight2 / 2, stickLength2, stickHeight2);
-        }
-        ctx.restore();
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        
-        stars.forEach(star => star.draw(ctx));
-        drawHelix();
-        
-        time += 0.005; 
-        requestAnimationFrame(animate);
-    }
-    
-    resizeCanvas();
-    animate();
+// cursor ring: follows the pointer, grows over links and cards
+(() => {
+  const ring = document.querySelector('.ring');
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y;
+  addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; ring.classList.add('live'); });  // (hidden until the mouse moves)
+  const tick = () => { rx += (x - rx) * .2; ry += (y - ry) * .2; ring.style.transform = `translate(${rx}px, ${ry}px)`; requestAnimationFrame(tick); };
+  tick();
+  document.querySelectorAll('a, button, .card').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('big'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+  });
+})();
 </script>
-
-<script data-goatcounter="https://ckaile.goatcounter.com/count"
-
-        async src="//gc.zgo.at/count.js"></script>
-
+<script data-goatcounter="https://ckaile.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
