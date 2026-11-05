@@ -32,7 +32,6 @@ window.roomReady = true;   // index.html shows the "no 3D" page if this never ha
 const $ = id => document.getElementById(id);
 const TOUCH = matchMedia('(pointer: coarse)').matches;
 const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const PR = Math.min(devicePixelRatio, 1.25);                    // a little soft on purpose (and much faster on phones)
 const clamp = THREE.MathUtils.clamp, rad = THREE.MathUtils.degToRad;
 const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 const nearest = (from, to) => from + (to - from) - Math.PI * 2 * Math.round((to - from) / (Math.PI * 2));
@@ -61,10 +60,9 @@ $('hint').textContent = TOUCH ? 'Swipe to look around · tap things' : 'Drag to 
 
 // ------------------------------------------------------------------ renderer, scene, camera
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
-renderer.setPixelRatio(PR);
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;           // the cheaper filter: the soft look hides the difference
 renderer.shadowMap.autoUpdate = false;                 // nothing moves, so shadows are redrawn only when told
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.prepend(renderer.domElement);
@@ -102,8 +100,23 @@ camera.rotation.order = 'YXZ';
 
 // ------------------------------------------------------------------ small helpers for shapes and pictures
 const std = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0, ...extra });
+// Photo textures are laid on in metres (material.userData.tile = metres per copy of the picture), not stretched over
+// each box: the wall pieces around the window, a desk top and its legs all show the texture at one size and line up
+// across pieces. userData.grain: wood, whose grain (the picture's up) runs along each face's longer side.
+function planarUV(geo, [ox, oy, oz], tile, grain) {
+  const { width: w, height: h, depth: d } = geo.parameters;
+  const p = geo.attributes.position, n = geo.attributes.normal, uv = geo.attributes.uv;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i) + ox, y = p.getY(i) + oy, z = p.getZ(i) + oz;
+    let [a, b, la, lb] = Math.abs(n.getX(i)) > 0.5 ? [z, y, d, h] : Math.abs(n.getY(i)) > 0.5 ? [x, z, w, d] : [x, y, w, h];
+    if (grain && la > lb) [a, b] = [b, a];
+    uv.setXY(i, a / tile, b / tile);
+  }
+}
 function box(w, h, d, mat, x = 0, y = 0, z = 0) {
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  const geo = new THREE.BoxGeometry(w, h, d);
+  if (mat.userData.tile) planarUV(geo, [x, y, z], mat.userData.tile, mat.userData.grain);
+  const m = new THREE.Mesh(geo, mat);
   m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
   return m;
 }
@@ -162,17 +175,22 @@ const MIDZ = (FRONT + BACK) / 2, LEN = BACK - FRONT + 2 * T, FULL = 2 * W + 2 * 
 const WIN = { x0: -1.75, x1: -0.8, y0: 0.95, y1: 2.05 };       // the window hole in the front wall
 const FZ = FRONT - T / 2;
 
-const FLOOR_REPEAT = [FULL / 1.6, LEN / 1.6];                    // the photo covers 1.6 m of floor
 const floorMat = std('#7d5d45', { roughness: 0.75 });
-photo(floorMat, 'map', 'wood_floor_diff_1k.jpg', FLOOR_REPEAT, '#e8ddd0');
-photo(floorMat, 'normalMap', 'wood_floor_nor_gl_1k.jpg', FLOOR_REPEAT);
-photo(floorMat, 'roughnessMap', 'wood_floor_arm_1k.jpg', FLOOR_REPEAT);
+floorMat.userData.tile = 1.6;                                    // the photo covers 1.6 m of floor
+photo(floorMat, 'map', 'wood_floor_diff_1k.jpg', [1, 1], '#e8ddd0');
+photo(floorMat, 'normalMap', 'wood_floor_nor_gl_1k.jpg');
+photo(floorMat, 'roughnessMap', 'wood_floor_arm_1k.jpg');
 const plaster = (tint, plain) => {
   const m = std(plain, { roughness: 0.95, normalScale: new THREE.Vector2(0.5, 0.5) });
-  photo(m, 'map', 'plastered_wall_04_diff_1k.jpg', [2.5, 2], tint);
-  return photo(m, 'normalMap', 'plastered_wall_04_nor_gl_1k.jpg', [2.5, 2]);
+  m.userData.tile = 1.5;                                         // 1.5 m of plaster per copy, the same on every wall
+  photo(m, 'map', 'plastered_wall_04_diff_1k.jpg', [1, 1], tint);
+  return photo(m, 'normalMap', 'plastered_wall_04_nor_gl_1k.jpg');
 };
-const woodMat = (tint = '#b9997e') => photo(std('#8a6a50', { roughness: 0.55 }), 'map', 'oak_veneer_01_diff_1k.jpg', [1, 1], tint);
+const woodMat = (tint = '#b9997e') => {
+  const m = std('#8a6a50', { roughness: 0.55 });
+  Object.assign(m.userData, { tile: 1.0, grain: true });          // 1 m of veneer per copy, grain along each board
+  return photo(m, 'map', 'oak_veneer_01_diff_1k.jpg', [1, 1], tint);
+};
 
 const wallMat = plaster('#e4d9c7', '#b8ad9b');                               // warm greige paint on plaster
 const trimMat = std('#ebe4d8', { roughness: 0.6 });
@@ -682,12 +700,13 @@ const PLACEHOLDERS = {
     };
     g.add(box(1.0, 0.08, 1.98, wood, 0, 0.24, 0));
     for (const [x, z] of [[-0.46, -0.95], [0.46, -0.95], [-0.46, 0.95], [0.46, 0.95]]) g.add(box(0.06, 0.2, 0.06, wood, x, 0.1, z));
-    g.add(soft(1.04, 0.62, 0.07, '#8e7b6a', 0, 0.55, -0.97, 0.03));                  // upholstered headboard
+    g.add(soft(1.0, 0.62, 0.07, '#8e7b6a', 0, 0.55, -0.955, 0.03));                  // upholstered headboard (clear of both walls)
     g.add(soft(0.96, 0.18, 1.9, '#efe9df', 0, 0.37, 0.02));                           // mattress
-    g.add(soft(0.98, 0.08, 1.38, '#9fb0a6', 0, 0.48, 0.3, 0.035));                    // duvet
-    g.add(soft(0.99, 0.07, 0.2, '#e9e4da', 0, 0.5, -0.32, 0.03));                     // its folded-back edge
-    const p1 = soft(0.42, 0.11, 0.3, '#f4f1ec', -0.23, 0.52, -0.72, 0.05); p1.rotation.x = -0.25;
-    const p2 = soft(0.42, 0.11, 0.3, '#d7c5b2', 0.23, 0.52, -0.72, 0.05); p2.rotation.x = -0.25;
+    // head to foot, nothing overlapping: pillows against the headboard, the cushions (objects.json) leaning on them, then the duvet
+    g.add(soft(0.98, 0.08, 1.23, '#9fb0a6', 0, 0.48, 0.355, 0.035));                  // duvet
+    g.add(soft(0.99, 0.07, 0.2, '#e9e4da', 0, 0.5, -0.16, 0.03));                     // its folded-back edge
+    const p1 = soft(0.42, 0.11, 0.3, '#f4f1ec', -0.23, 0.52, -0.76, 0.05); p1.rotation.x = -0.18;
+    const p2 = soft(0.42, 0.11, 0.3, '#d7c5b2', 0.23, 0.52, -0.76, 0.05); p2.rotation.x = -0.18;
     g.add(p1, p2, soft(1.0, 0.03, 0.5, '#b5643c', 0, 0.535, 0.72, 0.012));            // pillows, a rust throw at the foot
     return g;
   },
@@ -1159,12 +1178,21 @@ function setGlow(group, amount) {
 
 // ------------------------------------------------------------------ the "2010s memory" look: soft bloom, then fade, vignette, colour fringes
 // (the grain is the CSS .grain-layer, see room/folders.css)
-const target = new THREE.WebGLRenderTarget(innerWidth * PR, innerHeight * PR, { type: THREE.HalfFloatType, samples: TOUCH ? 0 : 4 });
+// How sharp the picture is. Phones were smooth as they were. Laptops lagged (2026-11-06): they drew 1.25x the screen's
+// pixels with 4x edge smoothing, so now 1x with 2x, and at most 2 million pixels on a very large screen.
+const pixelRatio = () => (TOUCH ? Math.min(devicePixelRatio, 1.25) : Math.min(1, Math.sqrt(2e6 / (innerWidth * innerHeight))));
+const target = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: TOUCH ? 0 : 2 });
 const composer = new EffectComposer(renderer, target);
-composer.setPixelRatio(PR);
-composer.setSize(innerWidth, innerHeight);
+function fitScreen() {
+  renderer.setPixelRatio(pixelRatio()); composer.setPixelRatio(pixelRatio());
+  renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
+  invalidate();
+}
+fitScreen();
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.4, 0.35, 0.85));
+// the glow only has to be soft, not crisp (owner, 2026-11-06): blurred at half the usual size, about a quarter of the work
+class SoftBloom extends UnrealBloomPass { setSize(w, h) { super.setSize(Math.ceil(w / 2), Math.ceil(h / 2)); } }
+composer.addPass(new SoftBloom(new THREE.Vector2(innerWidth, innerHeight), 0.4, 0.35, 0.85));
 composer.addPass(new OutputPass());
 composer.addPass(new ShaderPass({
   uniforms: { tDiffuse: { value: null } },
@@ -1201,7 +1229,8 @@ renderer.setAnimationLoop(() => {
     view.pos.lerp(view.posT, kp);
     dirty = true;
   }
-  const pulse = opened || STILL ? 0 : Math.pow(Math.max(0, Math.sin(t * 0.95 - 1)), 8) * 0.1;
+  // clickable things glow three times to show they're there, then stop (each glow redraws the room for a second or so)
+  const pulse = opened || STILL || t > 20 ? 0 : Math.pow(Math.max(0, Math.sin(t * 0.95 - 1)), 8) * 0.1;
   for (const g of interactive) setGlow(g, g === hovered || g === pending ? 0.16 : g.userData.entry.opens ? pulse : 0);
   if (!dirty) return;
   dirty = false;
@@ -1227,12 +1256,8 @@ tick();
 setInterval(tick, 1000);
 
 addEventListener('resize', () => {                       // always the visitor's window size (and zoom level)
-  const pr = Math.min(devicePixelRatio, 1.25);
-  renderer.setPixelRatio(pr); composer.setPixelRatio(pr);
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-  composer.setSize(innerWidth, innerHeight);
+  fitScreen();
   if (mode === 'room' && !isOn('win')) view.fovT = baseFov();
-  invalidate();
 });
