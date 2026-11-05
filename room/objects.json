@@ -1,0 +1,28 @@
+{
+  "_help": "What's in the room. Models from Poly Haven (CC0): the cushions. You sit at x 0, z 0.72, eyes 1.2 m up, and can turn about 90 degrees each way, so only the front half of the room is ever seen. The desk is in front (z -0.62) against the front wall (z -1.0), which has the window on its left (x -1.75 to -0.8); the left wall is x -2.2, the right wall x 2.2. 'model': a .glb file in room/models/ (\"\" = the placeholder shape named in 'placeholder'). position [x, y, z] in metres (y up, floor 0). rotation [x, y, z] in degrees: things on the front wall face you as they are (0), on the right wall -90, on the left wall 90. 'opens': a folder id from content.json, or \"desktop\" (the monitor). 'tip': words shown when you point at it. 'image': a picture in a frame or on a poster (poster: 'title', 'caption'; 'fullbleed': true = the picture alone, e.g. a real poster saved as assets/tm_poster.jpg). The corkboard (left wall, not clickable) pins polaroids of the folder named in 'photos' (content.json: Photos).",
+  "objects": [
+    { "id": "desk",      "placeholder": "desk",      "model": "", "position": [0, 0, -0.62],         "rotation": [0, 0, 0],   "scale": 1 },
+    { "id": "monitor",   "placeholder": "monitor",   "model": "", "position": [0, 0.76, -0.84],      "rotation": [0, 0, 0],   "scale": 1, "label": "Use the computer", "opens": "desktop" },
+    { "id": "keyboard",  "placeholder": "keyboard",  "model": "", "position": [-0.05, 0.76, -0.42],  "rotation": [0, 0, 0],   "scale": 1 },
+    { "id": "mouse",     "placeholder": "mouse",     "model": "", "position": [0.33, 0.76, -0.42],   "rotation": [0, -8, 0],  "scale": 1 },
+    { "id": "mug",       "placeholder": "mug",       "model": "", "position": [-0.6, 0.76, -0.45],   "rotation": [0, 30, 0],  "scale": 1, "tip": "Fun fact: I don't drink coffee :))" },
+    { "id": "book",      "placeholder": "book",      "model": "", "position": [-0.4, 0.76, -0.78],   "rotation": [0, 14, 0],  "scale": 1, "label": "Education", "opens": "education" },
+    { "id": "clock",     "placeholder": "clock",     "model": "", "position": [0.36, 0.76, -0.72],   "rotation": [0, -18, 0], "scale": 1 },
+    { "id": "phone",     "placeholder": "phone",     "model": "", "position": [0.55, 0.76, -0.44],   "rotation": [0, -25, 0], "scale": 1, "label": "Contact", "opens": "contact" },
+    { "id": "desklamp",  "placeholder": "desklamp",  "model": "", "position": [0.6, 0.76, -0.86],    "rotation": [0, 0, 0],   "scale": 1 },
+
+    { "id": "wallshelf", "placeholder": "wallshelf", "model": "", "position": [0.42, 1.66, -0.89],   "rotation": [0, 0, 0],   "scale": 1 },
+    { "id": "trophy",    "placeholder": "trophy",    "model": "", "position": [0.6, 1.6725, -0.9],   "rotation": [0, -10, 0], "scale": 1.05, "label": "Awards", "opens": "awards" },
+    { "id": "tmposter",  "placeholder": "poster",    "model": "", "position": [1.7, 1.5, -0.99],     "rotation": [0, 0, 0],   "scale": 1, "label": "Trackmania", "opens": "hobbies",
+      "image": "assets/TM.png", "title": "TRACKMANIA", "caption": "10+ published maps" },
+    { "id": "bed",       "placeholder": "bed",       "model": "", "position": [1.69, 0, 0.0],        "rotation": [0, 0, 0],   "scale": 1 },
+    { "id": "cushions",  "placeholder": "",          "model": "throw_pillows_01/throw_pillows_01.gltf", "position": [1.69, 0.46, -0.5], "rotation": [0, 0, 0], "scale": 0.8 },
+
+    { "id": "minibike",  "placeholder": "minibike",  "model": "", "position": [2.1, 1.42, -0.1],     "rotation": [0, -90, 0], "scale": 1, "label": "The bike", "opens": "hobbies" },
+    { "id": "shoes",     "placeholder": "shoes",     "model": "", "position": [2.15, 1.32, 0.45],    "rotation": [0, -90, 0], "scale": 1.35, "label": "Climbing shoes", "opens": "hobbies" },
+
+    { "id": "bookshelf",   "placeholder": "bookshelf", "model": "", "position": [-2.04, 0, 0.2],     "rotation": [0, 90, 0], "scale": 1 },
+    { "id": "flag",        "placeholder": "flag",      "model": "", "position": [-2.19, 1.95, 0.2],  "rotation": [0, 90, 0], "scale": 1, "tip": "Home: Singapore" },
+    { "id": "corkboard",   "placeholder": "corkboard", "model": "", "position": [-2.195, 1.78, -0.57], "rotation": [0, 90, 0], "scale": 1, "photos": "photos" }
+  ]
+}

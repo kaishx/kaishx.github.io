@@ -1,26 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 392 392">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- A little monitor on a dark desk, with the warm desk-lamp glow: the room, in one icon. -->
   <defs>
-    <style>
-      .crimson-fill { fill: #8b0000; } 
-      .gray-fill { fill: #e5e5e5; }   
-    </style>
+    <radialGradient id="glow" cx="0.78" cy="0.24" r="0.55">
+      <stop offset="0" stop-color="#ffbe70" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ffbe70" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-
-  <polygon class="gray-fill" points="262,80 432,80 432,250 382,250 382,130 262,130" />
-
-  <polygon class="gray-fill" points="80,262 130,262 130,382 250,382 250,432 80,432" />
-
-  <path class="crimson-fill" d="
-    M 165,155 
-    h 55 
-    v 80 
-    l 65,-80 
-    h 65 
-    l -75,90 
-    l 80,100 
-    h -65 
-    l -70,-85 
-    v 85 
-    h -55 
-    Z" />
+  <rect width="64" height="64" rx="14" fill="#171e19"/>
+  <rect width="64" height="64" rx="14" fill="url(#glow)"/>
+  <rect x="9" y="14" width="40" height="28" rx="4" fill="#d7c5b2"/>
+  <rect x="12.5" y="17.5" width="33" height="21" rx="2" fill="#22302a"/>
+  <rect x="16" y="22" width="5" height="4" rx="1" fill="#b7c6c2"/>
+  <rect x="16" y="29" width="5" height="4" rx="1" fill="#b7c6c2"/>
+  <rect x="26" y="22" width="15" height="3" rx="1.5" fill="#f6f3ee"/>
+  <rect x="26" y="28" width="11" height="2" rx="1" fill="#b7c6c2" opacity=".8"/>
+  <rect x="26" y="9.5" width="6" height="4.5" fill="#d7c5b2" transform="translate(0 32.5)"/>
+  <rect x="19" y="47" width="20" height="3.5" rx="1.75" fill="#d7c5b2"/>
+  <circle cx="52" cy="15" r="5" fill="#ffbe70"/>
 </svg>

@@ -1,0 +1,122 @@
+{
+  "_help": "The folders on the computer's desktop; the things in the room open them too (see 'opens' in objects.json). Edit the words here. Each item shows as a row: title, meta (dates / where), text, link, image (a file in assets/). 'desktop': true puts the folder on the desktop. 'layout': 'gallery' shows the items as polaroids (title = the caption, thumb = the square picture, image = the full photo); the corkboard in the room pins the Photos folder's first 7.",
+  "cvs": [{ "name": "CV (hybrid)", "file": "assets/cv_hybrid.pdf" }, { "name": "CV (quant)", "file": "assets/cv_quant.pdf" }],
+  "folders": [
+    {
+      "id": "experience", "icon": "💼", "name": "Experience", "desktop": true,
+      "title": "Experience",
+      "items": [
+        { "title": "Quantitative Research Intern · Genk Capital", "meta": "Feb – May 2026 · Singapore",
+          "text": "Derived a microstructure signal for price-level collapses in large-tick assets: a consistent 19-point lift in collapse persistence across every flow regime (40% to 59% in the tradable regime), over 106 days of Level-2 data. Survival analysis on 605K order-book updates put the median time-to-collapse at 97 ms, usable in real time. Modelled passive entries as three outcomes (fill, adverse selection, flat): positive expected value at every queue position after fees." },
+        { "title": "Air Force Electro-Armament Technician · RSAF", "meta": "2024 – 2026 · full-time National Service", "image": "assets/photos/rsaf.jpg",
+          "text": "Munitions and aircraft countermeasure maintenance; moved the depot's stock records onto Excel with macros; led a team of armament technicians as a 3rd Sergeant. SAF National Serviceman of the Year (2026)." },
+        { "title": "Landscape Architecture Intern · Grant Associates", "meta": "May – Jun 2023",
+          "text": "Research support for a coral reef enclosure design project." },
+        { "title": "Leadership", "meta": "NUS High",
+          "text": "Regimental Sergeant-Major and Planning & Training Exco for the 2023 school NDP (200+ marchers); NCC (Land) Unit Master Sergeant and Vice-President (2021 – 2022); SHINE volunteer (2023)." },
+        { "title": "Part-time", "meta": "2022 – 2023", "text": "Cold Storage (supermarket assistant), LF Logistics (production operator)." }
+      ]
+    },
+    {
+      "id": "projects", "icon": "📁", "name": "Technical projects", "desktop": true,
+      "title": "Technical projects",
+      "items": [
+        { "title": "Live trading systems", "meta": "Python · Linux · VPS",
+          "text": "Market-making strategies tested across crypto and US equity perpetuals, with state reconciliation, state tracking, data-staleness guards and circuit breakers, on a real-time multi-venue feed covering 330+ instruments." },
+        { "title": "Walk-forward analysis for pairs trading", "meta": "Python · Numba", "image": "assets/wfa.png",
+          "text": "A Numba-accelerated walk-forward engine that picks stable, mean-reverting pairs with a Kalman filter, z-score signals and ADF / Hurst checks.",
+          "link": "https://github.com/kaishx/wfa" },
+        { "title": "Pairs trading paper engine", "meta": "Python · Alpaca · Telegram", "image": "assets/papertrader.png",
+          "text": "Watches 20+ equity and ETF pairs for mean reversion and trades them through Alpaca's paper trading API, posting results to Telegram.",
+          "link": "https://github.com/kaishx/paper_trader" },
+        { "title": "Market microstructure research", "meta": "Order books · 15+ venues",
+          "text": "Screened perpetuals by spread, order-flow imbalance and lead-lag to separate market-making opportunity from adverse selection; backtests with plateau and single-trade-dominance checks." },
+        { "title": "Autonomous robot", "meta": "NUS · EG1311 Design and Make", "image": "assets/photos/robot.jpg",
+          "text": "Team build of an Arduino-controlled autonomous robot. I designed the chassis and catapult mechanism and contributed to the electronics." },
+        { "title": "Peptide nanomaterials research", "meta": "NUS High · NUS · 2022 – 2023",
+          "text": "Tested whether amino acids could co-crystallise with the FF dipeptide to change its self-assembly, screening computationally (HSP, ΔpKa, Mercury) and checking with SEM." },
+        { "title": "Scrabble word trainer", "meta": "JavaScript", "image": "assets/scrabble.png",
+          "text": "A fast trainer for recognising valid words.", "link": "https://kaishx.github.io/scrabbletrainer/" }
+      ]
+    },
+    {
+      "id": "other", "icon": "🎲", "name": "Other projects", "desktop": true,
+      "title": "Other projects",
+      "items": [
+        { "title": "A social deduction card game", "meta": "Design · 200+ cards", "image": "assets/cards.jpeg",
+          "text": "An original game, from rules to 200+ printed cards, balanced over 20+ playtests." },
+        { "title": "Manga database", "meta": "Google Sheets · 1,000+ titles", "image": "assets/manga_database.png",
+          "text": "1,000+ titles tracked with scores, with reports on score distribution, genres and status." }
+      ]
+    },
+    {
+      "id": "skills", "icon": "🛠️", "name": "Technical skills", "desktop": true,
+      "title": "Technical skills",
+      "items": [
+        { "title": "Quantitative", "text": "Statistical inference · time-series and tick-data analysis · walk-forward analysis · market microstructure · survival analysis" },
+        { "title": "Software", "text": "Python (Pandas, NumPy, Numba, Matplotlib) · Jupyter · SQL · JavaScript, HTML / CSS, Three.js · Excel VBA and macros · Git · Bash / Zsh" },
+        { "title": "Systems", "text": "Linux (i3wm) · SSH · VPS deployment · REST and WebSocket APIs · real-time data feeds · Telegram bots" },
+        { "title": "Engineering", "text": "Mechanical engineering (NUS) · mechanism design · Arduino and basic electronics · rapid prototyping" },
+        { "title": "Certificates", "text": "Foundational Data Analytics (Coursera) · Intermediate SQL (DataCamp) · Intermediate Python (DataCamp)" }
+      ]
+    },
+    {
+      "id": "education", "icon": "🎓", "name": "Education", "desktop": true,
+      "title": "Education",
+      "items": [
+        { "title": "National University of Singapore", "meta": "2026 – 2029",
+          "text": "B.Eng. Mechanical Engineering, Second Major in Computing (accelerated three-year programme). CDE Engineering Scholars Programme: full-ride, non-bonded." },
+        { "title": "NUS High School of Mathematics and Science", "meta": "2018 – 2023",
+          "text": "NUS High Diploma (High Distinction), overall CAP 4.5. Major CAP: Mathematics 4.9, Chemistry 4.9, Physics 4.6." }
+      ]
+    },
+    {
+      "id": "awards", "icon": "🏆", "name": "Awards", "desktop": true,
+      "title": "Awards",
+      "items": [
+        { "title": "CDE Engineering Scholars Programme", "meta": "NUS · 2026 – 2029", "text": "Full-ride, bond-free engineering scholarship." },
+        { "title": "SAF National Serviceman of the Year", "meta": "2026", "text": "Awarded to the top 0.25% of full-time national servicemen." },
+        { "title": "IMC Prosperity 04", "meta": "2026 · 123rd of 18,803 teams", "text": "Algorithmic trading competition, in a team of five." },
+        { "title": "5th place, NUS Chem-Engineering Challenge", "meta": "2022", "text": "Top 5% of 100+ teams." },
+        { "title": "Singapore Mathematical Olympiad (Junior), Silver", "meta": "2019" },
+        { "title": "NUS High School Commendation Award", "meta": "2021 – 2022", "text": "For leadership." }
+      ]
+    },
+    {
+      "id": "hobbies", "icon": "🧗", "name": "Hobbies", "desktop": true,
+      "title": "Hobbies",
+      "items": [
+        { "title": "Bouldering", "meta": "V7", "image": "assets/photos/bouldering.jpg" },
+        { "title": "Trackmania", "meta": "SG top 1 · Asia top 1% at peak", "image": "assets/TM.png",
+          "text": "10+ published maps, recognised by the community for design, which led to an offer of a commissioned map-building role." },
+        { "title": "Motorcycles", "image": "assets/photos/r15.jpg" },
+        { "title": "Valorant", "meta": "Top 0.8% at peak" },
+        { "title": "Also", "text": "Mixology, manga, Scrabble." }
+      ]
+    },
+    {
+      "id": "photos", "icon": "📷", "name": "Photos", "desktop": true, "layout": "gallery",
+      "title": "Photos",
+      "items": [
+        { "title": "EG1311 robot", "image": "assets/photos/robot.jpg", "thumb": "assets/photos/thumb/robot.jpg" },
+        { "title": "bouldering", "image": "assets/photos/bouldering.jpg", "thumb": "assets/photos/thumb/bouldering.jpg" },
+        { "title": "the R15", "image": "assets/photos/r15.jpg", "thumb": "assets/photos/thumb/r15.jpg" },
+        { "title": "NS, RSAF", "image": "assets/photos/rsaf.jpg", "thumb": "assets/photos/thumb/rsaf.jpg" },
+        { "title": "malaysia!", "image": "assets/photos/lanterns.jpg", "thumb": "assets/photos/thumb/lanterns.jpg" },
+        { "title": "by the sea", "image": "assets/photos/coast.jpg", "thumb": "assets/photos/thumb/coast.jpg" },
+        { "title": "capybara!", "image": "assets/photos/capybara.jpg", "thumb": "assets/photos/thumb/capybara.jpg" }
+      ]
+    },
+    {
+      "id": "contact", "icon": "✉️", "name": "Contact", "desktop": true,
+      "title": "Say hello",
+      "intro": "Open to engineering internships for summer 2027 (May – Aug).",
+      "items": [
+        { "title": "chukaile.work@gmail.com", "link": "mailto:chukaile.work@gmail.com" },
+        { "title": "LinkedIn", "link": "https://www.linkedin.com/in/ckail/" },
+        { "title": "GitHub", "link": "https://github.com/kaishx" },
+        { "title": "The text version of this site", "link": "classic.html" }
+      ]
+    }
+  ]
+}
