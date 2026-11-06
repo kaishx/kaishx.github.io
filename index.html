@@ -41,28 +41,71 @@ canvas { display: block; outline: none; touch-action: none; }
        letter-spacing: .12em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; transform: translate(14px, 14px); opacity: 0; transition: opacity .2s; }
 .tip.on { opacity: 1; }
 
-/* ---------------------------------------------------------------- the computer's desktop */
+/* ---------------------------------------------------------------- the computer's desktop: like a real one (owner,
+   2026-11-06): a menu bar with the clock, folder and PDF icons, two widgets, a dock */
 .desktop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease); }
 .desktop.on { opacity: 1; pointer-events: auto; }
 .screen { position: relative; width: min(1180px, 94vw); aspect-ratio: 16 / 10; max-height: 88vh; border-radius: 14px; overflow: hidden;
-          border: 10px solid #0d110f; box-shadow: 0 40px 120px rgba(0,0,0,.6); background: var(--desk-bg); }
-.bar { position: relative; z-index: 4; height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; background: rgba(0,0,0,.35);
-       font-size: 12px; font-weight: 600; letter-spacing: .08em; }
-.bar button { background: none; border: 0; color: var(--white); font: inherit; cursor: pointer; padding: 6px 10px; border-radius: 6px; }
-.bar button:hover { background: rgba(255,255,255,.12); }
-.icons { position: absolute; z-index: 4; top: 54px; left: 22px; bottom: 22px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(4, 104px); gap: 6px 14px; }
-.welcome { position: absolute; z-index: 4; right: 5%; top: 16%; width: min(380px, 40%); }
-.welcome .display { font-size: clamp(40px, 5vw, 76px); }
-.welcome p { color: rgba(255,255,255,.75); margin: 14px 0 0; }
+          border: 10px solid #0d110f; box-shadow: 0 40px 120px rgba(0,0,0,.6); background: var(--wallpaper); }
+.menubar { position: relative; z-index: 4; height: 28px; display: flex; align-items: center; gap: 16px; padding: 0 10px 0 14px;
+           background: rgba(18,20,22,.42); backdrop-filter: blur(18px) saturate(150%); font-size: 13px; }
+.menubar .mark { width: 14px; height: 14px; border-radius: 50%; background: conic-gradient(from 200deg, #d5f4f9, #b7c6c2, #c98a5e, #d5f4f9); }
+.menubar .menu { color: rgba(255,255,255,.88); cursor: default; }
+.menubar .spacer { flex: 1; }
+.menubar .tray { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,.92); }
+.menubar #clock { font-weight: 600; white-space: nowrap; }
+.menubar button { display: flex; align-items: center; gap: 6px; background: none; border: 0; color: var(--white); font: inherit; cursor: pointer;
+                  padding: 3px 8px; border-radius: 5px; }
+.menubar button:hover, .menubar button:focus-visible { background: rgba(255,255,255,.18); outline: none; }
+.icons { position: absolute; z-index: 4; top: 40px; left: 14px; bottom: 86px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(4, 100px);
+         gap: 4px 8px; align-content: start; }
+.widgets { position: absolute; z-index: 4; top: 44px; right: 20px; width: min(340px, 34%); display: grid; gap: 14px; }
+.widget { border-radius: 20px; padding: 18px 20px; background: rgba(28,32,34,.42); backdrop-filter: blur(22px) saturate(140%);
+          border: 1px solid rgba(255,255,255,.12); box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.widget h1 { margin: 0; font: 700 clamp(22px, 2.4vw, 30px)/1.15 'Plus Jakarta Sans', system-ui, sans-serif; letter-spacing: -0.01em; }
+.widget p { margin: 10px 0 0; color: rgba(255,255,255,.8); font-size: 14px; line-height: 1.55; }
+.widget.when { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 2px 14px; padding: 14px 20px; }
+.widget.when b { grid-row: span 2; font: 300 44px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+.widget.when span { font-size: 13px; color: rgba(255,255,255,.8); }
+.widget.when span:first-of-type { color: #ff8a65; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: .08em; }
+.dock { position: absolute; z-index: 5; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px;
+        padding: 7px 9px; border-radius: 20px; background: rgba(255,255,255,.16); backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255,255,255,.22); box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.dock .sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(255,255,255,.3); }
+.app { position: relative; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; border: 0; padding: 0; cursor: pointer;
+       color: var(--white); text-decoration: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 2px 6px rgba(0,0,0,.25); transition: transform .2s var(--ease); }
+.app svg { width: 58%; height: 58%; }
+.app:hover, .app:focus-visible { transform: translateY(-4px); outline: none; }
+.app::after { content: attr(aria-label); position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); white-space: nowrap;
+              padding: 3px 9px; border-radius: 6px; background: rgba(30,30,32,.85); color: #fff; font: 500 12px 'Plus Jakarta Sans', sans-serif;
+              opacity: 0; pointer-events: none; transition: opacity .15s; }
+.app:hover::after, .app:focus-visible::after { opacity: 1; }
+.app.mail { background: linear-gradient(#5db4ff, #1d6fe0); }
+.app.photos { background: linear-gradient(#ffffff, #eceae6); }
+.app.photos i { width: 64%; height: 64%; border-radius: 50%; background: conic-gradient(#f5a524, #f3d33c, #7cc35a, #3fa3d8, #6c6fd9, #d9558d, #f5a524);
+                -webkit-mask: radial-gradient(circle, transparent 18%, #000 20%); mask: radial-gradient(circle, transparent 18%, #000 20%); }
+.app.code { background: linear-gradient(#3b3f45, #1d1f23); }
+.app.in { background: linear-gradient(#2a86d6, #0a5eb0); font: 800 22px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.04em; }
+.app.power { background: linear-gradient(#5a5d63, #34363b); }
 
-/* ---------------------------------------------------------------- the folder window: over the desktop, or beside the room ("side") */
-#win { position: fixed; z-index: 30; left: 50%; top: 50%; width: min(640px, 92vw); max-height: min(78vh, 720px);
+/* ---------------------------------------------------------------- the folder window: over the desktop (with a sidebar of every
+   folder, like a file browser), or beside the room ("side": narrower, no sidebar) */
+#win { position: fixed; z-index: 30; left: 50%; top: 50%; width: min(820px, 92vw); max-height: min(78vh, 720px);
        transform: translate(-50%, -46%) scale(.97); opacity: 0; pointer-events: none; transition: opacity .35s var(--ease), transform .5s var(--ease); }
 #win.on { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
-#win.side { left: auto; right: 24px; transform: translate(0, -46%) scale(.97); }
+#win.side { width: min(640px, 92vw); left: auto; right: 24px; transform: translate(0, -46%) scale(.97); }
 #win.side.on { transform: translate(0, -50%); }
-#win header .dots i:first-child { cursor: pointer; }
-#win header button { margin-left: auto; border: 0; background: none; font-size: 18px; cursor: pointer; color: var(--navy); }
+#win .win-body { position: relative; z-index: 1; display: flex; min-height: 0; flex: 1; }
+#win .content { flex: 1; min-width: 0; outline: none; }
+.places { flex: none; width: 178px; overflow-y: auto; padding: 10px 8px; background: #efece7; border-right: 1px solid rgba(23,30,25,.1); }
+.places h4 { margin: 8px 8px 4px; font-size: 11px; font-weight: 700; color: #8a8384; }
+.places button, .places a { display: flex; align-items: center; gap: 8px; width: 100%; padding: 5px 8px; border: 0; border-radius: 6px; background: none;
+                            font: 500 13px 'Plus Jakarta Sans', sans-serif; color: #2b292a; text-align: left; text-decoration: none; cursor: pointer; }
+.places button:hover, .places a:hover { background: rgba(23,30,25,.06); }
+.places button.on { background: rgba(23,30,25,.11); font-weight: 600; }
+.places span { width: 18px; text-align: center; }
+#win.side .places { display: none; }
+#win .status { position: relative; z-index: 1; padding: 5px 14px; font-size: 11.5px; color: #7a7374; background: #f3f1ed; border-top: 1px solid rgba(23,30,25,.08); }
 
 /* ---------------------------------------------------------------- a tap on a phone: "open this?" first */
 .sheet { position: fixed; left: 50%; bottom: 18px; z-index: 25; width: min(420px, 92vw); transform: translate(-50%, 140%);
@@ -87,16 +130,17 @@ canvas { display: block; outline: none; touch-action: none; }
   .screen { width: 100vw; height: 100svh; max-height: none; aspect-ratio: auto; border: 0; border-radius: 0; }
   .icons { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); grid-template-rows: none; right: 12px; left: 12px; bottom: auto; }
   .icon { width: auto; }
-  .welcome { display: none; }
+  .widgets, .menubar .menu, .menubar button span { display: none; }
+  .menubar { gap: 12px; }
+  .places { display: none; }
   #win.side { left: 50%; right: auto; transform: translate(-50%, -46%) scale(.97); }
   #win.side.on { transform: translate(-50%, -50%); }
   .hint { right: auto; left: 16px; bottom: auto; top: 16px; font-size: 12px; padding: 6px 12px; }
   .quick { left: 12px; right: 12px; bottom: 12px; }
 }
 @media (max-height: 560px) and (min-width: 761px) {             /* short, wide windows: phones held sideways */
-  .icons { top: 44px; bottom: 10px; grid-template-rows: repeat(3, 82px); }
-  .icon .glyph { font-size: 28px; }
-  .welcome { display: none; }
+  .icons { top: 34px; bottom: 70px; grid-template-rows: repeat(3, 78px); }
+  .widgets { display: none; }
   .hint { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -125,20 +169,40 @@ canvas { display: block; outline: none; touch-action: none; }
 
 <div class="desktop" id="desktop" aria-hidden="true">
   <div class="screen" role="dialog" aria-label="Kai's computer">
-    <div class="bar"><span>kai@desk</span><span id="clock"></span><button type="button" id="stand-up">Stand up ✕</button></div>
-    <div class="icons" id="icons"></div>
-    <div class="welcome">
-      <div class="display">Hi, I'm Kai Le.</div>
-      <p>Mechanical Engineering and Computing at NUS, on the CDE Engineering Scholars Programme. I build trading systems and
-        research market microstructure. Open a folder, or grab a CV.</p>
+    <div class="menubar">
+      <span class="mark" aria-hidden="true"></span><b>Desktop</b><span class="menu">File</span><span class="menu">Edit</span><span class="menu">View</span>
+      <span class="spacer"></span>
+      <span class="tray" aria-hidden="true">
+        <svg viewBox="0 0 16 12" width="16" height="12"><path fill="currentColor" d="M8 11.6 5.7 9.2a3.3 3.3 0 0 1 4.6 0zM3.4 6.9a6.5 6.5 0 0 1 9.2 0l-1.5 1.5a4.4 4.4 0 0 0-6.2 0zM1.1 4.6a9.8 9.8 0 0 1 13.8 0l-1.5 1.5a7.6 7.6 0 0 0-10.8 0z"/></svg>
+        <svg viewBox="0 0 27 12" width="25" height="11"><rect x=".6" y=".6" width="22.5" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-opacity=".5"/><rect x="2.2" y="2.2" width="15.5" height="7.6" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="1.8" height="4" rx=".9" fill="currentColor" fill-opacity=".5"/></svg>
+      </span>
+      <span id="clock"></span>
+      <button type="button" id="stand-up" aria-label="Stand up (leave the computer)"><svg viewBox="0 0 16 16" width="13" height="13"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M8 1.5v6M4.4 3.6a6 6 0 1 0 7.2 0"/></svg><span>Stand up</span></button>
     </div>
+    <div class="icons" id="icons"></div>
+    <div class="widgets">
+      <div class="widget hello">
+        <h1>Hi, I'm Kai Le.</h1>
+        <p>Mechanical Engineering and Computing at NUS, on the CDE Engineering Scholars Programme. I build trading systems and
+          research market microstructure. Open a folder, or grab a CV.</p>
+      </div>
+      <div class="widget when" aria-hidden="true"><b id="w-time"></b><span id="w-day"></span><span id="w-date"></span></div>
+    </div>
+    <nav class="dock" aria-label="Dock">
+      <button type="button" class="app mail" data-open="contact" aria-label="Mail"><svg viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2" fill="#fff"/><path d="M3.2 6.6 12 13l8.8-6.4" fill="none" stroke="#1d6fe0" stroke-width="1.6"/></svg></button>
+      <button type="button" class="app photos" data-open="photos" aria-label="Photos"><i></i></button>
+      <a class="app code" href="https://github.com/kaishx" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5M13.2 5l-2.4 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="app in" href="https://www.linkedin.com/in/ckail/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" class="app power" id="dock-stand" aria-label="Stand up"><svg viewBox="0 0 16 16"><path fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" d="M8 1.8v5.6M4.5 3.8a5.6 5.6 0 1 0 7 0"/></svg></button>
+    </nav>
   </div>
 </div>
 
-<section class="win" id="win" aria-hidden="true" role="dialog">
-  <header><div class="dots"><i id="win-close-dot" title="Close"></i><i></i><i></i></div><span id="win-path"></span>
-    <button type="button" id="win-close" aria-label="Close">✕</button></header>
-  <div class="content" id="win-content"></div>
+<section class="win" id="win" aria-hidden="true" role="dialog" aria-labelledby="win-path">
+  <header><div class="dots"><button type="button" id="win-close-dot" aria-label="Close"></button><i></i><i></i></div><span id="win-path"></span></header>
+  <div class="win-body"><nav class="places" id="win-places" aria-label="Folders"></nav><div class="content" id="win-content" tabindex="-1"></div></div>
+  <div class="status" id="win-status"></div>
 </section>
 
 <div class="sheet" id="sheet" role="dialog" aria-hidden="true">

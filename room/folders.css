@@ -3,7 +3,11 @@
 :root { --navy: #171e19; --sage: #b7c6c2; --cyan: #d5f4f9; --beige: #d7c5b2; --taupe: #9f8d8b; --char: #302b2f;
         --paper: #f6f3ee; --white: #fff; --ease: cubic-bezier(0.16, 1, 0.3, 1);
         --desk-bg: radial-gradient(120% 90% at 85% 10%, rgba(213,244,249,.16), transparent 50%),
-                   radial-gradient(90% 80% at 0% 100%, rgba(183,198,194,.32), transparent 55%), linear-gradient(160deg, #1e2a24, #121815); }
+                   radial-gradient(90% 80% at 0% 100%, rgba(183,198,194,.32), transparent 55%), linear-gradient(160deg, #1e2a24, #121815);
+        /* the computer's wallpaper: soft colour fields, like a desktop's default picture */
+        --wallpaper: radial-gradient(55% 75% at 12% 18%, #4f7f78 0%, transparent 62%), radial-gradient(60% 70% at 88% 92%, #c98a5e 0%, transparent 58%),
+                     radial-gradient(45% 55% at 72% 22%, #9fbcb4 0%, transparent 60%), radial-gradient(50% 60% at 30% 95%, #6d5a7a 0%, transparent 60%),
+                     linear-gradient(135deg, #1f3b3b, #2b2635); }
 * { box-sizing: border-box; }
 a { color: inherit; }
 .display { font-family: 'Anton', Impact, sans-serif; text-transform: uppercase; letter-spacing: -0.01em; font-weight: 400; line-height: .9; }
@@ -11,19 +15,27 @@ a { color: inherit; }
 /* ---------------------------------------------------------------- a folder window */
 .win { position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 12px;
        background: var(--paper); color: var(--navy); box-shadow: 0 30px 90px rgba(0,0,0,.55); }
-.win header { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-              background: #e8e2d9; border-bottom: 1px solid rgba(23,30,25,.1); }
-.win header .dots { display: flex; gap: 6px; }
-.win header .dots i { width: 12px; height: 12px; border-radius: 50%; background: #c9bfb2; }
-.win header .dots i:first-child { background: #e0705a; }
-.win header span { font-size: 12px; font-weight: 600; letter-spacing: .08em; color: rgba(23,30,25,.65); }
+.win header { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+              background: #ebe8e3; border-bottom: 1px solid rgba(23,30,25,.12); }
+.win header .dots { display: flex; gap: 8px; }
+.win header .dots > * { position: relative; width: 12px; height: 12px; padding: 0; border: 0; border-radius: 50%; background: #febc2e;
+                        box-shadow: inset 0 0 0 .5px rgba(0,0,0,.18); }
+.win header .dots > :first-child { background: #ff5f57; }
+.win header .dots > :last-child { background: #28c840; }
+.win header .dots button { cursor: pointer; display: grid; place-items: center; }
+.win header .dots button::before { content: ""; position: absolute; inset: -9px; }      /* easier to hit with a finger */
+.win header .dots button::after { content: "\00d7"; font: 700 11px/1 sans-serif; color: rgba(70,0,0,.65); opacity: 0; }
+.win header:hover .dots button::after, .win header .dots button:focus-visible::after { opacity: 1; }
+.win header .dots button:focus-visible { outline: 2px solid #2f6fd6; outline-offset: 2px; }
+.win header span { flex: 1; margin-right: 52px; text-align: center; font-size: 13px; font-weight: 600; color: #3b3839;
+                   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .win .content { position: relative; z-index: 1; overflow-y: auto; padding: 26px 28px 30px; }
 .win h2 { font-size: clamp(36px, 4.5vw, 56px); margin: 0 0 6px; }
 .win .intro { margin: 0 0 14px; color: #4c4a4b; }
 .row { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 16px 0; border-top: 1px solid rgba(23,30,25,.12); }
 .row.has-img { grid-template-columns: 120px 1fr; gap: 16px; }
 .row img { width: 120px; height: 84px; object-fit: cover; border-radius: 6px; filter: grayscale(.4); transition: filter .4s; }
-.row:hover img { filter: none; }
+.row:hover img { filter: none; }   /* (the row is hovered; the picture itself takes no clicks, see below) */
 .row h3 { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.3; }
 .row .meta { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #6d6466; margin-top: 2px; }
 .row p { margin: 6px 0 0; color: #3e3c3d; font-size: 14.5px; }
@@ -32,23 +44,37 @@ a { color: inherit; }
 /* the Photos folder: polaroids, a little crooked */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 18px; padding: 10px 4px 6px; }
 .snap { margin: 0; background: #fbf9f4; padding: 9px 9px 0; box-shadow: 0 1px 2px rgba(0,0,0,.18), 0 6px 14px rgba(0,0,0,.12);
-  transform: rotate(-1.6deg); transition: transform .25s; }
+  transform: rotate(-1.6deg); }
 .snap:nth-child(3n+2) { transform: rotate(1.4deg); }
 .snap:nth-child(3n) { transform: rotate(-.5deg); }
-.snap:hover { transform: rotate(0) scale(1.03); }
-.snap a { display: block; }
 .snap img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+/* the photos are only shown, never opened or saved by a click or a drag (owner, 2026-11-06) */
+.snap img, .row img { pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
 .snap figcaption { font-family: Caveat, "Segoe Print", cursive; font-weight: 600; font-size: 22px; line-height: 1.1;
   text-align: center; color: #2c2a2b; padding: 5px 0 9px; }
 @media (max-width: 520px) { .gallery { grid-template-columns: 1fr 1fr; gap: 16px 12px; } .snap figcaption { font-size: 19px; } }
-@media (prefers-reduced-motion: reduce) { .snap { transition: none; } }
 
 /* ---------------------------------------------------------------- desktop icons */
-.icon { width: 96px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; border-radius: 10px;
-        border: 1px solid transparent; background: none; color: var(--white); font: 600 12px/1.25 'Plus Jakarta Sans', sans-serif;
+.icon { width: 92px; display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 8px 4px 6px; border-radius: 8px;
+        border: 1px solid transparent; background: none; color: var(--white); font: 500 12px/1.25 'Plus Jakarta Sans', sans-serif;
         text-align: center; cursor: pointer; text-decoration: none; }
-.icon .glyph { font-size: 38px; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,.35)); }
-.icon:hover, .icon:focus-visible { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.18); outline: none; }
+.icon .name { padding: 1px 6px; border-radius: 4px; text-shadow: 0 1px 3px rgba(0,0,0,.9); }
+.icon:hover { background: rgba(255,255,255,.1); }
+.icon:focus-visible { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.25); outline: none; }
+.icon:focus-visible .name { background: #2f6fd6; text-shadow: none; }
+.art { position: relative; display: block; height: 50px; filter: drop-shadow(0 3px 5px rgba(0,0,0,.35)); }
+.art.folder { width: 58px; margin-top: 4px; }
+.art.folder::before { content: ""; position: absolute; left: 3px; top: -5px; width: 24px; height: 10px; border-radius: 4px 4px 0 0; background: #3f8fd8; }
+.art.folder::after { content: ""; position: absolute; inset: 0; border-radius: 6px; background: linear-gradient(#80c4f8, #4c9fe8);
+                     box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(0,40,90,.12); }
+.art.folder i { position: absolute; z-index: 1; inset: 12px 0 0; font-style: normal; font-size: 20px; line-height: 1; text-align: center;
+                filter: grayscale(1) brightness(.5); opacity: .55; }
+.art.doc { width: 40px; height: 52px; border-radius: 3px; background: linear-gradient(225deg, transparent 9px, #fbfbf9 9px);
+           clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%); }
+.art.doc::before { content: ""; position: absolute; right: 0; top: 0; width: 12px; height: 12px; background: linear-gradient(225deg, transparent 50%, #d8d6d0 50%); }
+.art.doc::after { content: ""; position: absolute; left: 7px; right: 8px; top: 16px; height: 16px;
+                  background: repeating-linear-gradient(#b9b6ae 0 1.5px, transparent 1.5px 4px); }
+.art.doc b { position: absolute; left: 4px; bottom: 6px; padding: 1px 4px; border-radius: 2px; background: #e0443a; color: #fff; font: 800 8.5px/1.2 sans-serif; letter-spacing: .04em; }
 
 /* ---------------------------------------------------------------- film grain: a still noise tile, moved a few times a second
    (moving a layer is nearly free for the browser, unlike redrawing the 3D scene) */

@@ -20,7 +20,7 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { el, folderNodes } from './folders.js';
+import { el, folderNodes, iconArt } from './folders.js';
 import { createOutside } from './outside.js';
 
 window.roomReady = true;   // index.html shows the "no 3D" page if this never happens (the CDN didn't load)
@@ -201,6 +201,32 @@ const paint = colour => {
   m.userData.tile = 2.0;                                         // 2 m of wall per copy, the same on every wall
   return m;
 };
+// Woven cloth for the bedding, curtains, rug and lampshade: a fine weave, loose fibres and a faint unevenness, nearly
+// white so the colour is the material's. The room's things all have a surface now, like the wood and the floor, not
+// flat pastel colour (owner, 2026-11-06). cloth(colour, across, down): copies of the weave across and down each face.
+const fabricTex = (() => {
+  const S = 256, c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(0, 0, S, S);
+  for (let i = 0; i < 40; i++) {                                 // unevenness, wrapped round so the picture tiles
+    const x = rand() * S, y = rand() * S, r = 10 + rand() * 35, tone = rand() < 0.5 ? '0,0,0,0.025' : '255,255,255,0.03';
+    for (const dx of [-S, 0, S]) for (const dy of [-S, 0, S]) {
+      const g = ctx.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r);
+      g.addColorStop(0, `rgba(${tone})`); g.addColorStop(1, `rgba(${tone.replace(/[\d.]+$/, '0')})`);
+      ctx.fillStyle = g; ctx.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r);
+    }
+  }
+  for (let y = 0; y < S; y += 2) { ctx.fillStyle = `rgba(0,0,0,${0.03 + rand() * 0.04})`; ctx.fillRect(0, y, S, 1); }   // weft
+  for (let x = 0; x < S; x += 2) { ctx.fillStyle = `rgba(0,0,0,${0.02 + rand() * 0.04})`; ctx.fillRect(x, 0, 1, S); }   // warp
+  for (let i = 0; i < 2500; i++) { ctx.fillStyle = rand() < 0.5 ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.1)'; ctx.fillRect(rand() * S, rand() * S, 1 + rand() * 2, 1); }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4;
+  return t;
+})();
+const cloth = (colour, across = 1, down = 1, extra = {}) => {
+  const map = fabricTex.clone(); map.repeat.set(across, down);
+  return std(colour, { roughness: 1, map, ...extra });
+};
 const woodMat = (tint = '#b9997e') => {
   const m = std('#8a6a50', { roughness: 0.55 });
   Object.assign(m.userData, { tile: 1.0, grain: true });          // 1 m of veneer per copy, grain along each board
@@ -238,7 +264,7 @@ world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0
   const CZ = FRONT + 0.1, rodMat = std('#5a4636');                 // curtains hang just in front of the wall
   world.add(rod([WIN.x0 - 0.38, WIN.y1 + 0.12, CZ], [WIN.x1 + 0.3, WIN.y1 + 0.12, CZ], 0.011, rodMat));
   for (const x of [WIN.x0 - 0.33, WIN.x1 + 0.25]) world.add(rod([x, WIN.y1 + 0.12, FRONT], [x, WIN.y1 + 0.12, CZ], 0.008, rodMat));
-  const curtainMat = std('#c9a98a', { roughness: 1, side: THREE.DoubleSide });
+  const curtainMat = cloth('#c9a98a', 1.5, 5, { side: THREE.DoubleSide });
   for (const x of [WIN.x0 - 0.17, WIN.x1 + 0.13]) {
     const geo = new THREE.PlaneGeometry(0.3, 1.25, 20, 1);        // down to the sill, gathered in folds
     const p = geo.attributes.position;
@@ -251,22 +277,44 @@ world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0
 }
 // a rug under the chair
 {
-  const rug = new THREE.Mesh(new THREE.CircleGeometry(1.05, 48), std('#7f8f86', { roughness: 1 }));
+  const rug = new THREE.Mesh(new THREE.CircleGeometry(1.05, 48), cloth('#7f8f86', 7, 7));
   rug.rotation.x = -Math.PI / 2; rug.position.set(0, 0.004, 0.45); rug.receiveShadow = true; world.add(rug);
-  const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 0.96, 48), std('#d7c5b2', { roughness: 1 }));
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 0.96, 48), cloth('#d7c5b2', 7, 7));
   ring.rotation.x = -Math.PI / 2; ring.position.set(0, 0.005, 0.45); ring.receiveShadow = true; world.add(ring);
 }
-// cables from the things on the desk, over the back edge and down behind it (they follow objects.json's positions)
+// Cables, and where they go (they follow objects.json's positions): the keyboard into the back of the monitor; the
+// monitor, the lamp and the phone charger over the back of the desk, down the wall and into a power strip on the floor
+// under the desk, which is plugged into the wall. Nothing ends in mid-air (owner, 2026-11-06).
 {
   const cable = (pts, colour = '#1c1c1e') => {
     const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
-    const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 48, 0.0028, 5), std(colour, { roughness: 0.6 }));
+    const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 64, 0.0028, 5), std(colour, { roughness: 0.6 }));
     m.castShadow = true; m.receiveShadow = true; world.add(m);
   };
-  cable([[-0.05, 0.768, -0.49], [-0.07, 0.763, -0.6], [-0.14, 0.763, -0.75], [-0.2, 0.763, -0.93], [-0.21, 0.745, -0.99], [-0.21, 0.35, -0.995]]); // keyboard
-  cable([[0, 0.83, -0.885], [0.03, 0.766, -0.93], [0.06, 0.763, -0.965], [0.07, 0.74, -0.993], [0.07, 0.3, -0.995]]);                             // monitor
-  cable([[0.6, 0.77, -0.86], [0.63, 0.763, -0.94], [0.65, 0.745, -0.99], [0.65, 0.3, -0.995]]);                                                   // lamp
-  cable([[0.58, 0.766, -0.51], [0.6, 0.763, -0.62], [0.69, 0.763, -0.78], [0.72, 0.763, -0.93], [0.73, 0.745, -0.99], [0.73, 0.3, -0.995]], '#ecebe7'); // phone charger
+  const B = FRONT + 0.005, F = FRONT + 0.03;                       // down the wall; along the floor in front of the skirting
+  // the keyboard, round the left of the monitor's foot and up into its back
+  cable([[-0.05, 0.768, -0.49], [-0.08, 0.763, -0.62], [-0.14, 0.763, -0.75], [-0.15, 0.763, -0.86], [-0.06, 0.766, -0.94],
+    [0.04, 0.8, -0.92], [0.06, 0.9, -0.885], [0.05, 0.99, -0.86]]);
+  // the monitor: out of its back, left of the stand (you see it hang between the screen and the desk), to the strip
+  cable([[-0.1, 1.02, -0.857], [-0.11, 0.9, -0.87], [-0.12, 0.8, -0.9], [-0.15, 0.765, -0.95], [-0.16, 0.745, B - 0.003],
+    [-0.16, 0.4, B], [-0.13, 0.12, B], [-0.08, 0.095, F - 0.01], [-0.05, 0.068, -0.955]]);
+  // the lamp, from the back of its base, behind the drawers, along the floor to the strip
+  cable([[0.6, 0.77, -0.83], [0.63, 0.763, -0.93], [0.65, 0.745, B - 0.003], [0.655, 0.3, B], [0.65, 0.12, B], [0.635, 0.092, FRONT + 0.02],
+    [0.6, 0.012, F - 0.008], [0.4, 0.004, F - 0.008], [0.27, 0.02, F - 0.008], [0.21, 0.08, -0.96], [0.19, 0.068, -0.955]]);
+  // the phone charger: out of the bottom of the phone (its port), round the phone, behind the lamp, down to the strip
+  const ph = new THREE.Vector3(0.55, 0.7645, -0.44), along = new THREE.Vector3(Math.sin(rad(-25)), 0, Math.cos(rad(-25)));
+  const port = ph.clone().addScaledVector(along, 0.0775), out = ph.clone().addScaledVector(along, 0.11);
+  cable([port.toArray(), [out.x, 0.7635, out.z], [0.6, 0.763, -0.3], [0.69, 0.763, -0.4], [0.72, 0.763, -0.6], [0.725, 0.763, -0.85],
+    [0.73, 0.745, B - 0.003], [0.735, 0.3, B], [0.73, 0.12, B], [0.715, 0.092, FRONT + 0.025], [0.68, 0.012, F + 0.006], [0.4, 0.004, F + 0.006],
+    [0.27, 0.03, F + 0.006], [0.14, 0.09, -0.952], [0.11, 0.068, -0.955]], '#ecebe7');
+  // the power strip: four sockets, three plugs in (the phone's a white charger), and its own cable to the wall socket
+  const white = std('#ecebe7', { roughness: 0.5 }), black = std('#222124', { roughness: 0.5 });
+  world.add(box(0.32, 0.035, 0.05, white, 0.08, 0.0175, -0.955));
+  world.add(box(0.03, 0.03, 0.04, black, -0.05, 0.05, -0.955), box(0.03, 0.03, 0.04, black, 0.19, 0.05, -0.955));
+  world.add(box(0.032, 0.03, 0.032, white, 0.11, 0.05, -0.955));
+  world.add(box(0.03, 0.006, 0.04, std('#3a3a3c'), 0.03, 0.0375, -0.955));       // the empty socket
+  world.add(box(0.09, 0.09, 0.01, white, -0.3, 0.3, FRONT + 0.005), box(0.04, 0.055, 0.03, white, -0.3, 0.3, FRONT + 0.025));
+  cable([[-0.08, 0.0175, -0.955], [-0.14, 0.012, -0.965], [-0.24, 0.02, F - 0.004], [-0.29, 0.1, F - 0.004], [-0.3, 0.2, FRONT + 0.03], [-0.3, 0.272, FRONT + 0.025]], '#ecebe7');
 }
 // string lights along the top of the front wall
 const fairyMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.6, 0.85) });
@@ -398,32 +446,99 @@ function applyTime() {
 
 // ------------------------------------------------------------------ pictures drawn on things: the screen, the clock, the phone, posters
 let content = { folders: [] }, folders = {};
-const desktopItems = () => [...content.folders.filter(f => f.desktop), ...(content.cvs || []).map(c => ({ icon: '📄', name: c.name }))];
+const desktopItems = () => [...content.folders.filter(f => f.desktop), ...(content.cvs || []).map(c => ({ pdf: true, name: `${c.name}.pdf` }))];
 
-const screenTex = canvasTexture(1024, 596, (ctx, w, h) => {      // a picture of the desktop (the real one is HTML)
-  let g = ctx.createLinearGradient(0, 0, w, h); g.addColorStop(0, '#22302a'); g.addColorStop(1, '#121815');
+// A picture of the desktop for the monitor in the room, drawn like the real one (index.html, the HTML desktop): the
+// wallpaper, the menu bar, folder and PDF icons, the two widgets and the dock.
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  let line = '';
+  for (const word of text.split(' ')) {
+    if (line && ctx.measureText(`${line} ${word}`).width > maxW) { ctx.fillText(line, x, y); line = word; y += lineH; }
+    else line = line ? `${line} ${word}` : word;
+  }
+  ctx.fillText(line, x, y);
+}
+function drawFolder(ctx, x, y, symbol) {                       // 58 x 50 at (x, y)
+  ctx.fillStyle = '#3f8fd8'; roundRect(ctx, x + 3, y - 5, 24, 10, 4); ctx.fill();
+  const g = ctx.createLinearGradient(0, y, 0, y + 50); g.addColorStop(0, '#80c4f8'); g.addColorStop(1, '#4c9fe8');
+  ctx.fillStyle = g; roundRect(ctx, x, y, 58, 46, 6); ctx.fill();
+  ctx.save(); ctx.globalAlpha = 0.5; ctx.filter = 'grayscale(1) brightness(0.5)';
+  ctx.font = `20px ${EMOJI}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(symbol, x + 29, y + 26);
+  ctx.restore();
+}
+function drawPdf(ctx, x, y) {                                  // 40 x 52 at (x, y)
+  ctx.fillStyle = '#fbfbf9';
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 28, y); ctx.lineTo(x + 40, y + 12); ctx.lineTo(x + 40, y + 52); ctx.lineTo(x, y + 52); ctx.fill();
+  ctx.fillStyle = '#d8d6d0'; ctx.beginPath(); ctx.moveTo(x + 28, y); ctx.lineTo(x + 28, y + 12); ctx.lineTo(x + 40, y + 12); ctx.fill();
+  ctx.fillStyle = '#b9b6ae'; for (let i = 0; i < 4; i++) ctx.fillRect(x + 7, y + 16 + i * 4, 25, 1.5);
+  ctx.fillStyle = '#e0443a'; roundRect(ctx, x + 4, y + 36, 22, 11, 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '800 8.5px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText('PDF', x + 7, y + 41.5);
+}
+const screenTex = canvasTexture(1024, 596, (ctx, w, h) => {
+  ctx.fillStyle = '#25303a'; ctx.fillRect(0, 0, w, h);
+  let g = ctx.createLinearGradient(0, 0, w, h); g.addColorStop(0, '#1f3b3b'); g.addColorStop(1, '#2b2635');
   ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-  g = ctx.createRadialGradient(w * 0.85, h * 0.1, 0, w * 0.85, h * 0.1, w * 0.6);
-  g.addColorStop(0, 'rgba(213,244,249,0.22)'); g.addColorStop(1, 'rgba(213,244,249,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-  g = ctx.createRadialGradient(0, h, 0, 0, h, w * 0.6);
-  g.addColorStop(0, 'rgba(183,198,194,0.35)'); g.addColorStop(1, 'rgba(183,198,194,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(0, 0, w, 34);
-  ctx.fillStyle = '#fff'; ctx.font = `600 15px ${SANS}`; ctx.textBaseline = 'middle';
+  for (const [px, py, r, c] of [[0.12, 0.18, 0.55, '79,127,120'], [0.88, 0.92, 0.6, '201,138,94'], [0.72, 0.22, 0.42, '159,188,180'], [0.3, 0.95, 0.5, '109,90,122']]) {
+    g = ctx.createRadialGradient(px * w, py * h, 0, px * w, py * h, r * w);
+    g.addColorStop(0, `rgba(${c},1)`); g.addColorStop(1, `rgba(${c},0)`);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  }
+  // the menu bar
+  ctx.fillStyle = 'rgba(18,20,22,0.42)'; ctx.fillRect(0, 0, w, 24);
+  ctx.fillStyle = '#b7c6c2'; ctx.beginPath(); ctx.arc(16, 12, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  ctx.font = `700 12px ${SANS}`; ctx.fillText('Desktop', 30, 12);
+  ctx.font = `500 12px ${SANS}`; ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fillText('File', 96, 12); ctx.fillText('Edit', 130, 12); ctx.fillText('View', 164, 12);
   const d = now();
-  ctx.textAlign = 'left'; ctx.fillText('kai@desk', 16, 17);
-  ctx.textAlign = 'center'; ctx.fillText(`${d.toLocaleDateString([], { weekday: 'short' })} ${timeText(d)}`, w / 2, 17);
-  ctx.textAlign = 'right'; ctx.fillText('Stand up ✕', w - 16, 17);
-  ctx.textAlign = 'center';
+  ctx.textAlign = 'right'; ctx.fillStyle = '#fff'; ctx.fillText('Stand up', w - 12, 12);
+  ctx.font = `600 12px ${SANS}`; ctx.fillText(`${d.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}  ${timeText(d)}`, w - 84, 12);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)'; roundRect(ctx, w - 262, 7, 20, 10, 3); ctx.fill();                 // battery
+  ctx.beginPath(); ctx.arc(w - 284, 18, 9, Math.PI * 1.25, Math.PI * 1.75); ctx.lineTo(w - 284, 18); ctx.fill();   // wi-fi
+  // the icons, in columns of four
   desktopItems().forEach((f, i) => {
-    const x = 74 + Math.floor(i / 4) * 116, y = 64 + (i % 4) * 128;
-    ctx.font = `46px ${EMOJI}`; ctx.fillText(f.icon, x, y + 30);
-    ctx.font = `600 15px ${SANS}`; ctx.fillStyle = '#fff'; ctx.fillText(f.name, x, y + 78);
+    const cx = 60 + Math.floor(i / 4) * 92, y = 44 + (i % 4) * 92;
+    if (f.pdf) drawPdf(ctx, cx - 20, y); else drawFolder(ctx, cx - 29, y + 4, f.icon || '');
+    ctx.font = `500 11.5px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 3; ctx.fillStyle = '#fff'; ctx.fillText(f.name, cx, y + 70); ctx.shadowBlur = 0;
   });
-  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  ctx.font = '400 72px Anton, Impact, sans-serif'; ctx.fillText("HI, I'M KAI LE.", w * 0.5, h * 0.38);
-  ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.font = `400 20px ${SANS}`;
-  ctx.fillText('Mechanical Engineering and Computing at NUS.', w * 0.5, h * 0.38 + 48);
-  ctx.fillText('Open a folder, or grab a CV.', w * 0.5, h * 0.38 + 78);
+  // the widgets
+  const wx = w - 330, ww = 306;
+  const card = (y, hh) => {
+    ctx.fillStyle = 'rgba(28,32,34,0.45)'; roundRect(ctx, wx, y, ww, hh, 18); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1; ctx.stroke();
+  };
+  card(40, 152);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#fff'; ctx.font = `700 25px ${SANS}`; ctx.fillText("Hi, I'm Kai Le.", wx + 18, 78);
+  ctx.fillStyle = 'rgba(255,255,255,0.82)'; ctx.font = `400 12.5px ${SANS}`;
+  wrapText(ctx, 'Mechanical Engineering and Computing at NUS, on the CDE Engineering Scholars Programme. I build trading systems and research market microstructure. Open a folder, or grab a CV.', wx + 18, 104, ww - 36, 19);
+  card(206, 74);
+  ctx.fillStyle = '#fff'; ctx.font = `300 40px ${SANS}`; const t = timeText(d).replace(/\s?[ap]\.?m\.?$/i, '');
+  ctx.fillText(t, wx + 18, 258);
+  const tw = ctx.measureText(t).width;
+  ctx.fillStyle = '#ff8a65'; ctx.font = `700 10.5px ${SANS}`; ctx.fillText(d.toLocaleDateString([], { weekday: 'long' }).toUpperCase(), wx + 34 + tw, 236);
+  ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = `400 12.5px ${SANS}`; ctx.fillText(d.toLocaleDateString([], { day: 'numeric', month: 'long' }), wx + 34 + tw, 256);
+  // the dock
+  const tiles = [['#5db4ff', '#1d6fe0'], ['#ffffff', '#eceae6'], ['#3b3f45', '#1d1f23'], ['#2a86d6', '#0a5eb0'], null, ['#5a5d63', '#34363b']];
+  const dw = 5 * 46 + 4 * 8 + 18 + 18, dx = (w - dw) / 2, dy = h - 66;
+  ctx.fillStyle = 'rgba(255,255,255,0.18)'; roundRect(ctx, dx, dy, dw, 58, 18); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.stroke();
+  let x = dx + 9;
+  for (const c of tiles) {
+    if (!c) { ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(x + 1, dy + 12, 1, 34); x += 12; continue; }
+    g = ctx.createLinearGradient(0, dy + 6, 0, dy + 52); g.addColorStop(0, c[0]); g.addColorStop(1, c[1]);
+    ctx.fillStyle = g; roundRect(ctx, x, dy + 6, 46, 46, 11); ctx.fill();
+    x += 54;
+  }
+  ctx.fillStyle = '#fff'; ctx.fillRect(dx + 21, dy + 20, 22, 16);                                          // mail
+  g = ctx.createConicGradient ? ctx.createConicGradient(0, dx + 86, dy + 29) : null;                       // photos
+  if (g) { ['#f5a524', '#f3d33c', '#7cc35a', '#3fa3d8', '#6c6fd9', '#d9558d', '#f5a524'].forEach((c, i) => g.addColorStop(i / 6, c)); ctx.fillStyle = g; }
+  else ctx.fillStyle = '#7cc35a';
+  ctx.beginPath(); ctx.arc(dx + 86, dy + 29, 14, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = `800 20px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('</>', dx + 140, dy + 29); ctx.fillText('in', dx + 194, dy + 30);
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(dx + 260, dy + 31, 9, -Math.PI * 0.3, Math.PI * 1.3); ctx.stroke();               // power
+  ctx.beginPath(); ctx.moveTo(dx + 260, dy + 18); ctx.lineTo(dx + 260, dy + 28); ctx.stroke();
 }, { fonts: true });
 
 const SEGMENTS = ['abcdef', 'bc', 'abdeg', 'abcdg', 'bcfg', 'acdfg', 'acdefg', 'abc', 'abcdefg', 'abcdfg'];
@@ -527,16 +642,75 @@ const flagTex = canvasTexture(600, 400, (ctx, w, h) => {        // Singapore: re
   }
 });
 
+// The books on the shelf: spines, covers and page edges drawn on one sheet, one slot per book. Cloth hardbacks with gilt
+// bands, paperbacks with coloured bands, cream pages between the boards on top: the same level of surface as the wood
+// they stand on (owner, 2026-11-06: they were pastel blocks). Titles are generic, nothing claimed.
+const BOOK_SLOTS = 24, SLOT_W = 64, SHEET_W = BOOK_SLOTS * SLOT_W, SHEET_H = 512, SPINE_H = 400, COVER_H = 40;
+const BOOK_TITLES = ['CALCULUS', 'FIELD GUIDE', 'PHYSICS', 'ESSAYS', 'STATICS', 'ATLAS', 'PROBABILITY', 'STORIES', 'HANDBOOK',
+  'THERMODYNAMICS', 'POEMS', 'VOL. I', 'VOL. II', 'SKETCHBOOK', 'JOURNAL', 'NOTES'];
+const BOOK_COLOURS = [['#1f2f4d', '#d8b45c'], ['#6e1f24', '#e2c27a'], ['#e9e1cf', '#2d5e63'], ['#2f4a3a', '#d8c79a'], ['#c08a2c', '#1d1c1e'],
+  ['#1d1c1e', '#e8e2d6'], ['#f1ece2', '#a8322d'], ['#2d5e63', '#f0e6d0'], ['#b4532c', '#f6efe2'], ['#6b6e72', '#f2f0ea'],
+  ['#a8322d', '#f4ead6'], ['#5a4030', '#e6cf9a'], ['#ece7dc', '#1f2f4d']];
+const paleCover = hex => new THREE.Color(hex).getHSL({}).l > 0.6;           // a pale cover: printed like a paperback
+const bookSheet = canvasTexture(SHEET_W, SHEET_H, ctx => {
+  for (let i = 0; i < BOOK_SLOTS; i++) {
+    const [cover, ink] = BOOK_COLOURS[i % BOOK_COLOURS.length], x = i * SLOT_W, paper = paleCover(cover);
+    ctx.fillStyle = cover; ctx.fillRect(x, 0, SLOT_W, SPINE_H + COVER_H);
+    for (let k = 0; k < 700; k++) {                                     // cloth or paper grain, a little wear
+      ctx.fillStyle = rand() < 0.5 ? 'rgba(0,0,0,0.09)' : 'rgba(255,255,255,0.07)';
+      ctx.fillRect(x + rand() * SLOT_W, rand() * (SPINE_H + COVER_H), 1.5, 1.5);
+    }
+    ctx.fillStyle = ink;
+    if (paper) { ctx.fillRect(x, 0, SLOT_W, 44); ctx.fillRect(x, SPINE_H - 34, SLOT_W, 34); }
+    else for (const y of [20, 28, SPINE_H - 32, SPINE_H - 24]) ctx.fillRect(x + 5, y, SLOT_W - 10, 3);
+    ctx.save(); ctx.translate(x + SLOT_W / 2, paper ? 62 : 48); ctx.rotate(Math.PI / 2);     // the title, top to bottom
+    ctx.font = `700 ${Math.round(SLOT_W * 0.34)}px ${SANS}`; ctx.textBaseline = 'middle';
+    ctx.fillStyle = paper ? '#2b2a2e' : ink;
+    ctx.fillText(BOOK_TITLES[i % BOOK_TITLES.length], 0, 0, SPINE_H - 150);
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(x + SLOT_W / 2, SPINE_H - (paper ? 56 : 50), 5, 0, Math.PI * 2); ctx.fill();   // the publisher's mark
+    const top = SPINE_H + COVER_H, ph = SHEET_H - top;                    // the page edges, seen from above
+    ctx.fillStyle = '#ebe3d0'; ctx.fillRect(x, top, SLOT_W, ph);
+    for (let px = 4; px < SLOT_W - 4; px += 2) { ctx.fillStyle = `rgba(90,70,40,${0.05 + rand() * 0.09})`; ctx.fillRect(x + px, top, 1, ph); }
+    ctx.fillStyle = cover; ctx.fillRect(x, top, 4, ph); ctx.fillRect(x + SLOT_W - 4, top, 4, ph); ctx.fillRect(x, SHEET_H - 5, SLOT_W, 5);
+  }
+}, { fonts: true });
+// One book (thickness t across, height h, depth d), its faces mapped to its slot: the spine faces +z, pages on top.
+function bookGeometry(slot, t, h, d) {
+  const g = new THREE.BoxGeometry(t, h, d), uv = g.attributes.uv;
+  const u0 = (slot * SLOT_W + 1) / SHEET_W, u1 = ((slot + 1) * SLOT_W - 1) / SHEET_W, row = y => 1 - y / SHEET_H;
+  const part = { spine: [row(SPINE_H), row(0)], cover: [row(SPINE_H + COVER_H), row(SPINE_H)], pages: [row(SHEET_H), row(SPINE_H + COVER_H)] };
+  ['cover', 'cover', 'pages', 'cover', 'spine', 'cover'].forEach((name, f) => {   // BoxGeometry's faces: +x -x +y -y +z -z
+    const [v0, v1] = part[name];
+    for (let i = f * 4; i < f * 4 + 4; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
+  });
+  return g;
+}
+
 // ------------------------------------------------------------------ placeholder shapes (until your own models replace them)
 // Each returns a group in metres: things that stand (desk, shelves, lamps, and what sits on the desk) have their origin
 // on the floor or desk top; things on a wall have their origin at their centre. All face +z (towards you).
 function lampShade(rTop, rBottom, height, y, power) {    // a fabric drum shade that glows, with a warm bulb inside
   const g = new THREE.Group();
-  const mat = std('#efe0c6', { side: THREE.DoubleSide, emissive: '#ffb468', emissiveIntensity: 0.8, roughness: 1 });
+  const mat = cloth('#efe0c6', 6, 1, { side: THREE.DoubleSide, emissive: '#ffb468', emissiveIntensity: 0.8 });
   g.add(cyl(rTop, rBottom, height, mat, 0, y, 0, 40, true));
-  const light = new THREE.PointLight('#ffbf7a', power, 5, 2);
-  light.position.y = y - height * 0.1; g.add(light);
-  lamps.push({ light, shade: mat, power });
+  // The bulb's light leaves through the open bottom and top of the shade, not sideways: a cone down (the pool on the
+  // desk) and a weaker one up (the wash on the wall above). A bare bulb lit the wall behind the shade into a hot spot
+  // that glowed (owner, 2026-11-06). The bulb holder under it shades the lamp's own base, as in a real lamp (the base
+  // was the next bright spot); that cone casts shadows, drawn once like all the others.
+  const bulbY = y + 0.01;
+  g.add(cyl(0.017, 0.017, 0.04, std('#3a3330', { roughness: 0.5 }), 0, bulbY - 0.055, 0, 16));
+  for (const [dir, share, angle] of [[-1, 1, 0.85], [1, 0.45, 0.8]]) {
+    const light = new THREE.SpotLight('#ffbf7a', power * share, 6, angle, 1, 2);
+    light.position.y = bulbY; light.target.position.set(0, bulbY + dir, 0);
+    if (dir < 0) {
+      light.castShadow = true; light.shadow.mapSize.set(512, 512);
+      Object.assign(light.shadow.camera, { near: 0.02, far: 3 });
+      light.shadow.bias = -0.002; light.shadow.normalBias = 0.01;
+    }
+    g.add(light, light.target);
+    lamps.push({ light, shade: mat, power: power * share });
+  }
   return g;
 }
 function motorbike() {      // a sports bike, real size (2 m long, front wheel at +x); the miniature scales it down
@@ -652,7 +826,7 @@ const PLACEHOLDERS = {
   },
   mouse() {                              // a mouse pad and a mouse: an egg-shaped outline, rounded on top
     const g = new THREE.Group();
-    g.add(box(0.25, 0.004, 0.21, std('#33403a', { roughness: 1 }), 0, 0.002, 0));
+    g.add(box(0.25, 0.004, 0.21, cloth('#33403a', 2, 2), 0, 0.002, 0));
     const outline = new THREE.Shape(); outline.absellipse(0, 0, 0.022, 0.04, 0, Math.PI * 2);
     const geo = new THREE.ExtrudeGeometry(outline, { depth: 0.008, bevelEnabled: true, bevelThickness: 0.016, bevelSize: 0.012, bevelSegments: 8, curveSegments: 32 });
     geo.rotateX(-Math.PI / 2);
@@ -690,7 +864,7 @@ const PLACEHOLDERS = {
   desklamp() {                           // a ceramic table lamp with a glowing fabric shade
     const g = new THREE.Group();
     const profile = [[0, 0], [0.07, 0], [0.075, 0.02], [0.085, 0.08], [0.07, 0.15], [0.03, 0.2], [0.018, 0.21], [0, 0.21]];
-    g.add(new THREE.Mesh(new THREE.LatheGeometry(profile.map(([r, y]) => new THREE.Vector2(r, y)), 32), std('#8fa79c', { roughness: 0.35 })));
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(profile.map(([r, y]) => new THREE.Vector2(r, y)), 32), std('#8fa79c', { roughness: 0.5 })));
     g.add(cyl(0.008, 0.008, 0.14, std('#b8955a', { metalness: 0.8, roughness: 0.3 }), 0, 0.27, 0, 10));
     g.add(lampShade(0.1, 0.14, 0.17, 0.39, 1.4));
     return g;
@@ -698,7 +872,7 @@ const PLACEHOLDERS = {
   bed() {                                // a single bed, head at -z: frame, mattress, duvet with a folded edge, pillows, a throw
     const g = new THREE.Group(), wood = woodMat();
     const soft = (w, h, d, colour, x, y, z, r = 0.04) => {
-      const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, r), std(colour, { roughness: 1 }));
+      const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, r), cloth(colour, w / 0.3, d / 0.3));
       m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; return m;
     };
     g.add(box(1.0, 0.08, 1.98, wood, 0, 0.24, 0));
@@ -730,15 +904,33 @@ const PLACEHOLDERS = {
     const g = new THREE.Group(), wood = woodMat();
     g.add(box(0.03, 1.5, 0.32, wood, -0.42, 0.75, 0), box(0.03, 1.5, 0.32, wood, 0.42, 0.75, 0), box(0.87, 1.5, 0.015, wood, 0, 0.75, -0.155));
     for (const y of [0.05, 0.55, 1.02, 1.49]) g.add(box(0.87, 0.03, 0.32, wood, 0, y, 0));
-    const colours = ['#9f8d8b', '#b7c6c2', '#d7c5b2', '#302b2f', '#7d9bb0', '#9e3b2c', '#d7c5b2', '#26364f', '#c46a3a'];
-    for (const [shelfY, n, x0] of [[0.065, 9, -0.37], [0.565, 6, -0.37], [1.035, 4, 0.08]]) {
-      for (let i = 0; i < n; i++) {
-        const h = 0.2 + ((i * 7) % 5) * 0.03;
-        const b = box(0.055, h, 0.22, std(colours[(i + n) % colours.length]), x0 + i * 0.075, shelfY + h / 2, 0);
-        if (i === n - 1 && n < 9) { b.rotation.z = 0.25; b.position.x += 0.02; }   // one leaning
-        g.add(b);
-      }
-    }
+    // the books, in one shape: rows standing from the left, one leaning, small stacks lying flat ([height, thickness])
+    const parts = []; let slot = 0;
+    const put = (t, h, d, x, y, z, rz = 0, ry = 0) => {
+      const geo = bookGeometry(slot++ % BOOK_SLOTS, t, h, d);
+      geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, ry, rz)).setPosition(x, y, z));
+      parts.push(geo);
+    };
+    const depth = h => clamp(h * 0.72, 0.14, 0.22), zOf = d => 0.145 - d / 2 - rand() * 0.008;   // spines near the front
+    const row = (top, x, sizes) => {
+      for (const [h, t] of sizes) { const d = depth(h); put(t, h, d, x + t / 2, top + h / 2, zOf(d)); x += t + 0.002; }
+      return x;
+    };
+    const lean = (top, x, h, t, a) => {                                  // against the last book, its foot out a little
+      const d = depth(h);
+      put(t, h, d, x + (t / 2) * Math.cos(a) + (h / 2) * Math.sin(a), top + (t / 2) * Math.sin(a) + (h / 2) * Math.cos(a), zOf(d), a);
+    };
+    const stack = (top, x, sizes) => {
+      for (const [h, t] of sizes) { const d = depth(h); put(t, h, d, x + (rand() - 0.5) * 0.012, top + t / 2, zOf(d), Math.PI / 2, (rand() - 0.5) * 0.08); top += t; }
+    };
+    row(0.065, -0.4, [[0.3, 0.042], [0.28, 0.03], [0.31, 0.05], [0.27, 0.024], [0.29, 0.036], [0.25, 0.02], [0.3, 0.045], [0.27, 0.03], [0.26, 0.04], [0.29, 0.026], [0.28, 0.034]]);
+    stack(0.065, 0.2, [[0.26, 0.045], [0.24, 0.035], [0.22, 0.04]]);
+    lean(0.565, row(0.565, -0.4, [[0.24, 0.03], [0.22, 0.045], [0.25, 0.028], [0.23, 0.035], [0.21, 0.022], [0.24, 0.04], [0.22, 0.03]]), 0.23, 0.03, 0.22);
+    stack(0.565, 0.24, [[0.2, 0.03], [0.18, 0.04]]);
+    row(1.035, 0.12, [[0.22, 0.03], [0.2, 0.04], [0.23, 0.025], [0.21, 0.035], [0.19, 0.05], [0.22, 0.03]]);
+    stack(1.035, -0.22, [[0.24, 0.04], [0.22, 0.03]]);
+    const books = new THREE.Mesh(mergeGeometries(parts), std('#ffffff', { map: bookSheet, roughness: 0.75 }));
+    books.castShadow = true; books.receiveShadow = true; g.add(books);
     g.add(cyl(0.07, 0.06, 0.14, std('#d7c5b2', { roughness: 0.6 }), -0.25, 1.505 + 0.07, 0));   // a vase on top
     return g;
   },
@@ -872,7 +1064,7 @@ const PLACEHOLDERS = {
   },
   lion() {                               // a plush lion (NUS's mascot is a lion) in an NUS-blue scarf: opens Education
     const g = new THREE.Group();
-    const fur = std('#d9a243', { roughness: 1 }), mane = std('#9e5a2c', { roughness: 1 }), cream = std('#f0dfc0', { roughness: 1 });
+    const fur = cloth('#d9a243', 3, 3), mane = cloth('#9e5a2c', 3, 3), cream = cloth('#f0dfc0', 2, 2);
     const ink = std('#231c1a', { roughness: 0.35 });
     const ball = (parent, r, mat, x, y, z, sx = 1, sy = 1, sz = 1) => {
       const m = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 14), mat);
@@ -898,7 +1090,7 @@ const PLACEHOLDERS = {
     }
     ball(head, 0.018, cream, 0, -0.013, 0.04, 1.25, 0.85, 0.8);        // muzzle
     ball(head, 0.0075, ink, 0, -0.004, 0.056, 1.3, 0.9, 0.8);          // nose
-    const scarf = new THREE.Mesh(new THREE.TorusGeometry(0.037, 0.009, 8, 28), std('#003d7c', { roughness: 0.95 }));
+    const scarf = new THREE.Mesh(new THREE.TorusGeometry(0.037, 0.009, 8, 28), cloth('#003d7c', 4, 1));
     scarf.rotation.x = Math.PI / 2; scarf.position.set(0, 0.092, 0.002); scarf.castShadow = true; g.add(scarf);
     const end = box(0.02, 0.045, 0.007, std('#ef7c00', { roughness: 0.95 }), 0.017, 0.07, 0.042); end.rotation.z = 0.25; g.add(end);
     return g;
@@ -1000,19 +1192,37 @@ function finishLoading() {
 setTimeout(finishLoading, 6000);                             // never stay stuck on the loading screen
 
 // ------------------------------------------------------------------ the computer's desktop and its window (HTML over the room)
+// The desktop's icons (folders, then the CVs as PDFs) and the folder window's sidebar: the same folders, so you can go
+// from one to another without closing the window, and the CVs to download.
 function buildDesktop() {
-  const icons = content.folders.filter(f => f.desktop).map(f => {
+  const desk = content.folders.filter(f => f.desktop), cvs = content.cvs || [];
+  const icons = desk.map(f => {
     const b = el('button', null, { className: 'icon', type: 'button' });
-    b.append(el('span', f.icon, { className: 'glyph' }), el('span', f.name));
+    b.append(iconArt('folder', f.icon), el('span', f.name, { className: 'name' }));
     b.addEventListener('click', () => openFolder(f.id));
     return b;
   });
-  for (const cv of content.cvs || []) {
+  for (const cv of cvs) {
     const a = el('a', null, { className: 'icon', href: cv.file, download: '' });
-    a.append(el('span', '📄', { className: 'glyph' }), el('span', `${cv.name}.pdf`));
+    a.append(iconArt('pdf'), el('span', `${cv.name}.pdf`, { className: 'name' }));
     icons.push(a);
   }
   $('icons').replaceChildren(...icons);
+  const places = [el('h4', 'Desktop')];
+  for (const f of desk) {
+    const b = el('button', null, { type: 'button' });
+    b.dataset.id = f.id;
+    b.append(el('span', f.icon), f.name);
+    b.addEventListener('click', () => openFolder(f.id));
+    places.push(b);
+  }
+  if (cvs.length) places.push(el('h4', 'Downloads'));
+  for (const cv of cvs) {
+    const a = el('a', null, { href: cv.file, download: '' });
+    a.append(el('span', '📄'), `${cv.name}.pdf`);
+    places.push(a);
+  }
+  $('win-places').replaceChildren(...places);
 }
 const isOn = id => $(id).classList.contains('on');
 function show(id) { $(id).classList.add('on'); $(id).setAttribute('aria-hidden', 'false'); }
@@ -1155,13 +1365,16 @@ function turnTo(group) {
 function openFolder(id, from = null) {
   const f = folders[id];
   if (!f) return;
-  $('win-path').textContent = `~/Desktop/${f.name}`;
+  $('win-path').textContent = f.name;
   $('win-content').replaceChildren(...folderNodes(f));
   $('win-content').scrollTop = 0;
+  const n = f.items?.length || 0;
+  $('win-status').textContent = `${n} ${n === 1 ? 'item' : 'items'}`;
+  for (const b of $('win-places').querySelectorAll('button')) b.classList.toggle('on', b.dataset.id === id);
   $('win').classList.toggle('side', mode !== 'computer');
   show('win');
   if (from && mode === 'room') turnTo(from);
-  $('win-close').focus({ preventScroll: true });
+  $('win-content').focus({ preventScroll: true });               // the keys scroll it; Escape closes it
 }
 function closeWin() {
   hide('win');
@@ -1195,8 +1408,9 @@ $('open-contact').addEventListener('click', e => {
   openFolder('contact', mode === 'room' ? interactive.find(g => g.userData.entry.opens === 'contact') : null);
 });
 $('stand-up').addEventListener('click', standUp);
+$('dock-stand').addEventListener('click', standUp);
+for (const b of document.querySelectorAll('.dock [data-open]')) b.addEventListener('click', () => openFolder(b.dataset.open));
 $('desktop').addEventListener('click', e => { if (e.target === $('desktop')) standUp(); });
-$('win-close').addEventListener('click', closeWin);
 $('win-close-dot').addEventListener('click', closeWin);
 
 // Things you can click light up under the mouse (and pulse gently until the visitor has opened something).
@@ -1318,7 +1532,10 @@ function tick() {
   if (d.getMinutes() !== lastMinute) {
     lastMinute = d.getMinutes();
     screenTex.redraw(); phoneTex.redraw();
-    $('clock').textContent = `${d.toLocaleDateString([], { weekday: 'short' })} ${timeText(d)}`;
+    $('clock').textContent = `${d.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}  ${timeText(d)}`;
+    $('w-time').textContent = timeText(d).replace(/\s?[ap]\.?m\.?$/i, '');                     // the widget
+    $('w-day').textContent = d.toLocaleDateString([], { weekday: 'long' });
+    $('w-date').textContent = d.toLocaleDateString([], { day: 'numeric', month: 'long' });
   }
   if (d.getSeconds() % 30 === 0) applyTime();
 }

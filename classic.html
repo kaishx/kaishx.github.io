@@ -87,7 +87,7 @@ noscript p { max-width: 640px; margin: 0 auto 30px; padding: 0 24px; }
 <footer>The text version of <a href="index.html">the room</a>.</footer>
 
 <script type="module">
-import { el, windowNode } from './room/folders.js';
+import { el, windowNode, iconArt } from './room/folders.js';
 
 const clock = document.getElementById('clock');
 const tick = () => { const d = new Date(); clock.textContent = `${d.toLocaleDateString([], { weekday: 'short' })} ${d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`; };
@@ -99,7 +99,7 @@ document.getElementById('windows').replaceChildren(...folders.map(f => windowNod
 
 const icons = folders.filter(f => f.desktop).map(f => {
   const a = el('a', null, { className: 'icon', href: `#${f.id}` });
-  a.append(el('span', f.icon, { className: 'glyph' }), el('span', f.name));
+  a.append(iconArt('folder', f.icon), el('span', f.name, { className: 'name' }));
   a.addEventListener('click', () => {            // a short outline on the window you jumped to
     const win = document.getElementById(f.id);
     win.classList.add('flash'); setTimeout(() => win.classList.remove('flash'), 1200);
@@ -108,7 +108,7 @@ const icons = folders.filter(f => f.desktop).map(f => {
 });
 for (const cv of content.cvs || []) {
   const a = el('a', null, { className: 'icon', href: cv.file, download: '' });
-  a.append(el('span', '📄', { className: 'glyph' }), el('span', `${cv.name}.pdf`));
+  a.append(iconArt('pdf'), el('span', `${cv.name}.pdf`, { className: 'name' }));
   icons.push(a);
 }
 document.getElementById('icons').replaceChildren(...icons);
