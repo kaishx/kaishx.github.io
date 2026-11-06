@@ -672,25 +672,6 @@ const PLACEHOLDERS = {
     const handle = new THREE.Mesh(new THREE.TorusGeometry(0.026, 0.008, 8, 20), clay); handle.position.set(0.046, 0.052, 0); g.add(handle);
     return g;
   },
-  book() {                               // two textbooks, spines towards you: mech eng under, CS on top
-    const g = new THREE.Group();
-    const one = (w, t, d, cover, ink, title, y, rot) => {
-      const b = new THREE.Group(), c = std(cover, { roughness: 0.7 });
-      b.add(box(w, 0.004, d, c, 0, 0.002, 0), box(w, 0.004, d, c, 0, t - 0.002, 0), box(0.008, t, d, c, -w / 2 + 0.004, t / 2, 0));
-      b.add(box(w - 0.012, t - 0.008, d - 0.01, std('#efe9dd'), 0.004, t / 2, 0));
-      const spine = new THREE.Mesh(new THREE.PlaneGeometry(d, t), std('#ffffff', { roughness: 0.7, map: canvasTexture(1024, Math.round(1024 * t / d), (ctx, cw, ch) => {
-        ctx.fillStyle = cover; ctx.fillRect(0, 0, cw, ch);
-        ctx.fillStyle = ink; ctx.fillRect(40, 0, 10, ch); ctx.fillRect(cw - 50, 0, 10, ch);
-        ctx.font = `700 ${Math.round(ch * 0.42)}px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText(title, cw / 2, ch / 2 + 3);
-      }, { fonts: true }) }));
-      spine.rotation.y = -Math.PI / 2; spine.position.set(-w / 2 - 0.0006, t / 2, 0); b.add(spine);
-      b.position.y = y; b.rotation.y = Math.PI / 2 + rot; return b;
-    };
-    g.add(one(0.19, 0.036, 0.26, '#26364f', '#e8d9b0', 'MECHANICS OF MATERIALS', 0, 0),
-          one(0.165, 0.03, 0.235, '#b4532c', '#f6efe2', 'ALGORITHMS', 0.036, 0.1));
-    return g;
-  },
   clock() {
     const g = new THREE.Group();
     g.add(box(0.17, 0.08, 0.07, std('#262427', { roughness: 0.4 }), 0, 0.04, 0));
@@ -889,7 +870,7 @@ const PLACEHOLDERS = {
     }
     return g;
   },
-  lion() {                               // a plush lion (NUS's mascot is a lion) in an NUS-blue scarf, sitting by the textbooks
+  lion() {                               // a plush lion (NUS's mascot is a lion) in an NUS-blue scarf: opens Education
     const g = new THREE.Group();
     const fur = std('#d9a243', { roughness: 1 }), mane = std('#9e5a2c', { roughness: 1 }), cream = std('#f0dfc0', { roughness: 1 });
     const ink = std('#231c1a', { roughness: 0.35 });
@@ -940,7 +921,7 @@ const blobTex = canvasTexture(128, 128, (ctx, w, h) => {
   ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
 });
 const blobMat = new THREE.MeshBasicMaterial({ map: blobTex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
-const STANDING = new Set(['desk', 'monitor', 'keyboard', 'mouse', 'mug', 'book', 'clock', 'phone', 'desklamp', 'trophy', 'bookshelf', 'bed', 'lion']);
+const STANDING = new Set(['desk', 'monitor', 'keyboard', 'mouse', 'mug', 'clock', 'phone', 'desklamp', 'trophy', 'bookshelf', 'bed', 'lion']);
 function contactShadow(group) {
   const size = new THREE.Box3().setFromObject(group).getSize(new THREE.Vector3());
   const blob = noShadow(new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.3 + 0.04, size.z * 1.3 + 0.04), blobMat));
