@@ -3,8 +3,10 @@
 // the horizon with Marina Bay Sands and the Singapore Flyer, and big tropical clouds.
 //
 // It's a painted backdrop: everything is drawn nearer than it really is and shrunk to match, so from the chair it looks
-// right (only the angles matter, and you never walk up to the window). Cheap on purpose: two instanced meshes for every
-// building, painted textures instead of geometry, nothing moves.
+// right (only the angles matter, and you never walk up to the window). Depth comes from the haze (main.js: the fog
+// thickens with distance, so the CBD is paler than the blocks across the road). Cheap on purpose: two instanced meshes
+// for every building, painted textures instead of geometry, nothing moves; main.js draws it after the room, so the
+// part hidden by the walls costs nothing.
 //
 // main.js calls update(w) when the time of day changes; w = [night, dusk, day] weights that add up to 1.
 import * as THREE from 'three';
@@ -329,7 +331,7 @@ export function createOutside(scene, { touch = false } = {}) {
       warnMat.opacity = night + dusk * 0.4; warnPts.visible = warnMat.opacity > 0.02;
       const tint = new THREE.Color().setRGB(
         NIGHT.r * night + DUSK.r * dusk + DAY.r * day, NIGHT.g * night + DUSK.g * dusk + DAY.g * day, NIGHT.b * night + DUSK.b * dusk + DAY.b * day);
-      for (const m of cloudMats) { m.color.copy(tint); m.opacity = 0.92 - night * 0.45; }
+      for (const m of cloudMats) { m.color.copy(tint).multiplyScalar(0.82); m.opacity = 0.92 - night * 0.45; }   // never bright enough to glow like a sun
     },
   };
 }

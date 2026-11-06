@@ -17,11 +17,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { el, folderNodes } from './folders.js';
@@ -93,7 +89,7 @@ function photo(mat, slot, file, repeat = [1, 1], tint = null) {
 }
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0x000000, 90, 1000);         // only the city outside is far enough to fade (haze)
+scene.fog = new THREE.FogExp2(0x000000, 0.0022);       // only the city outside is far enough to fade (haze)
 const baseFov = () => (innerWidth < innerHeight ? 70 : 58);
 const camera = new THREE.PerspectiveCamera(baseFov(), innerWidth / innerHeight, 0.02, 520);
 camera.rotation.order = 'YXZ';
@@ -180,11 +176,30 @@ floorMat.userData.tile = 1.6;                                    // the photo co
 photo(floorMat, 'map', 'wood_floor_diff_1k.jpg', [1, 1], '#e8ddd0');
 photo(floorMat, 'normalMap', 'wood_floor_nor_gl_1k.jpg');
 photo(floorMat, 'roughnessMap', 'wood_floor_arm_1k.jpg');
-const plaster = (tint, plain) => {
-  const m = std(plain, { roughness: 0.95, normalScale: new THREE.Vector2(0.5, 0.5) });
-  m.userData.tile = 1.5;                                         // 1.5 m of plaster per copy, the same on every wall
-  photo(m, 'map', 'plastered_wall_04_diff_1k.jpg', [1, 1], tint);
-  return photo(m, 'normalMap', 'plastered_wall_04_nor_gl_1k.jpg');
+// Painted walls and ceiling: smooth emulsion paint, as in a real flat (owner, 2026-11-06: the photo plaster looked like
+// stained concrete). A picture drawn once, nearly white so the colour is the paint's: a faint, wide unevenness (roller
+// marks, light bouncing off the floor) and a fine grain.
+const paintTex = (() => {
+  const S = 512, c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#f4f4f4'; ctx.fillRect(0, 0, S, S);
+  for (let i = 0; i < 70; i++) {                                 // soft patches, drawn wrapped round so the picture tiles
+    const x = rand() * S, y = rand() * S, r = 40 + rand() * 130, tone = rand() < 0.5 ? '0,0,0,0.03' : '255,255,255,0.05';
+    for (const dx of [-S, 0, S]) for (const dy of [-S, 0, S]) {
+      const g = ctx.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r);
+      g.addColorStop(0, `rgba(${tone})`); g.addColorStop(1, `rgba(${tone.replace(/[\d.]+$/, '0')})`);
+      ctx.fillStyle = g; ctx.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r);
+    }
+  }
+  for (let i = 0; i < 26000; i++) { ctx.fillStyle = rand() < 0.5 ? 'rgba(0,0,0,0.035)' : 'rgba(255,255,255,0.04)'; ctx.fillRect(rand() * S, rand() * S, 1, 1); }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8;
+  return t;
+})();
+const paint = colour => {
+  const m = std(colour, { roughness: 0.92, map: paintTex });
+  m.userData.tile = 2.0;                                         // 2 m of wall per copy, the same on every wall
+  return m;
 };
 const woodMat = (tint = '#b9997e') => {
   const m = std('#8a6a50', { roughness: 0.55 });
@@ -192,10 +207,10 @@ const woodMat = (tint = '#b9997e') => {
   return photo(m, 'map', 'oak_veneer_01_diff_1k.jpg', [1, 1], tint);
 };
 
-const wallMat = plaster('#e4d9c7', '#b8ad9b');                               // warm greige paint on plaster
+const wallMat = paint('#e6dfd3');                                          // warm off-white
 const trimMat = std('#ebe4d8', { roughness: 0.6 });
 world.add(box(FULL, 0.1, LEN, floorMat, 0, -0.05, MIDZ));
-world.add(box(FULL, T, LEN, plaster('#efe8dc', '#cfc7ba'), 0, H + T / 2, MIDZ));
+world.add(box(FULL, T, LEN, paint('#f0ede7'), 0, H + T / 2, MIDZ));        // the ceiling, plain white
 world.add(box(T, H, LEN, wallMat, W + T / 2, H / 2, MIDZ), box(T, H, LEN, wallMat, -W - T / 2, H / 2, MIDZ));
 world.add(box(FULL, H, T, wallMat, 0, H / 2, BACK + T / 2));
 // the wall in front of you, built around the window
@@ -205,18 +220,22 @@ world.add(box(W + T - WIN.x1, WIN.y1 - WIN.y0, T, wallMat, (WIN.x1 + W + T) / 2,
 // skirting boards
 world.add(box(2 * W, 0.08, 0.015, trimMat, 0, 0.04, FRONT + 0.0075));
 world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0.015, 0.08, BACK - FRONT, trimMat, -W + 0.0075, 0.04, MIDZ));
-// the window: frame, bars, sill, faint glass, short curtains on a rod
+// the window: a slim aluminium frame set towards the outside of the wall, so the painted reveal shows around it as in a
+// real flat (it was a deep white box with the glass in the middle, which read oddly), a stone sill, faint glass, short
+// curtains on a rod
 {
   const wx = (WIN.x0 + WIN.x1) / 2, wy = (WIN.y0 + WIN.y1) / 2, ww = WIN.x1 - WIN.x0, wh = WIN.y1 - WIN.y0;
-  world.add(box(ww, 0.05, T + 0.02, trimMat, wx, WIN.y1 - 0.025, FZ), box(ww, 0.05, T + 0.02, trimMat, wx, WIN.y0 + 0.025, FZ));
-  world.add(box(0.05, wh, T + 0.02, trimMat, WIN.x0 + 0.025, wy, FZ), box(0.05, wh, T + 0.02, trimMat, WIN.x1 - 0.025, wy, FZ));
-  world.add(box(0.035, wh, 0.04, trimMat, wx, wy, FZ), box(ww, 0.035, 0.04, trimMat, wx, WIN.y0 + wh * 0.68, FZ));
-  world.add(box(ww + 0.16, 0.035, 0.2, trimMat, wx, WIN.y0 - 0.0175, FRONT + 0.05));
+  const OZ = FRONT - T + 0.035, f = 0.045, alu = std('#d4d8d7', { roughness: 0.4, metalness: 0.4 });   // OZ: the frame's middle
+  world.add(box(ww, f, 0.05, alu, wx, WIN.y1 - f / 2, OZ), box(ww, f, 0.05, alu, wx, WIN.y0 + f / 2, OZ));
+  world.add(box(f, wh - 2 * f, 0.05, alu, WIN.x0 + f / 2, wy, OZ), box(f, wh - 2 * f, 0.05, alu, WIN.x1 - f / 2, wy, OZ));
+  world.add(box(0.03, wh - 2 * f, 0.04, alu, wx, wy, OZ), box(ww - 2 * f, 0.03, 0.04, alu, wx, WIN.y0 + wh * 0.68, OZ));
+  const sillBack = OZ + 0.025, sillFront = FRONT + 0.035;          // from the frame to 3.5 cm into the room, its ends into the wall
+  world.add(box(ww + 0.08, 0.025, sillFront - sillBack, std('#e3dfd8', { roughness: 0.5 }), wx, WIN.y0 + 0.0125, (sillBack + sillFront) / 2));
   const glass = noShadow(new THREE.Mesh(new THREE.PlaneGeometry(ww, wh),
     new THREE.MeshBasicMaterial({ color: '#cfe6ee', transparent: true, opacity: 0.05, depthWrite: false })));
-  glass.position.set(wx, wy, FZ);
+  glass.position.set(wx, wy, OZ);
   world.add(glass);
-  const CZ = FRONT + 0.18, rodMat = std('#5a4636');                // curtains hang in front of the sill
+  const CZ = FRONT + 0.1, rodMat = std('#5a4636');                 // curtains hang just in front of the wall
   world.add(rod([WIN.x0 - 0.38, WIN.y1 + 0.12, CZ], [WIN.x1 + 0.3, WIN.y1 + 0.12, CZ], 0.011, rodMat));
   for (const x of [WIN.x0 - 0.33, WIN.x1 + 0.25]) world.add(rod([x, WIN.y1 + 0.12, FRONT], [x, WIN.y1 + 0.12, CZ], 0.008, rodMat));
   const curtainMat = std('#c9a98a', { roughness: 1, side: THREE.DoubleSide });
@@ -313,6 +332,9 @@ const stars = (() => {
   const p = new THREE.Points(g, new THREE.PointsMaterial({ color: '#ffffff', size: 1.6, sizeAttenuation: false, transparent: true, fog: false, depthWrite: false }));
   scene.add(p); return p;
 })();
+// The room is drawn first and the outside after it, the sky last: the city behind the walls is then skipped by the
+// graphics chip instead of painted and covered up (it was being drawn first, nearly a whole screen's worth).
+for (const o of scene.children) if (o !== world) o.traverse(m => { if (!m.material?.transparent) m.renderOrder = m === sky ? 2 : 1; });
 
 // ------------------------------------------------------------------ light: the sun or moon through the window, sky light, lamps
 const sun = new THREE.DirectionalLight('#ffffff', 2);
@@ -362,7 +384,7 @@ function applyTime() {
   blend(u.glow.value, 'light', w).multiplyScalar(mixN(w, 0.08, 1.2, 0.6));   // the moon's halo stays small: the sky is in the window
   u.sunDir.value.copy(lightDir);
   scene.fog.color.copy(u.horizon.value);
-  scene.fog.far = mixN(w, 1100, 800, 1000);                        // a light tropical haze; clearer at night
+  scene.fog.density = mixN(w, 0.0016, 0.0022, 0.0019);             // a tropical haze, thicker with distance; clearer at night
   outside.update(w);
   sunDisc.position.copy(sunDir).multiplyScalar(420); sunDisc.lookAt(0, 0, 0);
   sunDisc.material.opacity = smooth(-0.1, 0.02, e); sunDisc.visible = e > -0.1;
@@ -703,8 +725,9 @@ const PLACEHOLDERS = {
     g.add(soft(1.0, 0.62, 0.07, '#8e7b6a', 0, 0.55, -0.955, 0.03));                  // upholstered headboard (clear of both walls)
     g.add(soft(0.96, 0.18, 1.9, '#efe9df', 0, 0.37, 0.02));                           // mattress
     // head to foot, nothing overlapping: pillows against the headboard, the cushions (objects.json) leaning on them, then the duvet
-    g.add(soft(0.98, 0.08, 1.23, '#9fb0a6', 0, 0.48, 0.355, 0.035));                  // duvet
-    g.add(soft(0.99, 0.07, 0.2, '#e9e4da', 0, 0.5, -0.16, 0.03));                     // its folded-back edge
+    // (the cushions are measured against all of these: none of them pokes into another, owner 2026-11-06)
+    g.add(soft(0.98, 0.08, 1.13, '#9fb0a6', 0, 0.48, 0.405, 0.035));                  // duvet
+    g.add(soft(0.99, 0.07, 0.2, '#e9e4da', 0, 0.5, -0.06, 0.03));                     // its folded-back edge
     const p1 = soft(0.42, 0.11, 0.3, '#f4f1ec', -0.23, 0.52, -0.76, 0.05); p1.rotation.x = -0.18;
     const p2 = soft(0.42, 0.11, 0.3, '#d7c5b2', 0.23, 0.52, -0.76, 0.05); p2.rotation.x = -0.18;
     g.add(p1, p2, soft(1.0, 0.03, 0.5, '#b5643c', 0, 0.535, 0.72, 0.012));            // pillows, a rust throw at the foot
@@ -853,19 +876,50 @@ const PLACEHOLDERS = {
     for (const x of [-0.2, 0.2]) g.add(box(0.02, 0.1, 0.02, std('#302b2f'), x, -0.06, -0.09));
     return g;
   },
-  shoes() {                              // a pair of climbing shoes hanging by their heel loops from a hook
-    const g = new THREE.Group(), dark = std('#2b2a2e');
-    const hook = cyl(0.007, 0.007, 0.06, dark, 0, 0.12, -0.02); hook.rotation.x = Math.PI / 2; g.add(hook);
-    const biner = new THREE.Mesh(new THREE.TorusGeometry(0.022, 0.004, 8, 20), std('#c9862f', { metalness: 0.7, roughness: 0.3 }));
-    biner.scale.set(0.7, 1, 1); biner.position.set(0, 0.095, 0.01); g.add(biner);
-    for (const [s, colour] of [[-1, '#f2a516'], [1, '#eb9a12']]) {          // yellow uppers, like classic bouldering shoes
-      const pivot = new THREE.Group(), shoe = climbingShoe(colour);
-      shoe.position.set(-0.018, -0.096, 0);           // hang from the heel loop
-      pivot.add(shoe);
-      pivot.position.set(s * 0.05, 0.08, 0.03);
-      pivot.rotation.set(0, s * 0.18, -Math.PI / 2 + s * 0.22);
-      g.add(pivot);
+  shoes() {                              // a pair of climbing shoes on a little shelf of their own, beside the bike's
+    const g = new THREE.Group();
+    g.add(box(0.5, 0.022, 0.22, woodMat(), 0, 0, 0.01));               // from the wall (z -0.1) out 22 cm
+    for (const x of [-0.2, 0.2]) g.add(box(0.02, 0.1, 0.02, std('#302b2f'), x, -0.06, -0.09));
+    // life size, side by side and well apart along the shelf, so from the chair you see two shoes, not one (toes at +x)
+    for (const [x, z, turn] of [[-0.215, -0.05, 0], [-0.045, 0.055, -0.05]]) {
+      const shoe = climbingShoe('#f0a214');                          // yellow, like classic bouldering shoes
+      shoe.position.set(x, 0, z); shoe.rotation.y = turn;
+      shoe.position.y = 0.011 - new THREE.Box3().setFromObject(shoe).min.y;   // standing on the shelf
+      g.add(shoe);
     }
+    return g;
+  },
+  lion() {                               // a plush lion (NUS's mascot is a lion) in an NUS-blue scarf, sitting by the textbooks
+    const g = new THREE.Group();
+    const fur = std('#d9a243', { roughness: 1 }), mane = std('#9e5a2c', { roughness: 1 }), cream = std('#f0dfc0', { roughness: 1 });
+    const ink = std('#231c1a', { roughness: 0.35 });
+    const ball = (parent, r, mat, x, y, z, sx = 1, sy = 1, sz = 1) => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 14), mat);
+      m.position.set(x, y, z); m.scale.set(sx, sy, sz); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
+    };
+    ball(g, 0.05, fur, 0, 0.05, -0.005, 1, 1.05, 0.95);                // body, sitting
+    for (const s of [-1, 1]) {
+      ball(g, 0.022, fur, s * 0.036, 0.02, 0.035, 1, 0.85, 1.45);       // back legs, stuck out in front
+      ball(g, 0.014, cream, s * 0.038, 0.018, 0.066, 1, 0.9, 0.6);      // their paws
+      ball(g, 0.015, fur, s * 0.026, 0.05, 0.042, 1, 1.7, 1);           // front legs
+    }
+    const tail = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([[0, 0.02, -0.05], [0.04, 0.015, -0.07],
+      [0.07, 0.04, -0.06], [0.075, 0.07, -0.045]].map(p => new THREE.Vector3(...p))), 16, 0.005, 6), fur);
+    tail.castShadow = true; g.add(tail);
+    ball(g, 0.012, mane, 0.075, 0.075, -0.043);                        // the tuft
+    const head = new THREE.Group(); head.position.set(0, 0.128, 0.01); g.add(head);
+    ball(head, 0.05, mane, 0, 0, -0.016, 1, 1, 0.55);                  // the mane: a disc behind the face, with a ruff
+    for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2; ball(head, 0.021, mane, Math.cos(a) * 0.045, Math.sin(a) * 0.045, -0.006, 1, 1, 0.75); }
+    ball(head, 0.039, fur, 0, 0, 0.01);                                // face
+    for (const s of [-1, 1]) {
+      ball(head, 0.012, fur, s * 0.032, 0.034, 0.004, 1, 1, 0.6);       // ears
+      ball(head, 0.0055, ink, s * 0.015, 0.01, 0.045);                  // eyes
+    }
+    ball(head, 0.018, cream, 0, -0.013, 0.04, 1.25, 0.85, 0.8);        // muzzle
+    ball(head, 0.0075, ink, 0, -0.004, 0.056, 1.3, 0.9, 0.8);          // nose
+    const scarf = new THREE.Mesh(new THREE.TorusGeometry(0.037, 0.009, 8, 28), std('#003d7c', { roughness: 0.95 }));
+    scarf.rotation.x = Math.PI / 2; scarf.position.set(0, 0.092, 0.002); scarf.castShadow = true; g.add(scarf);
+    const end = box(0.02, 0.045, 0.007, std('#ef7c00', { roughness: 0.95 }), 0.017, 0.07, 0.042); end.rotation.z = 0.25; g.add(end);
     return g;
   },
 };
@@ -886,7 +940,7 @@ const blobTex = canvasTexture(128, 128, (ctx, w, h) => {
   ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
 });
 const blobMat = new THREE.MeshBasicMaterial({ map: blobTex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
-const STANDING = new Set(['desk', 'monitor', 'keyboard', 'mouse', 'mug', 'book', 'clock', 'phone', 'desklamp', 'trophy', 'bookshelf', 'bed']);
+const STANDING = new Set(['desk', 'monitor', 'keyboard', 'mouse', 'mug', 'book', 'clock', 'phone', 'desklamp', 'trophy', 'bookshelf', 'bed', 'lion']);
 function contactShadow(group) {
   const size = new THREE.Box3().setFromObject(group).getSize(new THREE.Vector3());
   const blob = noShadow(new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.3 + 0.04, size.z * 1.3 + 0.04), blobMat));
@@ -1176,42 +1230,78 @@ function setGlow(group, amount) {
   }
 }
 
-// ------------------------------------------------------------------ the "2010s memory" look: soft bloom, then fade, vignette, colour fringes
+// ------------------------------------------------------------------ the "2010s memory" look: soft glow, then fade, vignette, colour fringes
 // (the grain is the CSS .grain-layer, see room/folders.css)
-// How sharp the picture is. Phones were smooth as they were. Laptops lagged (2026-11-06): they drew 1.25x the screen's
-// pixels with 4x edge smoothing, so now 1x with 2x, and at most 2 million pixels on a very large screen.
+// Speed, measured in Firefox on a laptop's built-in Intel graphics (2026-11-06): the room itself is cheap (shadows,
+// lamps and textures hardly matter); what cost the most was edge smoothing and the steps after the room, each going over
+// the whole screen again (31 frames a second). Now: no edge smoothing (the film look and the grain hide the edges), the
+// room drawn once, the glow blurred at a quarter of the size and smaller, and the rest (glow, colours, the look) one last
+// pass straight to the screen: 60 frames a second, the screen's limit.
+// How sharp: phones 1.25x their screen's pixels at most; computers 1x, and at most 2 million pixels on a large screen.
 const pixelRatio = () => (TOUCH ? Math.min(devicePixelRatio, 1.25) : Math.min(1, Math.sqrt(2e6 / (innerWidth * innerHeight))));
-const target = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: TOUCH ? 0 : 2 });
-const composer = new EffectComposer(renderer, target);
+const HDR = { type: THREE.HalfFloatType };
+const roomRT = new THREE.WebGLRenderTarget(1, 1, HDR);
+const BLOOM = [4, 8, 16].map(div => ({ div, a: new THREE.WebGLRenderTarget(1, 1, HDR), b: new THREE.WebGLRenderTarget(1, 1, HDR) }));
+const FULL_VS = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+const pass = (uniforms, fragmentShader) => new FullScreenQuad(new THREE.ShaderMaterial({ uniforms, vertexShader: FULL_VS, fragmentShader, depthTest: false, depthWrite: false }));
+// smaller: each pixel the average of the 4x4 below it; the first step keeps only what is brighter than `bright`
+const shrink = pass({ src: { value: null }, texel: { value: new THREE.Vector2() }, bright: { value: 0 } }, `
+  uniform sampler2D src; uniform vec2 texel; uniform float bright; varying vec2 vUv;
+  void main() {
+    vec3 c = 0.25 * (texture2D(src, vUv - texel).rgb + texture2D(src, vUv + texel).rgb
+      + texture2D(src, vUv + vec2(texel.x, -texel.y)).rgb + texture2D(src, vUv + vec2(-texel.x, texel.y)).rgb);
+    gl_FragColor = vec4(c * smoothstep(bright, bright + 0.25, dot(c, vec3(0.2126, 0.7152, 0.0722))), 1.0);
+  }`);
+const blur = pass({ src: { value: null }, step: { value: new THREE.Vector2() } }, `
+  uniform sampler2D src; uniform vec2 step; varying vec2 vUv;   // a 9-tap Gaussian in 5 reads (one direction)
+  void main() {
+    vec3 c = texture2D(src, vUv).rgb * 0.227027;
+    c += (texture2D(src, vUv + step * 1.384615).rgb + texture2D(src, vUv - step * 1.384615).rgb) * 0.316216;
+    c += (texture2D(src, vUv + step * 3.230769).rgb + texture2D(src, vUv - step * 3.230769).rgb) * 0.070270;
+    gl_FragColor = vec4(c, 1.0);
+  }`);
+const look = pass({ room: { value: roomRT.texture }, g1: { value: BLOOM[0].a.texture }, g2: { value: BLOOM[1].a.texture }, g3: { value: BLOOM[2].a.texture } }, `
+  uniform sampler2D room, g1, g2, g3; varying vec2 vUv;
+  void main() {
+    vec2 c = vUv - 0.5;
+    vec2 shift = c * dot(c, c) * 0.02;                                 // colour fringes, stronger towards the edges
+    vec3 col = vec3(texture2D(room, vUv + shift).r, texture2D(room, vUv).g, texture2D(room, vUv - shift).b);
+    col += 0.5 * (texture2D(g1, vUv).rgb + 0.85 * texture2D(g2, vUv).rgb + 0.7 * texture2D(g3, vUv).rgb);   // the glow
+    col = linearToOutputTexel(vec4(toneMapping(col), 1.0)).rgb;        // the renderer's tone mapping and sRGB
+    float l = dot(col, vec3(0.299, 0.587, 0.114));
+    col = mix(col, vec3(l), 0.14);                                     // a little less colour
+    col *= vec3(1.04, 1.0, 0.92);                                      // warmer
+    col = mix(vec3(0.075, 0.065, 0.07), vec3(0.97, 0.94, 0.88), col);  // faded: blacks lifted, whites softened
+    col *= 1.0 - 0.45 * smoothstep(0.3, 0.95, length(c * vec2(1.15, 1.0)) * 1.3);    // vignette
+    col += vec3(1.0, 0.5, 0.25) * 0.05 * smoothstep(0.8, 0.0, distance(vUv, vec2(1.0)));   // a warm light leak
+    gl_FragColor = vec4(col, 1.0);
+  }`);
 function fitScreen() {
-  renderer.setPixelRatio(pixelRatio()); composer.setPixelRatio(pixelRatio());
-  renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(pixelRatio());
+  renderer.setSize(innerWidth, innerHeight);
+  const { x: w, y: h } = renderer.getDrawingBufferSize(new THREE.Vector2());
+  roomRT.setSize(w, h);
+  for (const g of BLOOM) { g.a.setSize(Math.ceil(w / g.div), Math.ceil(h / g.div)); g.b.setSize(Math.ceil(w / g.div), Math.ceil(h / g.div)); }
   invalidate();
 }
 fitScreen();
-composer.addPass(new RenderPass(scene, camera));
-// the glow only has to be soft, not crisp (owner, 2026-11-06): blurred at half the usual size, about a quarter of the work
-class SoftBloom extends UnrealBloomPass { setSize(w, h) { super.setSize(Math.ceil(w / 2), Math.ceil(h / 2)); } }
-composer.addPass(new SoftBloom(new THREE.Vector2(innerWidth, innerHeight), 0.4, 0.35, 0.85));
-composer.addPass(new OutputPass());
-composer.addPass(new ShaderPass({
-  uniforms: { tDiffuse: { value: null } },
-  vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: `
-    uniform sampler2D tDiffuse; varying vec2 vUv;
-    void main() {
-      vec2 c = vUv - 0.5;
-      vec2 shift = c * dot(c, c) * 0.02;                               // colour fringes, stronger towards the edges
-      vec3 col = vec3(texture2D(tDiffuse, vUv + shift).r, texture2D(tDiffuse, vUv).g, texture2D(tDiffuse, vUv - shift).b);
-      float l = dot(col, vec3(0.299, 0.587, 0.114));
-      col = mix(col, vec3(l), 0.14);                                   // a little less colour
-      col *= vec3(1.04, 1.0, 0.92);                                    // warmer
-      col = mix(vec3(0.075, 0.065, 0.07), vec3(0.97, 0.94, 0.88), col); // faded: blacks lifted, whites softened
-      col *= 1.0 - 0.45 * smoothstep(0.3, 0.95, length(c * vec2(1.15, 1.0)) * 1.3);   // vignette
-      col += vec3(1.0, 0.5, 0.25) * 0.05 * smoothstep(0.8, 0.0, distance(vUv, vec2(1.0)));  // a warm light leak
-      gl_FragColor = vec4(col, 1.0);
-    }`,
-}));
+function draw() {
+  renderer.setRenderTarget(roomRT);
+  renderer.render(scene, camera);
+  let src = roomRT;
+  for (const [i, g] of BLOOM.entries()) {
+    const u = shrink.material.uniforms, b = blur.material.uniforms;
+    u.src.value = src.texture; u.texel.value.set(1 / src.width, 1 / src.height); u.bright.value = i ? -1 : 0.85;
+    renderer.setRenderTarget(g.a); shrink.render(renderer);
+    b.src.value = g.a.texture; b.step.value.set(1 / g.a.width, 0);
+    renderer.setRenderTarget(g.b); blur.render(renderer);
+    b.src.value = g.b.texture; b.step.value.set(0, 1 / g.a.height);
+    renderer.setRenderTarget(g.a); blur.render(renderer);
+    src = g.a;
+  }
+  renderer.setRenderTarget(null);
+  look.render(renderer);
+}
 
 // ------------------------------------------------------------------ every frame (drawing only when something changed); the clocks; resizing
 const timer = new THREE.Clock();
@@ -1237,7 +1327,7 @@ renderer.setAnimationLoop(() => {
   camera.position.copy(view.pos);
   camera.rotation.set(view.pitch, view.yaw, 0);
   if (camera.fov !== view.fov) { camera.fov = view.fov; camera.updateProjectionMatrix(); }
-  composer.render(dt);
+  draw();
 });
 
 let lastMinute = -1;
