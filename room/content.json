@@ -1,6 +1,50 @@
 {
   "_help": "The folders on the computer's desktop; the things in the room open them too (see 'opens' in objects.json). Edit the words here. Each item shows as a row: title, meta (dates / where), text, link, image (a file in assets/). 'desktop': true puts the folder on the desktop. 'layout': 'gallery' shows the items as polaroids (title = the caption, thumb = the square picture, image = the full photo); the corkboard in the room pins the Photos folder's first 7.",
   "cvs": [{ "name": "CV (hybrid)", "file": "assets/cv_hybrid.pdf" }, { "name": "CV (quant)", "file": "assets/cv_quant.pdf" }],
+  "bookshelf": {
+    "_help": "The books on the bookshelf in the room: a shelf per year, top shelf first; each book a course from the degree plan, [code, full name as on NUSMods]. Hovering a book shows its name.",
+    "shelves": [
+      { "label": "Year 1", "books": [
+        ["ME1103", "Principles of Mechanics and Materials"],
+        ["GEA1000", "Quantitative Reasoning with Data"],
+        ["CS2040DE", "Data Structures and Algorithms"],
+        ["MA1512", "Differential Equations for Engineering"],
+        ["MA1513", "Linear Algebra with Differential Equations"],
+        ["PF1101A", "Project Management and Finance"],
+        ["RVX1003", "Print to Screen: Analysing Film Adaptation"],
+        ["ME3291", "Numerical Methods in Engineering"],
+        ["DTK1234", "Design Thinking"],
+        ["ME2116", "Strength of Materials"],
+        ["ME2121", "Engineering Thermodynamics and Heat Transfer"],
+        ["CS2030DE", "Programming Methodology II"],
+        ["EE2211", "Introduction to Machine Learning"],
+        ["LAV1201", "Vietnamese 1"],
+        ["EG3612", "Vacation Industrial Attachment"]
+      ] },
+      { "label": "Year 2", "books": [
+        ["EG2401A", "Engineering Professionalism"],
+        ["ST2131", "Probability"],
+        ["CS2100DE", "Computer Organisation"],
+        ["ME2102", "Engineering Innovation and Modelling"],
+        ["ME3281", "Microsystems Design and Applications"],
+        ["ME3142", "Feedback Control Systems"],
+        ["LAV2201", "Vietnamese 2"],
+        ["ME2134", "Fluid Mechanics I"],
+        ["ME2162", "Manufacturing Processes"],
+        ["EE3801", "Data Engineering Principles"],
+        ["CS2103DE", "Software Engineering"],
+        ["CFG2101", "NUS Vacation Internship Programme"]
+      ] },
+      { "label": "Year 3", "books": [
+        ["ME4101A", "Bachelor of Engineering Dissertation"],
+        ["ME3243", "Robotic System Design"],
+        ["ME2105", "Principles of Mechatronics and Automation"],
+        ["EE4802", "Learning from Data"],
+        ["ME3123", "Applied Thermofluids"],
+        ["ME3115", "Mechanics of Machines"]
+      ] }
+    ]
+  },
   "folders": [
     {
       "id": "experience", "icon": "💼", "name": "Experience", "desktop": true,

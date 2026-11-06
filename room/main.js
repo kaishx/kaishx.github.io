@@ -19,7 +19,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { el, folderNodes, iconArt } from './folders.js';
 import { createOutside } from './outside.js';
 
@@ -133,6 +133,40 @@ function extrude(shape, depth, bevel, mat) {           // a flat outline made th
   geo.translate(0, 0, -depth / 2);
   const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true;
   return m;
+}
+// An outline made thick like extrude(), but as wide as width(x, y) says at each point (full width, metres), with rounded
+// edges inside the outline: a fairing wide in the middle and narrow at the nose and the tail. Shaded smooth.
+function sculpt(shape, width, mat, edge = 0.035) {
+  const D = 0.1, B = 0.04;
+  let geo = new THREE.ExtrudeGeometry(shape, { depth: D, bevelEnabled: true, bevelThickness: B, bevelSize: edge, bevelOffset: -edge, bevelSegments: 5, curveSegments: 8 });
+  const p = geo.attributes.position;
+  for (let i = 0; i < p.count; i++) p.setZ(i, (((p.getZ(i) - D / 2) / (D / 2 + B)) * width(p.getX(i), p.getY(i))) / 2);
+  geo.deleteAttribute('normal'); geo.deleteAttribute('uv');
+  geo = mergeVertices(geo, 1e-4); geo.computeVertexNormals();
+  const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true;
+  return m;
+}
+// Smooth runs of points (x, y), a sharp corner where one run ends and the next begins.
+function outline(start, ...runs) {
+  const s = new THREE.Shape(); s.moveTo(...start);
+  for (const run of runs) s.splineThru(run.map(([x, y]) => new THREE.Vector2(x, y)));
+  return s;
+}
+// Many small parts drawn as one shape per material (fewer draw calls), in the group's own space.
+function bake(group) {
+  group.updateMatrixWorld(true);
+  const inv = group.matrixWorld.clone().invert(), byMat = new Map();
+  group.traverse(m => {
+    if (!m.isMesh) return;
+    const geo = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone();
+    for (const k of Object.keys(geo.attributes)) if (k !== 'position' && k !== 'normal') geo.deleteAttribute(k);
+    geo.applyMatrix4(inv.clone().multiply(m.matrixWorld));
+    if (!byMat.has(m.material)) byMat.set(m.material, []);
+    byMat.get(m.material).push(geo);
+  });
+  const out = new THREE.Group();
+  for (const [mat, geos] of byMat) { const m = new THREE.Mesh(mergeGeometries(geos), mat); m.castShadow = true; m.receiveShadow = true; out.add(m); }
+  return out;
 }
 const noShadow = m => { m.castShadow = false; m.receiveShadow = false; m.raycast = () => {}; return m; };
 
@@ -316,9 +350,9 @@ world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0
   world.add(box(0.09, 0.09, 0.01, white, -0.3, 0.3, FRONT + 0.005), box(0.04, 0.055, 0.03, white, -0.3, 0.3, FRONT + 0.025));
   cable([[-0.08, 0.0175, -0.955], [-0.14, 0.012, -0.965], [-0.24, 0.02, F - 0.004], [-0.29, 0.1, F - 0.004], [-0.3, 0.2, FRONT + 0.03], [-0.3, 0.272, FRONT + 0.025]], '#ecebe7');
 }
-// string lights along the top of the front wall
+// string lights along the top of the front wall. They only glow (and bloom): the one light that stood in for them lit
+// a single patch of wall and ceiling, a glow from nowhere (owner, 2026-11-06).
 const fairyMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.6, 0.85) });
-const fairyLight = new THREE.PointLight('#ffc27a', 0.6, 4.5, 2);
 {
   const anchors = [[-2.15, 2.44], [-0.95, 2.47], [0.35, 2.44], [1.45, 2.47], [2.15, 2.44]], pts = [];
   for (let i = 0; i < anchors.length - 1; i++) {
@@ -340,8 +374,6 @@ const fairyLight = new THREE.PointLight('#ffc27a', 0.6, 4.5, 2);
   bulbs.raycast = () => {};
   bulbs.frustumCulled = false;
   world.add(bulbs);
-  fairyLight.position.set(-0.3, 2.25, -0.75);
-  world.add(fairyLight);
 }
 
 // ------------------------------------------------------------------ outside: sky, sun, moon, stars (the city: room/outside.js)
@@ -425,7 +457,6 @@ function applyTime() {
   hemi.intensity = mixN(w, 0.55, 1.4, 2.6);
   const glow = mixN(w, 1, 0.75, 0.2);                                // the lamps matter most after dark
   for (const l of lamps) { l.light.intensity = l.power * glow; l.shade.emissiveIntensity = 0.1 + glow * 0.5; }
-  fairyLight.intensity = 0.7 * glow;
   fairyMat.color.setRGB(0.7 + 1.6 * glow, 0.6 + 1.1 * glow, 0.45 + 0.45 * glow);
   const u = sky.material.uniforms;
   blend(u.top.value, 'top', w); blend(u.horizon.value, 'horizon', w); blend(u.bottom.value, 'bottom', w);
@@ -642,49 +673,67 @@ const flagTex = canvasTexture(600, 400, (ctx, w, h) => {        // Singapore: re
   }
 });
 
-// The books on the shelf: spines, covers and page edges drawn on one sheet, one slot per book. Cloth hardbacks with gilt
-// bands, paperbacks with coloured bands, cream pages between the boards on top: the same level of surface as the wood
-// they stand on (owner, 2026-11-06: they were pastel blocks). Titles are generic, nothing claimed.
-const BOOK_SLOTS = 24, SLOT_W = 64, SHEET_W = BOOK_SLOTS * SLOT_W, SHEET_H = 512, SPINE_H = 400, COVER_H = 40;
-const BOOK_TITLES = ['CALCULUS', 'FIELD GUIDE', 'PHYSICS', 'ESSAYS', 'STATICS', 'ATLAS', 'PROBABILITY', 'STORIES', 'HANDBOOK',
-  'THERMODYNAMICS', 'POEMS', 'VOL. I', 'VOL. II', 'SKETCHBOOK', 'JOURNAL', 'NOTES'];
+// The books on the bookshelf: a book per course in the degree plan (content.json "bookshelf"), a shelf per year (owner,
+// 2026-11-06). Spines, covers and page edges are drawn on one sheet, a slot per book: cloth hardbacks with gilt rules
+// and a serif title, paperbacks with printed bands; the course's full name runs down the spine, its code at the foot.
+const SLOT_W = 80, SPINE_H = 600, COVER_H = 40, CELL_H = 720;
+const SERIF = 'Georgia, "Times New Roman", serif';
 const BOOK_COLOURS = [['#1f2f4d', '#d8b45c'], ['#6e1f24', '#e2c27a'], ['#e9e1cf', '#2d5e63'], ['#2f4a3a', '#d8c79a'], ['#c08a2c', '#1d1c1e'],
   ['#1d1c1e', '#e8e2d6'], ['#f1ece2', '#a8322d'], ['#2d5e63', '#f0e6d0'], ['#b4532c', '#f6efe2'], ['#6b6e72', '#f2f0ea'],
   ['#a8322d', '#f4ead6'], ['#5a4030', '#e6cf9a'], ['#ece7dc', '#1f2f4d']];
 const paleCover = hex => new THREE.Color(hex).getHSL({}).l > 0.6;           // a pale cover: printed like a paperback
-const bookSheet = canvasTexture(SHEET_W, SHEET_H, ctx => {
-  for (let i = 0; i < BOOK_SLOTS; i++) {
-    const [cover, ink] = BOOK_COLOURS[i % BOOK_COLOURS.length], x = i * SLOT_W, paper = paleCover(cover);
-    ctx.fillStyle = cover; ctx.fillRect(x, 0, SLOT_W, SPINE_H + COVER_H);
-    for (let k = 0; k < 700; k++) {                                     // cloth or paper grain, a little wear
+function bookAtlas(books) {                                                  // books: [[code, full name]]
+  const cols = Math.max(1, Math.ceil(Math.sqrt((books.length * CELL_H) / SLOT_W))), rows = Math.max(1, Math.ceil(books.length / cols));
+  const W = cols * SLOT_W, H = rows * CELL_H, at = i => [(i % cols) * SLOT_W, Math.floor(i / cols) * CELL_H];
+  const tex = canvasTexture(W, H, ctx => books.forEach(([code, title], i) => {
+    const [x, y] = at(i), [cover, ink] = BOOK_COLOURS[(i * 5) % BOOK_COLOURS.length], paper = paleCover(cover);
+    ctx.fillStyle = cover; ctx.fillRect(x, y, SLOT_W, SPINE_H + COVER_H);
+    for (let k = 0; k < 900; k++) {                                     // cloth or paper grain, a little wear
       ctx.fillStyle = rand() < 0.5 ? 'rgba(0,0,0,0.09)' : 'rgba(255,255,255,0.07)';
-      ctx.fillRect(x + rand() * SLOT_W, rand() * (SPINE_H + COVER_H), 1.5, 1.5);
+      ctx.fillRect(x + rand() * SLOT_W, y + rand() * (SPINE_H + COVER_H), 1.5, 1.5);
     }
     ctx.fillStyle = ink;
-    if (paper) { ctx.fillRect(x, 0, SLOT_W, 44); ctx.fillRect(x, SPINE_H - 34, SLOT_W, 34); }
-    else for (const y of [20, 28, SPINE_H - 32, SPINE_H - 24]) ctx.fillRect(x + 5, y, SLOT_W - 10, 3);
-    ctx.save(); ctx.translate(x + SLOT_W / 2, paper ? 62 : 48); ctx.rotate(Math.PI / 2);     // the title, top to bottom
-    ctx.font = `700 ${Math.round(SLOT_W * 0.34)}px ${SANS}`; ctx.textBaseline = 'middle';
+    if (paper) { ctx.fillRect(x, y, SLOT_W, 52); ctx.fillRect(x, y + SPINE_H - 118, SLOT_W, 118); }   // printed bands
+    else for (const b of [24, 34, SPINE_H - 132, SPINE_H - 122]) ctx.fillRect(x + 6, y + b, SLOT_W - 12, 4);   // gilt rules
+    // the full name, down the spine (read with your head tilted right), on two lines if it is long
+    const len = SPINE_H - 230, face = paper ? SANS : SERIF, weight = paper ? 700 : 600;
+    const width = (text, size) => { ctx.font = `${weight} ${size}px ${face}`; return ctx.measureText(text).width; };
+    let size = Math.round(SLOT_W * 0.36), lines = [title];
+    if (width(title, size) > len) {
+      size = Math.round(SLOT_W * 0.27);
+      const words = title.split(' ');
+      let best = Infinity;
+      for (let k = 1; k < words.length; k++) {                         // the break that keeps the longer line shortest
+        const two = [words.slice(0, k).join(' '), words.slice(k).join(' ')], w = Math.max(...two.map(t => width(t, size)));
+        if (w < best) { best = w; lines = two; }
+      }
+    }
+    ctx.save(); ctx.translate(x + SLOT_W / 2, y + (paper ? 64 : 48) + len / 2); ctx.rotate(Math.PI / 2);
+    ctx.font = `${weight} ${size}px ${face}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = paper ? '#2b2a2e' : ink;
-    ctx.fillText(BOOK_TITLES[i % BOOK_TITLES.length], 0, 0, SPINE_H - 150);
+    lines.forEach((t, k) => ctx.fillText(t, 0, (k - (lines.length - 1) / 2) * size * 1.08, len));
     ctx.restore();
-    ctx.beginPath(); ctx.arc(x + SLOT_W / 2, SPINE_H - (paper ? 56 : 50), 5, 0, Math.PI * 2); ctx.fill();   // the publisher's mark
-    const top = SPINE_H + COVER_H, ph = SHEET_H - top;                    // the page edges, seen from above
+    ctx.save(); ctx.translate(x + SLOT_W / 2, y + SPINE_H - 58); ctx.rotate(Math.PI / 2);   // the course code at the foot
+    ctx.font = `700 ${Math.round(SLOT_W * 0.22)}px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = paper ? cover : ink; ctx.fillText(code, 0, 0, 100);
+    ctx.restore();
+    const top = y + SPINE_H + COVER_H, ph = CELL_H - SPINE_H - COVER_H;  // the page edges, seen from above
     ctx.fillStyle = '#ebe3d0'; ctx.fillRect(x, top, SLOT_W, ph);
     for (let px = 4; px < SLOT_W - 4; px += 2) { ctx.fillStyle = `rgba(90,70,40,${0.05 + rand() * 0.09})`; ctx.fillRect(x + px, top, 1, ph); }
-    ctx.fillStyle = cover; ctx.fillRect(x, top, 4, ph); ctx.fillRect(x + SLOT_W - 4, top, 4, ph); ctx.fillRect(x, SHEET_H - 5, SLOT_W, 5);
-  }
-}, { fonts: true });
-// One book (thickness t across, height h, depth d), its faces mapped to its slot: the spine faces +z, pages on top.
-function bookGeometry(slot, t, h, d) {
-  const g = new THREE.BoxGeometry(t, h, d), uv = g.attributes.uv;
-  const u0 = (slot * SLOT_W + 1) / SHEET_W, u1 = ((slot + 1) * SLOT_W - 1) / SHEET_W, row = y => 1 - y / SHEET_H;
-  const part = { spine: [row(SPINE_H), row(0)], cover: [row(SPINE_H + COVER_H), row(SPINE_H)], pages: [row(SHEET_H), row(SPINE_H + COVER_H)] };
-  ['cover', 'cover', 'pages', 'cover', 'spine', 'cover'].forEach((name, f) => {   // BoxGeometry's faces: +x -x +y -y +z -z
-    const [v0, v1] = part[name];
-    for (let i = f * 4; i < f * 4 + 4; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
-  });
-  return g;
+    ctx.fillStyle = cover; ctx.fillRect(x, top, 5, ph); ctx.fillRect(x + SLOT_W - 5, top, 5, ph); ctx.fillRect(x, top + ph - 6, SLOT_W, 6);
+  }), { fonts: true });
+  // One book (thickness t across, height h, depth d), its faces mapped to slot i: the spine faces +z, pages on top.
+  const geometry = (i, t, h, d) => {
+    const g = new THREE.BoxGeometry(t, h, d), uv = g.attributes.uv, [x, y] = at(i);
+    const u0 = (x + 1) / W, u1 = (x + SLOT_W - 1) / W, v = py => 1 - (y + py) / H;
+    const part = { spine: [v(SPINE_H), v(0)], cover: [v(SPINE_H + COVER_H), v(SPINE_H)], pages: [v(CELL_H), v(SPINE_H + COVER_H)] };
+    ['cover', 'cover', 'pages', 'cover', 'spine', 'cover'].forEach((name, f) => {   // BoxGeometry's faces: +x -x +y -y +z -z
+      const [v0, v1] = part[name];
+      for (let k = f * 4; k < f * 4 + 4; k++) uv.setXY(k, u0 + uv.getX(k) * (u1 - u0), v0 + uv.getY(k) * (v1 - v0));
+    });
+    return g;
+  };
+  return { tex, geometry };
 }
 
 // ------------------------------------------------------------------ placeholder shapes (until your own models replace them)
@@ -700,7 +749,7 @@ function lampShade(rTop, rBottom, height, y, power) {    // a fabric drum shade 
   // was the next bright spot); that cone casts shadows, drawn once like all the others.
   const bulbY = y + 0.01;
   g.add(cyl(0.017, 0.017, 0.04, std('#3a3330', { roughness: 0.5 }), 0, bulbY - 0.055, 0, 16));
-  for (const [dir, share, angle] of [[-1, 1, 0.85], [1, 0.45, 0.8]]) {
+  for (const [dir, share, angle] of [[-1, 1, 0.85], [1, 0.22, 1.05]]) {     // the wash up the wall: faint and wide, no bright cone
     const light = new THREE.SpotLight('#ffbf7a', power * share, 6, angle, 1, 2);
     light.position.y = bulbY; light.target.position.set(0, bulbY + dir, 0);
     if (dir < 0) {
@@ -713,58 +762,105 @@ function lampShade(rTop, rBottom, height, y, power) {    // a fabric drum shade 
   }
   return g;
 }
-function motorbike() {      // a sports bike, real size (2 m long, front wheel at +x); the miniature scales it down
+function motorbike() {      // a supersport, real size (2.05 m long, 1.4 m between the axles, front wheel at +x); the model on the wall shelf scales it down
   const g = new THREE.Group();
-  const paint = std('#b8322a', { metalness: 0.35, roughness: 0.3 }), dark = std('#2a2829', { roughness: 0.55 });
-  const tyre = std('#141414', { roughness: 0.9 }), metal = std('#9aa0a4', { metalness: 0.85, roughness: 0.3 });
-  const chrome = std('#d8dcde', { metalness: 1, roughness: 0.18 });
-  for (const x of [-0.68, 0.68]) {
-    for (const ring of [new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.065, 14, 40), tyre), new THREE.Mesh(new THREE.TorusGeometry(0.235, 0.018, 8, 40), metal)]) {
-      ring.position.set(x, 0.365, 0); g.add(ring);
+  const paint = std('#b3141c', { metalness: 0.3, roughness: 0.24 }), gloss = std('#1a1a1c', { metalness: 0.2, roughness: 0.3 });
+  const matte = std('#202022', { roughness: 0.9 }), tyre = std('#161616', { roughness: 0.92 }), engine = std('#3a3b3e', { metalness: 0.5, roughness: 0.45 });
+  const alu = std('#b9bdc0', { metalness: 0.8, roughness: 0.35 }), chrome = std('#dfe2e4', { metalness: 1, roughness: 0.15 });
+  const gold = std('#c9a043', { metalness: 0.85, roughness: 0.3 }), rim = std('#2a2a2c', { metalness: 0.6, roughness: 0.4 });
+  const glass = std('#1d2428', { metalness: 0.3, roughness: 0.05, transparent: true, opacity: 0.62 });   // smoked screen
+  const silencer = std('#2c2c2e', { metalness: 0.55, roughness: 0.4, flatShading: true }), titanium = std('#6a655e', { metalness: 0.7, roughness: 0.35 });
+  const lit = colour => new THREE.MeshBasicMaterial({ color: colour });
+  const at = (m, x, y, z = 0) => { m.position.set(x, y, z); m.castShadow = true; return m; };
+  const axial = m => { m.rotation.x = Math.PI / 2; return m; };              // a cylinder turned to lie along z
+  const flatRing = (r, w, mat) => { const m = new THREE.Mesh(new THREE.TorusGeometry(r, w / 2, 4, 40), mat); m.scale.z = 0.006 / w; return m; };
+  // the wheels: round-shouldered tyres on 17-inch rims, five split spokes, discs and gold calipers
+  const wheel = (x, r, w, discs) => {
+    const a = 0.075, rc = r - a, rimR = rc + a * Math.cos(1.86), prof = [];
+    for (let k = 0; k <= 18; k++) { const th = -1.86 + (3.72 * k) / 18; prof.push(new THREE.Vector2(rc + a * Math.cos(th), (w / 2) * Math.sin(th))); }
+    const t = at(new THREE.Mesh(new THREE.LatheGeometry(prof, 48), tyre), x, r); t.rotation.x = Math.PI / 2; g.add(t);
+    for (const z of [-1, 1]) { const lip = at(new THREE.Mesh(new THREE.TorusGeometry(rimR, 0.009, 6, 40), rim), x, r, z * w * 0.45); g.add(lip); }
+    for (let i = 0; i < 5; i++) {
+      const s0 = (i / 5) * Math.PI * 2 + 0.3;
+      for (const d of [-0.14, 0.14]) g.add(rod([x + Math.cos(s0) * 0.05, r + Math.sin(s0) * 0.05, 0], [x + Math.cos(s0 + d) * (rimR - 0.008), r + Math.sin(s0 + d) * (rimR - 0.008), 0], 0.011, rim));
     }
-    for (let i = 0; i < 5; i++) {                                     // cast wheel spokes
-      const a = (i / 5) * Math.PI * 2;
-      g.add(rod([x, 0.365, 0], [x + Math.cos(a) * 0.23, 0.365 + Math.sin(a) * 0.23, 0], 0.016, metal));
+    g.add(axial(cyl(0.045, 0.045, w * 0.9, alu, x, r)));
+    for (const [z, dr, ang] of discs) {
+      g.add(at(flatRing(dr - 0.03, 0.06, chrome), x, r, z));
+      const cal = at(box(0.075, 0.034, 0.03, gold), x + Math.cos(ang) * (dr - 0.025), r + Math.sin(ang) * (dr - 0.025), z + Math.sign(z) * 0.012);
+      cal.rotation.z = ang + Math.PI / 2; g.add(cal);
     }
-    const hub = cyl(0.05, 0.05, 0.12, metal, x, 0.365, 0); hub.rotation.x = Math.PI / 2; g.add(hub);
+  };
+  wheel(0.7, 0.3, 0.12, [[0.072, 0.16, 2.3], [-0.072, 0.16, 2.3]]);
+  wheel(-0.7, 0.31, 0.19, [[0.108, 0.11, -1.2]]);
+  g.add(axial(cyl(0.1, 0.1, 0.008, gloss, -0.7, 0.31, -0.11)));             // the rear sprocket
+  // the front fork (raked 24 degrees: gold outer tubes, chrome sliders), the top yoke, clip-on bars with grips and levers
+  const rake = [-Math.sin(rad(24)), Math.cos(rad(24))], along = k => [0.7 + rake[0] * k, 0.3 + rake[1] * k];
+  for (const z of [-0.105, 0.105]) {
+    g.add(rod([...along(-0.03), z], [...along(0.27), z], 0.021, chrome), rod([...along(0.25), z], [...along(0.66), z], 0.03, gold));
+    g.add(at(box(0.05, 0.06, 0.04, gloss), ...along(0), z));                                  // the axle clamp
   }
-  const brake = cyl(0.16, 0.16, 0.012, chrome, 0.68, 0.365, 0.07); brake.rotation.x = Math.PI / 2; g.add(brake);
-  // tank, seat and tail as one outline, made thick
-  const body = new THREE.Shape();
-  body.moveTo(0.36, 0.74);
-  body.quadraticCurveTo(0.38, 0.95, 0.22, 1.0);
-  body.quadraticCurveTo(0.05, 1.05, -0.15, 0.92);
-  body.lineTo(-0.55, 0.9);
-  body.quadraticCurveTo(-0.8, 0.95, -0.95, 1.02);
-  body.lineTo(-0.92, 0.92);
-  body.quadraticCurveTo(-0.6, 0.78, -0.2, 0.72);
-  body.lineTo(0.36, 0.74);
-  g.add(extrude(body, 0.2, 0.04, paint));
-  const seat = new THREE.Mesh(new THREE.CapsuleGeometry(0.05, 0.3, 4, 10), dark);
-  seat.rotation.z = Math.PI / 2 + 0.06; seat.scale.set(1, 1, 2.2); seat.position.set(-0.37, 0.93, 0); g.add(seat);
-  // the fairing around the headlight, and its screen
-  const nose = new THREE.Shape();
-  nose.moveTo(0.36, 0.74); nose.quadraticCurveTo(0.62, 0.78, 0.66, 1.0); nose.lineTo(0.5, 1.12);
-  nose.quadraticCurveTo(0.4, 1.0, 0.34, 0.95); nose.lineTo(0.36, 0.74);
-  g.add(extrude(nose, 0.22, 0.035, paint));
-  const lamp = new THREE.Mesh(new THREE.CircleGeometry(0.055, 20), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 1.5, 1.2) }));
-  lamp.position.set(0.672, 0.94, 0); lamp.rotation.y = Math.PI / 2; g.add(lamp);
-  const visor = box(0.04, 0.16, 0.2, std('#3b4a55', { metalness: 0.5, roughness: 0.15 }), 0.56, 1.12, 0); visor.rotation.z = 0.5; g.add(visor);
-  // engine, frame, swingarm, forks, bars, exhaust, mudguard, tail light
-  g.add(box(0.42, 0.34, 0.26, dark, 0.02, 0.52, 0));
-  for (let i = 0; i < 4; i++) g.add(box(0.44, 0.02, 0.28, metal, 0.02, 0.6 + i * 0.045, 0));
-  g.add(rod([0.45, 1.0, 0], [-0.05, 0.62, 0], 0.035, metal));
-  g.add(rod([-0.05, 0.45, 0.08], [-0.68, 0.365, 0.08], 0.03, metal), rod([-0.05, 0.45, -0.08], [-0.68, 0.365, -0.08], 0.03, metal));
-  for (const z of [-0.08, 0.08]) g.add(rod([0.47, 1.05, z], [0.68, 0.365, z], 0.025, chrome));
-  g.add(rod([0.44, 1.08, -0.32], [0.44, 1.08, 0.32], 0.014, dark));
-  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([new THREE.Vector3(0.12, 0.38, 0.1),
-    new THREE.Vector3(-0.15, 0.32, 0.16), new THREE.Vector3(-0.5, 0.5, 0.17), new THREE.Vector3(-0.78, 0.66, 0.17)]), 30, 0.035, 10), chrome));
-  const can = cyl(0.06, 0.05, 0.3, metal, -0.72, 0.62, 0.17); can.rotation.z = Math.PI / 2 - 0.45; g.add(can);
-  const guard = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.02, 6, 24, Math.PI * 0.5), paint);
-  guard.position.set(0.68, 0.365, 0); guard.rotation.z = Math.PI * 0.3; g.add(guard);
-  const tail = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.03, 0.12), new THREE.MeshBasicMaterial({ color: new THREE.Color(2, 0.2, 0.15) }));
-  tail.position.set(-0.96, 0.97, 0); g.add(tail);
-  return g;
+  const yoke = at(box(0.09, 0.022, 0.28, alu), ...along(0.65)); yoke.rotation.z = rad(24); g.add(yoke);
+  const [bx, by] = along(0.6);
+  for (const s of [-1, 1]) {
+    g.add(rod([bx, by, s * 0.1], [bx - 0.045, by - 0.02, s * 0.3], 0.012, gloss), rod([bx - 0.028, by - 0.012, s * 0.22], [bx - 0.048, by - 0.022, s * 0.31], 0.019, matte));
+    g.add(rod([bx + 0.02, by - 0.004, s * 0.17], [bx - 0.01, by - 0.03, s * 0.3], 0.006, alu));
+  }
+  const guard = at(new THREE.Mesh(new THREE.TorusGeometry(0.335, 0.02, 6, 24, 1.15), paint), 0.7, 0.3);   // front mudguard
+  guard.rotation.z = 0.55; guard.scale.z = 3.2; g.add(guard);
+  const hugger = at(new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.02, 6, 24, 1.2), gloss), -0.7, 0.31);  // rear hugger
+  hugger.rotation.z = 0.85; hugger.scale.z = 5; g.add(hugger);
+  // frame spar, engine, swingarm, chain, the rear shock under the seat
+  g.add(sculpt(outline([0.34, 0.97], [[0.16, 0.92], [0.02, 0.84], [-0.08, 0.73], [-0.13, 0.6], [-0.15, 0.47]], [[-0.05, 0.45]],
+    [[-0.04, 0.56], [0.0, 0.66], [0.1, 0.77], [0.34, 0.885]]), () => 0.32, alu, 0.015));
+  g.add(at(new THREE.Mesh(new RoundedBoxGeometry(0.4, 0.36, 0.26, 3, 0.04), engine), 0.1, 0.43));
+  const arm = outline([-0.1, 0.505], [[-0.3, 0.475], [-0.52, 0.405], [-0.71, 0.345]], [[-0.745, 0.31], [-0.71, 0.275]], [[-0.5, 0.335], [-0.3, 0.4], [-0.11, 0.425]]);
+  for (const z of [-0.135, 0.135]) g.add(at(extrude(arm, 0.025, 0.007, alu), 0, 0, z));
+  g.add(axial(cyl(0.024, 0.024, 0.34, alu, -0.12, 0.465)), axial(cyl(0.02, 0.02, 0.32, alu, -0.7, 0.31)));   // pivot, rear axle
+  const chain = new THREE.CatmullRomCurve3([[-0.02, 0.475], [-0.36, 0.44], [-0.7, 0.41], [-0.8, 0.31], [-0.7, 0.21], [-0.36, 0.31], [-0.02, 0.385], [0.025, 0.43]]
+    .map(([x, y]) => new THREE.Vector3(x, y, -0.115)), true);
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(chain, 80, 0.007, 5, true), gloss));
+  g.add(sculpt(outline([-0.1, 0.87], [[-0.3, 0.86], [-0.48, 0.865]], [[-0.45, 0.76], [-0.32, 0.68], [-0.2, 0.66]], [[-0.12, 0.7]]), () => 0.2, matte, 0.015));
+  g.add(rod([-0.155, 0.5, 0], [-0.22, 0.71, 0], 0.033, gold), rod([-0.15, 0.48, 0], [-0.23, 0.74, 0], 0.014, chrome));
+  // the bodywork: fairing and tank in one piece, a black belly pan, the seat, the raised tail, the smoked screen
+  const bodyW = (x, y) => (x > 0.66 ? 0.4 - 0.28 * smooth(0.66, 0.9, x) : x > 0.05 ? 0.4 + 0.03 * smooth(0.6, 0.3, x) : 0.43 - 0.13 * smooth(0.05, -0.13, x))
+    * (1 - 0.28 * smooth(0.92, 1.1, y));
+  g.add(sculpt(outline([0.885, 0.845],
+    [[0.82, 0.885], [0.74, 0.925], [0.62, 0.965], [0.52, 1.0], [0.43, 1.04], [0.32, 1.085], [0.2, 1.105], [0.08, 1.09], [-0.02, 1.045], [-0.1, 0.97], [-0.13, 0.925]],
+    [[-0.06, 0.875], [0.02, 0.8], [0.08, 0.7], [0.16, 0.6], [0.26, 0.52]],          // the engine shows below
+    [[0.33, 0.475], [0.38, 0.47], [0.438, 0.562], [0.544, 0.635], [0.668, 0.669], [0.777, 0.67]],     // clear of the front wheel
+    [[0.84, 0.745], [0.87, 0.8]]), bodyW, paint, 0.045));
+  g.add(sculpt(outline([0.46, 0.66], [[0.36, 0.635], [0.28, 0.69]], [[0.36, 0.74], [0.47, 0.75]]), (x, y) => bodyW(x, y) + 0.008, matte, 0.012));   // a vent in the side
+  g.add(sculpt(outline([0.4, 0.45], [[0.37, 0.34], [0.3, 0.25], [0.18, 0.205], [0.03, 0.2], [-0.06, 0.23]], [[-0.08, 0.3], [-0.03, 0.36]],
+    [[0.1, 0.41], [0.26, 0.44]]), (x, y) => 0.32 - 0.12 * smooth(0.36, 0.2, y), gloss, 0.03));
+  g.add(sculpt(outline([-0.115, 0.935], [[-0.17, 0.895], [-0.27, 0.878], [-0.38, 0.882], [-0.47, 0.905]], [[-0.48, 0.86]], [[-0.3, 0.85], [-0.13, 0.86]]),
+    x => 0.27 - 0.05 * smooth(-0.2, -0.47, x), matte, 0.02));
+  g.add(sculpt(outline([-0.13, 0.87], [[-0.3, 0.86], [-0.46, 0.875], [-0.56, 0.93], [-0.7, 0.97], [-0.84, 1.005], [-0.94, 1.03]], [[-0.95, 1.0]],
+    [[-0.86, 0.96], [-0.72, 0.9], [-0.58, 0.83], [-0.42, 0.775], [-0.25, 0.77], [-0.14, 0.81]]),
+    x => 0.3 - 0.04 * smooth(-0.13, -0.5, x) - 0.15 * smooth(-0.55, -0.95, x), paint, 0.03));
+  g.add(sculpt(outline([0.8, 0.895], [[0.74, 0.96], [0.64, 1.04], [0.55, 1.095], [0.485, 1.125]], [[0.455, 1.11]], [[0.53, 1.01], [0.66, 0.955]]),
+    (x, y) => 0.24 - 0.12 * smooth(0.92, 1.12, y), glass, 0.015));
+  // the face: LED eyes either side of a ram-air intake; mirrors on stalks; the tail light and the plate under the tail
+  const eyeMat = lit(new THREE.Color(1.7, 1.7, 1.55));
+  for (const s of [-1, 1]) {
+    const eye = at(box(0.075, 0.016, 0.01, eyeMat), 0.8, 0.8, s * 0.114); eye.rotation.set(0, s * 0.7, 0.35); g.add(eye);
+    g.add(rod([0.64, 0.97, s * 0.16], [0.62, 1.01, s * 0.24], 0.008, gloss));
+    const mirror = at(new THREE.Mesh(new THREE.SphereGeometry(0.05, 16, 10), paint), 0.61, 1.02, s * 0.27); mirror.scale.set(1.2, 0.5, 0.9); g.add(mirror);
+    g.add(rod([-0.21, 0.43, s * 0.15], [-0.21, 0.43, s * 0.22], 0.012, alu), at(box(0.1, 0.06, 0.008, alu), -0.2, 0.47, s * 0.15));   // footpegs
+  }
+  g.add(at(box(0.03, 0.04, 0.08, gloss), 0.875, 0.81));
+  g.add(at(box(0.03, 0.018, 0.09, lit(new THREE.Color(2, 0.15, 0.1))), -0.935, 0.995));
+  g.add(rod([-0.84, 0.955, 0], [-0.9, 0.74, 0], 0.01, gloss));
+  const plate = at(box(0.004, 0.1, 0.17, gloss), -0.905, 0.7); plate.rotation.z = -0.2; g.add(plate);
+  // the exhaust on the right: a header under the belly pan to a short hexagonal silencer beside the back wheel, tipped up
+  const canDir = new THREE.Vector3(-0.9, 0.42, 0).normalize(), canAt = new THREE.Vector3(-0.42, 0.56, 0.2);
+  const pipe = new THREE.CatmullRomCurve3([[0.28, 0.42, 0.06], [0.24, 0.25, 0.09], [0.08, 0.21, 0.12], [-0.08, 0.26, 0.16], [-0.2, 0.38, 0.19]]
+    .map(v => new THREE.Vector3(...v)).concat(canAt.clone().addScaledVector(canDir, -0.13)));
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(pipe, 30, 0.026, 10), titanium));
+  const can = new THREE.Mesh(new THREE.CylinderGeometry(0.056, 0.064, 0.28, 6), silencer);
+  can.position.copy(canAt); can.quaternion.setFromUnitVectors(UP, canDir); g.add(can);
+  const tip = cyl(0.042, 0.042, 0.03, chrome); tip.position.copy(canAt).addScaledVector(canDir, 0.15); tip.quaternion.copy(can.quaternion); g.add(tip);
+  return bake(g);
 }
 function climbingShoe(upperColour) {   // a downturned climbing shoe: its side outline made thick (toe at +x)
   const g = new THREE.Group();
@@ -904,33 +1000,52 @@ const PLACEHOLDERS = {
     const g = new THREE.Group(), wood = woodMat();
     g.add(box(0.03, 1.5, 0.32, wood, -0.42, 0.75, 0), box(0.03, 1.5, 0.32, wood, 0.42, 0.75, 0), box(0.87, 1.5, 0.015, wood, 0, 0.75, -0.155));
     for (const y of [0.05, 0.55, 1.02, 1.49]) g.add(box(0.87, 0.03, 0.32, wood, 0, y, 0));
-    // the books, in one shape: rows standing from the left, one leaning, small stacks lying flat ([height, thickness])
-    const parts = []; let slot = 0;
+    // A shelf per year of the degree, the top one first, a book per course (content.json "bookshelf"): they stand in a row
+    // from the left, the last one leaning; on a shelf with room to spare the last two lie in a stack, then a basket.
+    // The books are one shape; hovering one says its name (userData.titles, twelve triangles a book).
+    const shelves = (content.bookshelf?.shelves || []).slice(0, 3), all = shelves.flatMap(sh => sh.books || []);
+    if (!all.length) return g;
+    const atlas = bookAtlas(all), parts = [], titles = [];
     const put = (t, h, d, x, y, z, rz = 0, ry = 0) => {
-      const geo = bookGeometry(slot++ % BOOK_SLOTS, t, h, d);
+      const geo = atlas.geometry(parts.length, t, h, d);
       geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, ry, rz)).setPosition(x, y, z));
-      parts.push(geo);
+      titles.push(all[parts.length].join(' · ')); parts.push(geo);
     };
     const depth = h => clamp(h * 0.72, 0.14, 0.22), zOf = d => 0.145 - d / 2 - rand() * 0.008;   // spines near the front
-    const row = (top, x, sizes) => {
-      for (const [h, t] of sizes) { const d = depth(h); put(t, h, d, x + t / 2, top + h / 2, zOf(d)); x += t + 0.002; }
-      return x;
-    };
-    const lean = (top, x, h, t, a) => {                                  // against the last book, its foot out a little
-      const d = depth(h);
-      put(t, h, d, x + (t / 2) * Math.cos(a) + (h / 2) * Math.sin(a), top + (t / 2) * Math.sin(a) + (h / 2) * Math.cos(a), zOf(d), a);
-    };
-    const stack = (top, x, sizes) => {
-      for (const [h, t] of sizes) { const d = depth(h); put(t, h, d, x + (rand() - 0.5) * 0.012, top + t / 2, zOf(d), Math.PI / 2, (rand() - 0.5) * 0.08); top += t; }
-    };
-    row(0.065, -0.4, [[0.3, 0.042], [0.28, 0.03], [0.31, 0.05], [0.27, 0.024], [0.29, 0.036], [0.25, 0.02], [0.3, 0.045], [0.27, 0.03], [0.26, 0.04], [0.29, 0.026], [0.28, 0.034]]);
-    stack(0.065, 0.2, [[0.26, 0.045], [0.24, 0.035], [0.22, 0.04]]);
-    lean(0.565, row(0.565, -0.4, [[0.24, 0.03], [0.22, 0.045], [0.25, 0.028], [0.23, 0.035], [0.21, 0.022], [0.24, 0.04], [0.22, 0.03]]), 0.23, 0.03, 0.22);
-    stack(0.565, 0.24, [[0.2, 0.03], [0.18, 0.04]]);
-    row(1.035, 0.12, [[0.22, 0.03], [0.2, 0.04], [0.23, 0.025], [0.21, 0.035], [0.19, 0.05], [0.22, 0.03]]);
-    stack(1.035, -0.22, [[0.24, 0.04], [0.22, 0.03]]);
-    const books = new THREE.Mesh(mergeGeometries(parts), std('#ffffff', { map: bookSheet, roughness: 0.75 }));
-    books.castShadow = true; books.receiveShadow = true; g.add(books);
+    shelves.forEach((shelf, i) => {
+      const top = [1.035, 0.565, 0.065][i], books = (shelf.books || []).map(([code, title]) => {
+        const h = /^LA/.test(code) ? 0.215 + rand() * 0.02 : 0.245 + rand() * 0.055;   // the language courses: slim workbooks
+        return [h, clamp(0.024 + title.length * 0.00045 + rand() * 0.008, 0.024, 0.05)];
+      });
+      const total = books.reduce((sum, [, t]) => sum + t + 0.002, 0), spare = 0.8 - total;
+      const stack = spare > 0.45 && books.length > 3 ? books.splice(-2) : [];
+      let x = -0.395;
+      books.forEach(([h, t], k) => {
+        const d = depth(h);
+        if (k === books.length - 1 && !stack.length && spare > 0.12) {    // the last one leans on its neighbour
+          const a = 0.2;
+          put(t, h, d, x + (t / 2) * Math.cos(a) + (h / 2) * Math.sin(a), top + (t / 2) * Math.sin(a) + (h / 2) * Math.cos(a), zOf(d), a);
+        } else { put(t, h, d, x + t / 2, top + h / 2, zOf(d)); x += t + 0.002; }
+      });
+      if (stack.length) {
+        const cx = x + 0.03 + Math.max(...stack.map(([h]) => h)) / 2;
+        let y = top;
+        for (const [h, t] of stack) { const d = depth(h); put(t, h, d, cx + (rand() - 0.5) * 0.012, y + t / 2, zOf(d), Math.PI / 2, (rand() - 0.5) * 0.08); y += t; }
+        if (0.395 - (cx + 0.16) > 0.24) {                                     // a woven basket in the space left
+          const bx = 0.395 - 0.13;
+          g.add(box(0.26, 0.2, 0.27, cloth('#9b8a72', 6, 4), bx, top + 0.1, -0.005), box(0.24, 0.004, 0.25, std('#4a3f33'), bx, top + 0.199, -0.005));
+        }
+      }
+      const label = canvasTexture(256, 64, (ctx, w, h) => {                  // a label-maker strip on the shelf's edge
+        ctx.fillStyle = '#1d1d1f'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#f2f0ea'; ctx.font = `700 34px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText((shelf.label || '').toUpperCase(), w / 2, h / 2 + 1);
+      }, { fonts: true });
+      const tape = new THREE.Mesh(new THREE.PlaneGeometry(0.08, 0.02), std('#ffffff', { map: label, roughness: 0.5 }));
+      tape.position.set(-0.3, top - 0.015, 0.1606); g.add(tape);
+    });
+    const books = new THREE.Mesh(mergeGeometries(parts), std('#ffffff', { map: atlas.tex, roughness: 0.75 }));
+    books.castShadow = true; books.receiveShadow = true; books.userData.titles = titles; g.add(books);
     g.add(cyl(0.07, 0.06, 0.14, std('#d7c5b2', { roughness: 0.6 }), -0.25, 1.505 + 0.07, 0));   // a vase on top
     return g;
   },
@@ -1294,13 +1409,19 @@ addEventListener('keydown', e => {
 
 // ------------------------------------------------------------------ pointing at things, clicking, tapping
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-function groupAt(x, y) {
+function hitAt(x, y) {
   ndc.set((x / innerWidth) * 2 - 1, -(y / innerHeight) * 2 + 1);
   ray.setFromCamera(ndc, camera);
-  let o = ray.intersectObject(world, true)[0]?.object;          // the nearest thing, so walls hide what's behind them
+  return ray.intersectObject(world, true)[0] || null;          // the nearest thing, so walls hide what's behind them
+}
+function groupOf(hit) {
+  let o = hit?.object;
   while (o && !o.userData.entry) o = o.parent;
   return o || null;
 }
+const groupAt = (x, y) => groupOf(hitAt(x, y));
+// What the pointer says: a book its own name (the shelf's books are one shape, twelve triangles a book), else the thing's.
+const tipOf = (hit, g) => hit?.object.userData.titles?.[Math.floor(hit.faceIndex / 12)] ?? (g ? labelOf(g) : '');
 function labelOf(g) {
   const { label, opens, tip } = g.userData.entry, f = folders[opens];
   if (!opens) return tip || label || '';
@@ -1313,18 +1434,18 @@ function showTip(text, x, y) {
   tip.style.left = `${x}px`; tip.style.top = `${y}px`;
 }
 function hover(e) {
-  const g = mode === 'room' ? groupAt(e.clientX, e.clientY) : null;
+  const hit = mode === 'room' ? hitAt(e.clientX, e.clientY) : null, g = groupOf(hit);
   hovered = g;
   canvas.style.cursor = g?.userData.entry.opens ? 'pointer' : 'grab';
-  showTip(g ? labelOf(g) : '', e.clientX, e.clientY);
+  showTip(tipOf(hit, g), e.clientX, e.clientY);
 }
 function tap(e, type) {
   if (mode !== 'room') return;
-  const g = groupAt(e.clientX, e.clientY);
+  const hit = hitAt(e.clientX, e.clientY), g = groupOf(hit);
   if (!g) { hideSheet(); if (isOn('win')) closeWin(); return; }
-  if (!g.userData.entry.opens) {                               // something that only has a tip, like the mug
+  if (!g.userData.entry.opens) {                               // something that only has a tip, like the mug or a book
     if (type !== 'mouse') {
-      showTip(labelOf(g), Math.max(12, e.clientX - 120), e.clientY - 70);
+      showTip(tipOf(hit, g), Math.max(12, e.clientX - 120), e.clientY - 70);
       clearTimeout(tipTimer); tipTimer = setTimeout(() => $('tip').classList.remove('on'), 2500);
     }
     return;
