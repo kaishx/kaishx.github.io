@@ -1,5 +1,5 @@
 {
-  "_help": "The folders on the computer's desktop; the things in the room open them too (see 'opens' in objects.json). Edit the words here. Each item shows as a row: title, meta (dates / where), text, link, image (a file in assets/). 'desktop': true puts the folder on the desktop. 'layout': 'gallery' shows the items as polaroids (title = the caption, thumb = the square picture, image = the full photo); the corkboard in the room pins the Photos folder's first 7.",
+  "_help": "The folders on the computer's desktop; the things in the room open them too (see 'opens' in objects.json). Edit the words here. Each item shows as a row: title, meta (dates / where), text (a paragraph, or a list [\"...\", \"...\"] shown as bullet points), link, image (a file in assets/). 'desktop': true puts the folder on the desktop. 'layout': 'gallery' shows the items as polaroids (title = the caption, thumb = the square picture, image = the full photo); the corkboard in the room pins the Photos folder's first 7.",
   "cvs": [{ "name": "CV (hybrid)", "file": "assets/cv_hybrid.pdf" }, { "name": "CV (quant)", "file": "assets/cv_quant.pdf" }],
   "bookshelf": {
     "_help": "The books on the bookshelf in the room: a shelf per year, top shelf first; each book a course from the degree plan, [code, full name as on NUSMods]. Hovering a book shows its name.",
@@ -51,14 +51,31 @@
       "title": "Experience",
       "items": [
         { "title": "Quantitative Research Intern · Genk Capital", "meta": "Feb – May 2026 · Singapore",
-          "text": "Derived a microstructure signal for price-level collapses in large-tick assets: a consistent 19-point lift in collapse persistence across every flow regime (40% to 59% in the tradable regime), over 106 days of Level-2 data. Survival analysis on 605K order-book updates put the median time-to-collapse at 97 ms, usable in real time. Modelled passive entries as three outcomes (fill, adverse selection, flat): positive expected value at every queue position after fees." },
+          "text": [
+            "Derived a microstructure signal for price-level collapses in large-tick assets, over 106 days of Level-2 data",
+            "A consistent 19-point lift in collapse persistence across every flow regime (40% to 59% in the tradable regime)",
+            "Survival analysis on 605K order-book updates: median time-to-collapse of 97 ms, usable in real time",
+            "Modelled passive entries as three outcomes (fill, adverse selection, flat): positive expected value at every queue position after fees"
+          ] },
         { "title": "Air Force Electro-Armament Technician · RSAF", "meta": "2024 – 2026 · full-time National Service", "image": "assets/photos/rsaf.jpg",
-          "text": "Munitions and aircraft countermeasure maintenance; moved the depot's stock records onto Excel with macros; led a team of armament technicians as a 3rd Sergeant. SAF National Serviceman of the Year (2026)." },
+          "text": [
+            "Munitions and aircraft countermeasure maintenance",
+            "Moved the depot's stock records onto Excel with macros",
+            "Led a team of armament technicians as a 3rd Sergeant",
+            "SAF National Serviceman of the Year (2026)"
+          ] },
         { "title": "Landscape Architecture Intern · Grant Associates", "meta": "May – Jun 2023",
           "text": "Research support for a coral reef enclosure design project." },
         { "title": "Leadership", "meta": "NUS High",
-          "text": "Regimental Sergeant-Major and Planning & Training Exco for the 2023 school NDP (200+ marchers); NCC (Land) Unit Master Sergeant and Vice-President (2021 – 2022); SHINE volunteer (2023)." },
-        { "title": "Part-time", "meta": "2022 – 2023", "text": "Cold Storage (supermarket assistant), LF Logistics (production operator)." }
+          "text": [
+            "Regimental Sergeant-Major and Planning & Training Exco for the 2023 school NDP (200+ marchers)",
+            "NCC (Land) Unit Master Sergeant and Vice-President (2021 – 2022)",
+            "SHINE volunteer (2023)"
+          ] },
+        { "title": "Part-time", "meta": "2022 – 2023", "text": [
+            "Cold Storage (supermarket assistant)",
+            "LF Logistics (production operator)"
+          ] }
       ]
     },
     {
@@ -66,19 +83,40 @@
       "title": "Technical projects",
       "items": [
         { "title": "Live trading systems", "meta": "Python · Linux · VPS",
-          "text": "Market-making strategies tested across crypto and US equity perpetuals, with state reconciliation, state tracking, data-staleness guards and circuit breakers, on a real-time multi-venue feed covering 330+ instruments." },
+          "text": [
+            "Market-making strategies tested across crypto and US equity perpetuals",
+            "State reconciliation, state tracking, data-staleness guards and circuit breakers",
+            "A real-time multi-venue feed covering 330+ instruments"
+          ] },
         { "title": "Walk-forward analysis for pairs trading", "meta": "Python · Numba", "image": "assets/wfa.png",
-          "text": "A Numba-accelerated walk-forward engine that picks stable, mean-reverting pairs with a Kalman filter, z-score signals and ADF / Hurst checks.",
+          "text": [
+            "A Numba-accelerated walk-forward engine that picks stable, mean-reverting pairs",
+            "Kalman filter, z-score signals and ADF / Hurst checks"
+          ],
           "link": "https://github.com/kaishx/wfa" },
         { "title": "Pairs trading paper engine", "meta": "Python · Alpaca · Telegram", "image": "assets/papertrader.png",
-          "text": "Watches 20+ equity and ETF pairs for mean reversion and trades them through Alpaca's paper trading API, posting results to Telegram.",
+          "text": [
+            "Watches 20+ equity and ETF pairs for mean reversion",
+            "Trades them through Alpaca's paper trading API",
+            "Posts results to Telegram"
+          ],
           "link": "https://github.com/kaishx/paper_trader" },
         { "title": "Market microstructure research", "meta": "Order books · 15+ venues",
-          "text": "Screened perpetuals by spread, order-flow imbalance and lead-lag to separate market-making opportunity from adverse selection; backtests with plateau and single-trade-dominance checks." },
+          "text": [
+            "Screened perpetuals by spread, order-flow imbalance and lead-lag to separate market-making opportunity from adverse selection",
+            "Backtests with plateau and single-trade-dominance checks"
+          ] },
         { "title": "Autonomous robot", "meta": "NUS · EG1311 Design and Make", "image": "assets/photos/robot.jpg",
-          "text": "Team build of an Arduino-controlled autonomous robot. I designed the chassis and catapult mechanism and contributed to the electronics." },
+          "text": [
+            "Team build of an Arduino-controlled autonomous robot",
+            "I designed the chassis and catapult mechanism",
+            "Contributed to the electronics"
+          ] },
         { "title": "Peptide nanomaterials research", "meta": "NUS High · NUS · 2022 – 2023",
-          "text": "Tested whether amino acids could co-crystallise with the FF dipeptide to change its self-assembly, screening computationally (HSP, ΔpKa, Mercury) and checking with SEM." },
+          "text": [
+            "Tested whether amino acids could co-crystallise with the FF dipeptide to change its self-assembly",
+            "Screened computationally (HSP, ΔpKa, Mercury) and checked with SEM"
+          ] },
         { "title": "Scrabble word trainer", "meta": "JavaScript", "image": "assets/scrabble.png",
           "text": "A fast trainer for recognising valid words.", "link": "https://kaishx.github.io/scrabbletrainer/" }
       ]
@@ -88,9 +126,15 @@
       "title": "Other projects",
       "items": [
         { "title": "A social deduction card game", "meta": "Design · 200+ cards", "image": "assets/cards.jpeg",
-          "text": "An original game, from rules to 200+ printed cards, balanced over 20+ playtests." },
+          "text": [
+            "An original game, from rules to 200+ printed cards",
+            "Balanced over 20+ playtests"
+          ] },
         { "title": "Manga database", "meta": "Google Sheets · 1,000+ titles", "image": "assets/manga_database.png",
-          "text": "1,000+ titles tracked with scores, with reports on score distribution, genres and status." }
+          "text": [
+            "1,000+ titles tracked with scores",
+            "Reports on score distribution, genres and status"
+          ] }
       ]
     },
     {
@@ -109,9 +153,19 @@
       "title": "Education",
       "items": [
         { "title": "National University of Singapore", "meta": "2026 – 2029",
-          "text": "B.Eng. Mechanical Engineering, Second Major in Computing (accelerated three-year programme). CDE Engineering Scholars Programme: full-ride, non-bonded." },
+          "text": [
+            "B.Eng. Mechanical Engineering, Second Major in Computing",
+            "Accelerated three-year programme",
+            "CDE Engineering Scholars Programme: full-ride, non-bonded"
+          ] },
         { "title": "NUS High School of Mathematics and Science", "meta": "2018 – 2023",
-          "text": "NUS High Diploma (High Distinction), overall CAP 4.5. Major CAP: Mathematics 4.9, Chemistry 4.9, Physics 4.6." }
+          "text": [
+            "NUS High Diploma (High Distinction)",
+            "Overall CAP 4.5",
+            "Mathematics major: CAP 4.9",
+            "Chemistry major: CAP 4.9",
+            "Physics major: CAP 4.6"
+          ] }
       ]
     },
     {
@@ -132,7 +186,10 @@
       "items": [
         { "title": "Bouldering", "meta": "V7", "image": "assets/photos/bouldering.jpg" },
         { "title": "Trackmania", "meta": "SG top 1 · Asia top 1% at peak", "image": "assets/TM.png",
-          "text": "10+ published maps, recognised by the community for design, which led to an offer of a commissioned map-building role." },
+          "text": [
+            "10+ published maps, recognised by the community for design",
+            "Led to an offer of a commissioned map-building role"
+          ] },
         { "title": "Motorcycles", "image": "assets/photos/r15.jpg" },
         { "title": "Valorant", "meta": "Top 0.8% at peak" },
         { "title": "Also", "text": "Mixology, manga, Scrabble." }

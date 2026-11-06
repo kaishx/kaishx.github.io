@@ -207,9 +207,9 @@ const FZ = FRONT - T / 2;
 
 const floorMat = std('#7d5d45', { roughness: 0.75 });
 floorMat.userData.tile = 1.6;                                    // the photo covers 1.6 m of floor
-photo(floorMat, 'map', 'wood_floor_diff_1k.jpg', [1, 1], '#e8ddd0');
-photo(floorMat, 'normalMap', 'wood_floor_nor_gl_1k.jpg');
-photo(floorMat, 'roughnessMap', 'wood_floor_arm_1k.jpg');
+// The wood (floor and furniture) is a small, softened copy of the photo, colour only: closer to the flat colours of the
+// rest of the room (owner, 2026-11-06: the 1k photos with bumps and shine stood out).
+photo(floorMat, 'map', 'wood_floor_diff_256.jpg', [1, 1], '#e8ddd0');
 // Painted walls and ceiling: smooth emulsion paint, as in a real flat (owner, 2026-11-06: the photo plaster looked like
 // stained concrete). A picture drawn once, nearly white so the colour is the paint's: a faint, wide unevenness (roller
 // marks, light bouncing off the floor) and a fine grain.
@@ -264,19 +264,55 @@ const cloth = (colour, across = 1, down = 1, extra = {}) => {
 const woodMat = (tint = '#b9997e') => {
   const m = std('#8a6a50', { roughness: 0.55 });
   Object.assign(m.userData, { tile: 1.0, grain: true });          // 1 m of veneer per copy, grain along each board
-  return photo(m, 'map', 'oak_veneer_01_diff_1k.jpg', [1, 1], tint);
+  return photo(m, 'map', 'oak_veneer_01_diff_256.jpg', [1, 1], tint);
 };
 
 const wallMat = paint('#e6dfd3');                                          // warm off-white
+const ceilingMat = paint('#f0ede7');                                       // plain white
+// The walls cast shadows from their outer face (three.js uses the inner one by default): where two walls meet, a point
+// on one sat right against the other's shadow-casting face, inside the bias, and a thin line of light leaked down the
+// corner (owner, 2026-11-06).
+wallMat.shadowSide = ceilingMat.shadowSide = THREE.FrontSide;
 const trimMat = std('#ebe4d8', { roughness: 0.6 });
 world.add(box(FULL, 0.1, LEN, floorMat, 0, -0.05, MIDZ));
-world.add(box(FULL, T, LEN, paint('#f0ede7'), 0, H + T / 2, MIDZ));        // the ceiling, plain white
+world.add(box(FULL, T, LEN, ceilingMat, 0, H + T / 2, MIDZ));
 world.add(box(T, H, LEN, wallMat, W + T / 2, H / 2, MIDZ), box(T, H, LEN, wallMat, -W - T / 2, H / 2, MIDZ));
 world.add(box(FULL, H, T, wallMat, 0, H / 2, BACK + T / 2));
 // the wall in front of you, built around the window
 world.add(box(FULL, WIN.y0, T, wallMat, 0, WIN.y0 / 2, FZ), box(FULL, H - WIN.y1, T, wallMat, 0, (H + WIN.y1) / 2, FZ));
 world.add(box(WIN.x0 + W + T, WIN.y1 - WIN.y0, T, wallMat, (WIN.x0 - W - T) / 2, (WIN.y0 + WIN.y1) / 2, FZ));
 world.add(box(W + T - WIN.x1, WIN.y1 - WIN.y0, T, wallMat, (WIN.x1 + W + T) / 2, (WIN.y0 + WIN.y1) / 2, FZ));
+// A soft shade into every corner and along the ceiling, as light falls off there in a real room: the corners read
+// clearly instead of the walls running into one another (owner, 2026-11-06). Strips of black, fading out, over the paint.
+{
+  const fade = canvasTexture(64, 4, (ctx, w, h) => {      // grey levels: an alpha map reads the green channel
+    const g = ctx.createLinearGradient(0, 0, w, 0);
+    for (let i = 0; i <= 8; i++) { const v = Math.round(255 * (1 - i / 8) ** 2); g.addColorStop(i / 8, `rgb(${v},${v},${v})`); }
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  });
+  fade.colorSpace = THREE.NoColorSpace;
+  const strip = (strength, a, b, away) => {               // dark along the edge a-b, faded out by the time it has moved `away`
+    const [A, B, V] = [a, b, away].map(v => new THREE.Vector3(...v)), geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute([A, B, A.clone().add(V), B.clone().add(V)].flatMap(v => v.toArray()), 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 0, 1, 1, 0, 1, 1], 2));
+    geo.setIndex([0, 2, 1, 2, 3, 1]);
+    world.add(noShadow(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x000000, alphaMap: fade, transparent: true, opacity: strength,
+      depthWrite: false, side: THREE.DoubleSide }))));
+  };
+  const e = 0.003, CW = 0.32, TOP = 0.25;                   // just off the paint; how far each shade reaches
+  for (const sx of [-1, 1]) for (const [z, dz] of [[FRONT, 1], [BACK, -1]]) {        // the four upright corners, both walls
+    strip(0.2, [sx * (W - e), 0, z], [sx * (W - e), H, z], [0, 0, dz * CW]);
+    strip(0.2, [sx * W, 0, z + dz * e], [sx * W, H, z + dz * e], [-sx * CW, 0, 0]);
+  }
+  for (const [z, dz] of [[FRONT, 1], [BACK, -1]]) {                                 // where the walls meet the ceiling
+    strip(0.13, [-W, H, z + dz * e], [W, H, z + dz * e], [0, -TOP, 0]);
+    strip(0.13, [-W, H - e, z], [W, H - e, z], [0, 0, dz * TOP]);
+  }
+  for (const sx of [-1, 1]) {
+    strip(0.13, [sx * (W - e), H, FRONT], [sx * (W - e), H, BACK], [0, -TOP, 0]);
+    strip(0.13, [sx * W, H - e, FRONT], [sx * W, H - e, BACK], [-sx * TOP, 0, 0]);
+  }
+}
 // skirting boards
 world.add(box(2 * W, 0.08, 0.015, trimMat, 0, 0.04, FRONT + 0.0075));
 world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0.015, 0.08, BACK - FRONT, trimMat, -W + 0.0075, 0.04, MIDZ));
@@ -350,25 +386,32 @@ world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0
   world.add(box(0.09, 0.09, 0.01, white, -0.3, 0.3, FRONT + 0.005), box(0.04, 0.055, 0.03, white, -0.3, 0.3, FRONT + 0.025));
   cable([[-0.08, 0.0175, -0.955], [-0.14, 0.012, -0.965], [-0.24, 0.02, F - 0.004], [-0.29, 0.1, F - 0.004], [-0.3, 0.2, FRONT + 0.03], [-0.3, 0.272, FRONT + 0.025]], '#ecebe7');
 }
-// string lights along the top of the front wall. They only glow (and bloom): the one light that stood in for them lit
-// a single patch of wall and ceiling, a glow from nowhere (owner, 2026-11-06).
+// String lights all the way round the room, just under the ceiling (owner, 2026-11-06): hooks about every 1.1 m, a
+// little slack between them, round each corner. They only glow (and bloom): the one light that stood in for them lit a
+// single patch of wall and ceiling, a glow from nowhere (owner, 2026-11-06).
 const fairyMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.6, 0.85) });
 {
-  const anchors = [[-2.15, 2.44], [-0.95, 2.47], [0.35, 2.44], [1.45, 2.47], [2.15, 2.44]], pts = [];
-  for (let i = 0; i < anchors.length - 1; i++) {
-    const [x0, y0] = anchors[i], [x1, y1] = anchors[i + 1];
-    for (let s = 0; s < 14; s++) {
-      const u = s / 14;
-      pts.push(new THREE.Vector3(x0 + (x1 - x0) * u, y0 + (y1 - y0) * u - Math.sin(u * Math.PI) * 0.15, FRONT + 0.03));
+  const x0 = -W + 0.03, x1 = W - 0.03, z0 = FRONT + 0.03, z1 = BACK - 0.03, corners = [[x0, z0], [x1, z0], [x1, z1], [x0, z1], [x0, z0]];
+  const pts = [], hookY = h => (h % 2 ? 2.47 : 2.44);
+  let hook = 0;
+  for (let c = 0; c < 4; c++) {
+    const [ax, az] = corners[c], [bx, bz] = corners[c + 1], len = Math.hypot(bx - ax, bz - az), spans = Math.round(len / 1.1);
+    for (let k = 0; k < spans; k++, hook++) {
+      const y0 = hookY(hook), y1 = hookY(hook + 1), sag = 0.12 * (len / spans);
+      for (let s = 0; s < 14; s++) {
+        const u = s / 14, along = (k + u) / spans;
+        pts.push(new THREE.Vector3(ax + (bx - ax) * along, y0 + (y1 - y0) * u - Math.sin(u * Math.PI) * sag, az + (bz - az) * along));
+      }
     }
   }
-  pts.push(new THREE.Vector3(anchors.at(-1)[0], anchors.at(-1)[1], FRONT + 0.03));
-  const curve = new THREE.CatmullRomCurve3(pts);
-  world.add(noShadow(new THREE.Mesh(new THREE.TubeGeometry(curve, 200, 0.003, 4), std('#2b2a2e'))));
-  const bulbs = new THREE.InstancedMesh(new THREE.SphereGeometry(0.014, 10, 8), fairyMat, 40);
+  const curve = new THREE.CatmullRomCurve3(pts, true);
+  world.add(noShadow(new THREE.Mesh(new THREE.TubeGeometry(curve, 900, 0.003, 4, true), std('#2b2a2e'))));
+  const bulbs = new THREE.InstancedMesh(new THREE.SphereGeometry(0.014, 10, 8), fairyMat, Math.round(curve.getLength() / 0.11));
   const dummy = new THREE.Object3D();
   for (let i = 0; i < bulbs.count; i++) {
-    dummy.position.copy(curve.getPointAt((i + 0.5) / bulbs.count)).add(new THREE.Vector3(0, -0.014, 0.008));
+    const p = curve.getPointAt((i + 0.5) / bulbs.count);
+    const [, ox, oz] = [[p.x - x0, 1, 0], [x1 - p.x, -1, 0], [p.z - z0, 0, 1], [z1 - p.z, 0, -1]].sort((a, b) => a[0] - b[0])[0];   // off the nearest wall
+    dummy.position.set(p.x + ox * 0.008, p.y - 0.014, p.z + oz * 0.008);
     dummy.updateMatrix(); bulbs.setMatrixAt(i, dummy.matrix);
   }
   bulbs.raycast = () => {};
@@ -1104,12 +1147,11 @@ const PLACEHOLDERS = {
   },
   corkboard(o) {                         // a cork pinboard: polaroids of the folder named in o.photos (content.json), pinned crooked
     const g = new THREE.Group(), BW = 0.62, BH = 0.46, f = 0.022, wood = woodMat('#c9ab8c');
-    const cork = std('#ffffff', { roughness: 1, map: canvasTexture(512, 380, (ctx, w, h) => {
+    const cork = std('#ffffff', { roughness: 1, map: canvasTexture(192, 142, (ctx, w, h) => {   // plain cork, a faint grain
       ctx.fillStyle = '#b88a5c'; ctx.fillRect(0, 0, w, h);
-      for (let i = 0; i < 9000; i++) {
-        const r = rand();
-        ctx.fillStyle = r < 0.45 ? 'rgba(90,55,25,0.35)' : r < 0.8 ? 'rgba(225,180,130,0.35)' : 'rgba(60,35,15,0.4)';
-        ctx.fillRect(rand() * w, rand() * h, 1 + rand() * 2.2, 1 + rand() * 2.2);
+      for (let i = 0; i < 1400; i++) {
+        ctx.fillStyle = rand() < 0.55 ? 'rgba(90,55,25,0.16)' : 'rgba(225,180,130,0.16)';
+        ctx.fillRect(rand() * w, rand() * h, 1 + rand(), 1 + rand());
       }
     }) });
     g.add(box(BW, BH, 0.012, cork, 0, 0, 0.006));

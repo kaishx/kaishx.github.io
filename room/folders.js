@@ -13,7 +13,8 @@ export function linkLabel(url) {
   return /^https?:/.test(url) ? 'Open ↗' : 'Open →';
 }
 
-// The inside of a window: the title, an optional intro, then one row per item (title, meta, text, link, image), or
+// The inside of a window: the title, an optional intro, then one row per item (title, meta, text: a paragraph, or a
+// list of bullet points; link, image), or
 // for a gallery (f.layout === 'gallery') a grid of polaroids: the square thumb and the title as a handwritten caption.
 // The photos are only shown: nothing opens them (owner, 2026-11-06).
 export function folderNodes(f) {
@@ -34,7 +35,11 @@ export function folderNodes(f) {
     const body = el('div');
     body.append(el('h3', it.title));
     if (it.meta) body.append(el('div', it.meta, { className: 'meta' }));
-    if (it.text) body.append(el('p', it.text));
+    if (Array.isArray(it.text)) {                                  // a list: bullet points
+      const ul = el('ul', null, { className: 'points' });
+      for (const t of it.text) ul.append(el('li', t));
+      body.append(ul);
+    } else if (it.text) body.append(el('p', it.text));
     if (it.link) {
       const a = el('a', linkLabel(it.link), { className: 'go', href: it.link });
       if (/^https?:/.test(it.link)) { a.target = '_blank'; a.rel = 'noopener'; }
