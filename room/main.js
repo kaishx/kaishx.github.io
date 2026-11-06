@@ -1814,10 +1814,11 @@ renderer.setAnimationLoop(() => {
 const isNight = () => { const d = now(), h = d.getHours() + d.getMinutes() / 60; return h >= 18.75 || h < 6.75; };
 function showDayNight() {
   const night = isNight(), b = $('daynight');
+  if (!b) return;                                       // an older index.html still in the browser's cache (no button)
   b.classList.toggle('night', night);
   b.setAttribute('aria-label', night ? 'Switch to day' : 'Switch to night'); b.title = b.getAttribute('aria-label');
 }
-$('daynight').addEventListener('click', () => {
+$('daynight')?.addEventListener('click', () => {
   const toNight = !isNight();
   fixedHour = toNight ? 21.5 : 14;
   lastMinute = -1; applyTime(); tick(); showDayNight();
