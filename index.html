@@ -119,25 +119,21 @@ canvas { display: block; outline: none; touch-action: none; }
 .sheet button { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(23,30,25,.2); background: transparent; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: var(--navy); }
 .sheet button.go { background: var(--navy); color: var(--white); border-color: var(--navy); }
 
-/* ---------------------------------------------------------------- the door: the room or the text version, chosen before
-   anything 3D downloads (owner, 2026-11-06). Behind it, a picture of the room (the link preview). */
+/* ---------------------------------------------------------------- the door: the room or the text version (owner, 2026-11-06).
+   The room loads behind it meanwhile, so it's usually ready when picked. Behind it, a picture of the room (the link preview). */
 .door { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; padding: 24px; overflow-y: auto; isolation: isolate;
         background: var(--navy); transition: opacity .6s var(--ease); }
 .door::before { content: ""; position: fixed; inset: -24px; z-index: -1; filter: blur(4px);
                 background: linear-gradient(rgba(14,18,16,.5), rgba(14,18,16,.86)), url(assets/preview.jpg) center / cover; }
 .door.gone { opacity: 0; pointer-events: none; }
 .door-card { width: min(560px, 100%); text-align: center; }
-.door .display { margin: 0; font-size: clamp(48px, 10vw, 80px); }
-.door .lead { margin: 14px 0 28px; color: rgba(255,255,255,.85); font-size: 16px; }
+.door .lead { margin: 0 0 24px; color: rgba(255,255,255,.85); font-size: 16px; }
 .door-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.door-go { display: grid; gap: 4px; padding: 18px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.25); background: rgba(14,18,16,.35);
-           color: var(--white); font: inherit; text-align: center; text-decoration: none; cursor: pointer; backdrop-filter: blur(8px);
-           transition: background .2s, transform .25s var(--ease); }
-.door-go b { font-size: 16px; }
-.door-go small { font-size: 12.5px; color: rgba(255,255,255,.72); }
+.door-go { display: grid; place-items: center; padding: 20px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.25); background: rgba(14,18,16,.35);
+           color: var(--white); font: 600 16px/1.3 'Plus Jakarta Sans', system-ui, sans-serif; text-align: center; text-decoration: none; cursor: pointer;
+           backdrop-filter: blur(8px); transition: background .2s, transform .25s var(--ease); }
 .door-go:hover, .door-go:focus-visible { background: rgba(14,18,16,.55); transform: translateY(-2px); outline: none; }
 .door-go.main { background: var(--white); color: var(--navy); border-color: var(--white); }
-.door-go.main small { color: rgba(23,30,25,.65); }
 .door-go.main:hover, .door-go.main:focus-visible { background: #efebe4; }
 .door-cv { margin: 22px 0 0; font-size: 13px; color: rgba(255,255,255,.72); }
 .door-cv a { color: var(--white); }
@@ -235,15 +231,14 @@ canvas { display: block; outline: none; touch-action: none; }
   <div class="acts"><button type="button" id="sheet-cancel">Not now</button><button type="button" class="go" id="sheet-open">Open</button></div>
 </div>
 
-<!-- The door: pick the room or the text version. Nothing 3D downloads until "Step into my room" (the script below);
-     a deep link (index.html#projects, #computer, #room) or ?t= goes straight in. -->
+<!-- The door: the room or the text version. The room loads behind it while the visitor chooses (the scripts below);
+     a deep link (index.html#projects, #computer, #room) or ?t= skips it. -->
 <div class="door" id="door">
   <div class="door-card">
-    <h1 class="display">Chu Kai Le</h1>
-    <p class="lead">Mechanical Engineering and Computing at NUS.<br>Looking for engineering and quant internships, summer 2027 or 2028.</p>
+    <p class="lead">Looking for engineering and quant internships, summer 2027 or 2028.</p>
     <div class="door-acts">
-      <button type="button" class="door-go main" id="enter-room"><b>Step into my room</b><small>3D: look around, click things</small></button>
-      <a class="door-go" href="classic.html"><b>Text only</b><small>everything on one page, loads at once</small></a>
+      <button type="button" class="door-go main" id="enter-room">Step into my room</button>
+      <a class="door-go" href="classic.html">Text-only portfolio</a>
     </div>
     <p class="door-cv">Or just the CV: <a href="assets/cv_hybrid.pdf" download>hybrid ↓</a> · <a href="assets/cv_quant.pdf" download>quant ↓</a></p>
   </div>
@@ -253,15 +248,13 @@ canvas { display: block; outline: none; touch-action: none; }
 <div class="fallback" id="fallback"><div><div class="display" style="font-size:46px">No 3D here</div>
   <p>Your browser can't show the room. <a href="classic.html">Everything is on the text version →</a></p></div></div>
 
+<script type="module" src="room/main.js"></script>
 <script>
-(function () {
+/* if the 3D code never starts (blocked CDN, old browser), offer the text version (seen once the door is gone) */
+setTimeout(function () { if (!window.roomReady) document.getElementById('fallback').classList.add('on'); }, 15000);
+(function () {   /* lifting the door: main.js hears 'room-enter' (or reads roomEntered if it starts later) */
   var door = document.getElementById('door'), q = new URLSearchParams(location.search);
-  function enter() {
-    door.classList.add('gone');
-    var s = document.createElement('script'); s.type = 'module'; s.src = 'room/main.js'; document.body.appendChild(s);
-    /* if the 3D code never starts (blocked CDN, old browser), offer the text version */
-    setTimeout(function () { if (!window.roomReady) document.getElementById('fallback').classList.add('on'); }, 15000);
-  }
+  function enter() { door.classList.add('gone'); window.roomEntered = true; dispatchEvent(new Event('room-enter')); }
   if (location.hash || q.has('t')) return enter();
   document.getElementById('enter-room').addEventListener('click', function () {
     history.replaceState(null, '', '#room');            /* a refresh goes straight back in */

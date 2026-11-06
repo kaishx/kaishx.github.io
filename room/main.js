@@ -1729,6 +1729,10 @@ function draw() {
 
 // ------------------------------------------------------------------ every frame (drawing only when something changed); the clocks; resizing
 const timer = new THREE.Clock();
+// Behind the door (index.html) the room loads and is drawn, so it's ready when picked; the "click me" glow waits, and
+// its 20 seconds start when the visitor walks in.
+let entered = !!window.roomEntered;
+addEventListener('room-enter', () => { entered = true; timer.start(); invalidate(); });
 renderer.setAnimationLoop(() => {
   const dt = Math.min(timer.getDelta(), 0.1), t = timer.elapsedTime;
   const lim = yawLimit();
@@ -1744,7 +1748,7 @@ renderer.setAnimationLoop(() => {
     dirty = true;
   }
   // clickable things glow three times to show they're there, then stop (each glow redraws the room for a second or so)
-  const pulse = opened || STILL || t > 20 ? 0 : Math.pow(Math.max(0, Math.sin(t * 0.95 - 1)), 8) * 0.1;
+  const pulse = opened || STILL || !entered || t > 20 ? 0 : Math.pow(Math.max(0, Math.sin(t * 0.95 - 1)), 8) * 0.1;
   for (const g of interactive) setGlow(g, g === hovered || g === pending ? 0.16 : g.userData.entry.opens ? pulse : 0);
   if (!dirty) return;
   dirty = false;

@@ -263,6 +263,16 @@ export function createOutside(scene, { touch = false } = {}) {
     const at = mbsAt(off);
     towers.push({ ...at, w: 52, d: 30, h: 194, turn: at.az - axis, tint: '#e9edf0' });
   }
+  // No two towers inside each other: where they were, their windows flickered against each other (owner, 2026-11-06,
+  // the tall one by Marina Bay Sands). Each office tower, in turn, steps back until it is clear of Marina Bay Sands and
+  // of the towers already placed (footprints as circles, in drawn space).
+  const spot = b => { const r = b.r ?? drawn(b.D), k = r / b.D; return [Math.sin(b.az) * r, -Math.cos(b.az) * r, 0.5 * Math.hypot(b.w, b.d) * k]; };
+  const placed = towers.slice(17);
+  for (const b of towers.slice(0, 17)) {
+    const hits = () => { const [x, z, rad] = spot(b); return placed.some(o => { const [ox, oz, orad] = spot(o); return Math.hypot(x - ox, z - oz) < rad + orad; }); };
+    while (hits()) b.D += 120;
+    placed.push(b);
+  }
   const glassMat = facadeMaterial(glassFacade(256, 512), GLASS_TILE, '#7d8790');
   group.add(instanced(towers, glassMat));
   // The SkyPark across the top, overhanging the north tower, lit along its edge at night
