@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chu Kai Le</title>
 <meta name="description" content="Chu Kai Le: Mechanical Engineering and Computing at NUS (CDE Engineering Scholar). Step into the room: projects, experience, skills and the CV are on the computer.">
-<!-- the card LinkedIn, Telegram, WhatsApp etc. show when the link is shared (assets/preview.jpg: the room at 8:30 pm) -->
+<!-- the card LinkedIn, Telegram, WhatsApp etc. show when the link is shared (assets/preview.jpg: the room at 8:30 pm; after
+     replacing the picture, raise ?v= so they fetch the new one instead of their cached copy) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Chu Kai Le">
 <meta property="og:description" content="Mechanical Engineering and Computing at NUS. Step into my room: projects, experience and CV are on the computer.">
 <meta property="og:url" content="https://kaishx.github.io/">
-<meta property="og:image" content="https://kaishx.github.io/assets/preview.jpg">
+<meta property="og:image" content="https://kaishx.github.io/assets/preview.jpg?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A cosy desk at night: a computer saying Hi, I'm Kai Le, a lamp, and the Singapore skyline through the window">
+<meta property="og:image:alt" content="A cosy desk at night under string lights: a computer saying Hi, I'm Kai Le, a lamp, and the Singapore skyline through the window">
 <meta name="twitter:card" content="summary_large_image">
 <!-- ?v=2: a new address, so browsers that cached the old site's icon fetch this one -->
 <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
@@ -118,6 +119,30 @@ canvas { display: block; outline: none; touch-action: none; }
 .sheet button { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(23,30,25,.2); background: transparent; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: var(--navy); }
 .sheet button.go { background: var(--navy); color: var(--white); border-color: var(--navy); }
 
+/* ---------------------------------------------------------------- the door: the room or the text version, chosen before
+   anything 3D downloads (owner, 2026-11-06). Behind it, a picture of the room (the link preview). */
+.door { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; padding: 24px; overflow-y: auto; isolation: isolate;
+        background: var(--navy); transition: opacity .6s var(--ease); }
+.door::before { content: ""; position: fixed; inset: -24px; z-index: -1; filter: blur(4px);
+                background: linear-gradient(rgba(14,18,16,.5), rgba(14,18,16,.86)), url(assets/preview.jpg) center / cover; }
+.door.gone { opacity: 0; pointer-events: none; }
+.door-card { width: min(560px, 100%); text-align: center; }
+.door .display { margin: 0; font-size: clamp(48px, 10vw, 80px); }
+.door .lead { margin: 14px 0 28px; color: rgba(255,255,255,.85); font-size: 16px; }
+.door-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.door-go { display: grid; gap: 4px; padding: 18px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.25); background: rgba(14,18,16,.35);
+           color: var(--white); font: inherit; text-align: center; text-decoration: none; cursor: pointer; backdrop-filter: blur(8px);
+           transition: background .2s, transform .25s var(--ease); }
+.door-go b { font-size: 16px; }
+.door-go small { font-size: 12.5px; color: rgba(255,255,255,.72); }
+.door-go:hover, .door-go:focus-visible { background: rgba(14,18,16,.55); transform: translateY(-2px); outline: none; }
+.door-go.main { background: var(--white); color: var(--navy); border-color: var(--white); }
+.door-go.main small { color: rgba(23,30,25,.65); }
+.door-go.main:hover, .door-go.main:focus-visible { background: #efebe4; }
+.door-cv { margin: 22px 0 0; font-size: 13px; color: rgba(255,255,255,.72); }
+.door-cv a { color: var(--white); }
+@media (max-width: 520px) { .door-acts { grid-template-columns: 1fr; } }
+
 /* ---------------------------------------------------------------- loading, no WebGL */
 .loading { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; background: var(--navy); transition: opacity .8s var(--ease); }
 .loading.done { opacity: 0; pointer-events: none; }
@@ -210,13 +235,41 @@ canvas { display: block; outline: none; touch-action: none; }
   <div class="acts"><button type="button" id="sheet-cancel">Not now</button><button type="button" class="go" id="sheet-open">Open</button></div>
 </div>
 
+<!-- The door: pick the room or the text version. Nothing 3D downloads until "Step into my room" (the script below);
+     a deep link (index.html#projects, #computer, #room) or ?t= goes straight in. -->
+<div class="door" id="door">
+  <div class="door-card">
+    <h1 class="display">Chu Kai Le</h1>
+    <p class="lead">Mechanical Engineering and Computing at NUS.</p>
+    <div class="door-acts">
+      <button type="button" class="door-go main" id="enter-room"><b>Step into my room</b><small>3D: look around, click things</small></button>
+      <a class="door-go" href="classic.html"><b>Text only</b><small>everything on one page, loads at once</small></a>
+    </div>
+    <p class="door-cv">Or just the CV: <a href="assets/cv_hybrid.pdf" download>hybrid ↓</a> · <a href="assets/cv_quant.pdf" download>quant ↓</a></p>
+  </div>
+</div>
+
 <div class="loading" id="loading"><div><div class="display" style="font-size:38px">Walking in…</div><div class="barline"><i id="bar"></i></div></div></div>
 <div class="fallback" id="fallback"><div><div class="display" style="font-size:46px">No 3D here</div>
   <p>Your browser can't show the room. <a href="classic.html">Everything is on the text version →</a></p></div></div>
 
-<script type="module" src="room/main.js"></script>
-<script>/* if the 3D code never starts (blocked CDN, old browser), offer the text version */
-setTimeout(function () { if (!window.roomReady) document.getElementById('fallback').classList.add('on'); }, 15000);</script>
+<script>
+(function () {
+  var door = document.getElementById('door'), q = new URLSearchParams(location.search);
+  function enter() {
+    door.classList.add('gone');
+    var s = document.createElement('script'); s.type = 'module'; s.src = 'room/main.js'; document.body.appendChild(s);
+    /* if the 3D code never starts (blocked CDN, old browser), offer the text version */
+    setTimeout(function () { if (!window.roomReady) document.getElementById('fallback').classList.add('on'); }, 15000);
+  }
+  if (location.hash || q.has('t')) return enter();
+  document.getElementById('enter-room').addEventListener('click', function () {
+    history.replaceState(null, '', '#room');            /* a refresh goes straight back in */
+    if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'chose-room', title: 'Chose the 3D room', event: true });
+    enter();
+  });
+})();
+</script>
 <script data-goatcounter="https://ckaile.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

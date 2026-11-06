@@ -1,5 +1,5 @@
 {
-  "_help": "The folders on the computer's desktop; the things in the room open them too (see 'opens' in objects.json). Edit the words here. Each item shows as a row: title, meta (dates / where), text (a paragraph, or a list [\"...\", \"...\"] shown as bullet points), link, image (a file in assets/). 'desktop': true puts the folder on the desktop. 'layout': 'gallery' shows the items as polaroids (title = the caption, thumb = the square picture, image = the full photo); the corkboard in the room pins the Photos folder's first 7.",
+  "_help": "The folders on the computer's desktop; the things in the room open them too (see 'opens' in objects.json). Edit the words here. Each item shows as a row: title, meta (dates / where), text (a paragraph, or a list [\"...\", \"...\"] shown as bullet points), link, image (a file in assets/). 'logo': a small logo beside the title: a picture (e.g. assets/logos/nus.png, square, the school's or company's own) or a few letters shown on a badge (\"NUS\"). 'desktop': true puts the folder on the desktop. 'layout': 'gallery' shows the items as polaroids (title = the caption, thumb = the square picture, image = the full photo); the corkboard in the room pins the Photos folder's first 7.",
   "cvs": [{ "name": "CV (hybrid)", "file": "assets/cv_hybrid.pdf" }, { "name": "CV (quant)", "file": "assets/cv_quant.pdf" }],
   "bookshelf": {
     "_help": "The books on the bookshelf in the room: a shelf per year, top shelf first; each book a course from the degree plan, [code, full name as on NUSMods]. Hovering a book shows its name.",
@@ -50,23 +50,23 @@
       "id": "experience", "icon": "💼", "name": "Experience", "desktop": true,
       "title": "Experience",
       "items": [
-        { "title": "Quantitative Research Intern · Genk Capital", "meta": "Feb – May 2026 · Singapore",
+        { "title": "Quantitative Research Intern · Genk Capital", "meta": "Feb – May 2026 · Singapore", "logo": "GC",
           "text": [
             "Derived a microstructure signal for price-level collapses in large-tick assets, over 106 days of Level-2 data",
             "A consistent 19-point lift in collapse persistence across every flow regime (40% to 59% in the tradable regime)",
             "Survival analysis on 605K order-book updates: median time-to-collapse of 97 ms, usable in real time",
             "Modelled passive entries as three outcomes (fill, adverse selection, flat): positive expected value at every queue position after fees"
           ] },
-        { "title": "Air Force Electro-Armament Technician · RSAF", "meta": "2024 – 2026 · full-time National Service", "image": "assets/photos/rsaf.jpg",
+        { "title": "Air Force Electro-Armament Technician · RSAF", "meta": "2024 – 2026 · full-time National Service", "logo": "RSAF", "image": "assets/photos/rsaf.jpg",
           "text": [
             "Munitions and aircraft countermeasure maintenance",
             "Moved the depot's stock records onto Excel with macros",
             "Led a team of armament technicians as a 3rd Sergeant",
             "SAF National Serviceman of the Year (2026)"
           ] },
-        { "title": "Landscape Architecture Intern · Grant Associates", "meta": "May – Jun 2023",
+        { "title": "Landscape Architecture Intern · Grant Associates", "meta": "May – Jun 2023", "logo": "GA",
           "text": "Research support for a coral reef enclosure design project." },
-        { "title": "Leadership", "meta": "NUS High",
+        { "title": "Leadership", "meta": "NUS High", "logo": "NUSH",
           "text": [
             "Regimental Sergeant-Major and Planning & Training Exco for the 2023 school NDP (200+ marchers)",
             "NCC (Land) Unit Master Sergeant and Vice-President (2021 – 2022)",
@@ -152,13 +152,13 @@
       "id": "education", "icon": "🎓", "name": "Education", "desktop": true,
       "title": "Education",
       "items": [
-        { "title": "National University of Singapore", "meta": "2026 – 2029",
+        { "title": "National University of Singapore", "meta": "2026 – 2029", "logo": "NUS",
           "text": [
             "B.Eng. Mechanical Engineering, Second Major in Computing",
             "Accelerated three-year programme",
             "CDE Engineering Scholars Programme: full-ride, non-bonded"
           ] },
-        { "title": "NUS High School of Mathematics and Science", "meta": "2018 – 2023",
+        { "title": "NUS High School of Mathematics and Science", "meta": "2018 – 2023", "logo": "NUSH",
           "text": [
             "NUS High Diploma (High Distinction)",
             "Overall CAP 4.5",

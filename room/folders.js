@@ -13,8 +13,8 @@ export function linkLabel(url) {
   return /^https?:/.test(url) ? 'Open ↗' : 'Open →';
 }
 
-// The inside of a window: the title, an optional intro, then one row per item (title, meta, text: a paragraph, or a
-// list of bullet points; link, image), or
+// The inside of a window: the title, an optional intro, then one row per item (logo, title, meta, text: a paragraph,
+// or a list of bullet points; link, image), or
 // for a gallery (f.layout === 'gallery') a grid of polaroids: the square thumb and the title as a handwritten caption.
 // The photos are only shown: nothing opens them (owner, 2026-11-06).
 export function folderNodes(f) {
@@ -33,8 +33,16 @@ export function folderNodes(f) {
     const row = el('div', null, { className: it.image ? 'row has-img' : 'row' });
     if (it.image) row.append(el('img', null, { src: it.image, alt: '', loading: 'lazy', draggable: false }));
     const body = el('div');
-    body.append(el('h3', it.title));
-    if (it.meta) body.append(el('div', it.meta, { className: 'meta' }));
+    let head = body;
+    if (it.logo) {                                                 // a logo beside the title: a picture, or letters on a badge
+      head = el('div', null, { className: 'head' });
+      head.append(/\.(svg|png|jpe?g|webp)$/i.test(it.logo)
+        ? el('img', null, { className: 'logo', src: it.logo, alt: '', loading: 'lazy', draggable: false })
+        : el('span', it.logo, { className: 'logo', ariaHidden: 'true' }));
+      body.append(head);
+    }
+    head.append(el('h3', it.title));
+    if (it.meta) head.append(el('div', it.meta, { className: 'meta' }));
     if (Array.isArray(it.text)) {                                  // a list: bullet points
       const ul = el('ul', null, { className: 'points' });
       for (const t of it.text) ul.append(el('li', t));

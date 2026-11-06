@@ -927,11 +927,15 @@ function climbingShoe(upperColour) {   // a downturned climbing shoe: its side o
   rubber.quadraticCurveTo(0.25, -0.004, 0.225, 0.0);
   rubber.quadraticCurveTo(0.15, 0.03, 0.09, 0.018);
   rubber.quadraticCurveTo(0.04, 0.0, 0.0, 0.012);
-  g.add(extrude(upper, 0.056, 0.013, std(upperColour, { roughness: 0.75 })));
-  g.add(extrude(rubber, 0.062, 0.0135, std('#1b1a1b', { roughness: 0.95 })));
-  const strapMat = std('#2c3238', { roughness: 0.8 });
-  for (const [x, y, a] of [[0.1, 0.074, -0.05], [0.15, 0.068, -0.35]]) {      // two velcro straps over the instep
-    const s = box(0.018, 0.006, 0.092, strapMat, x, y, 0); s.rotation.z = a; g.add(s);
+  // rounded across like the bike's fairing: a narrow heel, a broad forefoot, a pointed toe, narrower towards the top
+  const across = (x, y) => (x < 0.17 ? 0.06 + 0.022 * smooth(0, 0.17, x) : 0.082 - 0.045 * smooth(0.17, 0.265, x)) * (1 - 0.3 * clamp(y / 0.09, 0, 1) ** 2);
+  g.add(sculpt(upper, across, std(upperColour, { roughness: 0.75 }), 0.012));
+  g.add(sculpt(rubber, (x, y) => across(x, y) + 0.006, std('#1b1a1b', { roughness: 0.95 }), 0.012));
+  const strapMat = std('#2c3238', { roughness: 0.8, side: THREE.DoubleSide });
+  for (const [x, y, a] of [[0.1, 0.074, -0.05], [0.15, 0.068, -0.35]]) {      // two velcro straps over the instep, wrapping it
+    const r = across(x, y - 0.01) / 2 + 0.003;
+    const s = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.018, 16, 1, true, 0, Math.PI), strapMat);
+    s.position.set(x, y - r + 0.004, 0); s.rotation.z = Math.PI / 2 + a; g.add(s);
   }
   const loop = new THREE.Mesh(new THREE.TorusGeometry(0.012, 0.003, 6, 14), strapMat);
   loop.position.set(0.018, 0.096, 0); g.add(loop);
@@ -943,8 +947,15 @@ const PLACEHOLDERS = {
     const g = new THREE.Group(), wood = woodMat(), dark = std('#302b2f');
     g.add(box(1.5, 0.05, 0.72, wood, 0, 0.735, 0));
     for (const z of [-0.32, 0.32]) g.add(box(0.05, 0.71, 0.05, wood, -0.7, 0.355, z));
-    g.add(box(0.42, 0.71, 0.66, wood, 0.52, 0.355, 0));                 // drawers
-    for (const y of [0.18, 0.42, 0.62]) g.add(box(0.12, 0.015, 0.012, dark, 0.52, y, 0.336));
+    g.add(box(0.42, 0.71, 0.66, wood, 0.52, 0.355, 0));                 // the drawer unit
+    g.add(box(0.41, 0.69, 0.002, dark, 0.52, 0.355, 0.331));            // dark behind the fronts: the gaps between drawers
+    const metal = std('#2a2829', { metalness: 0.6, roughness: 0.35 });
+    for (const [y0, y1] of [[0.035, 0.27], [0.275, 0.49], [0.495, 0.705]]) {   // three drawer fronts, a bar pull on each
+      const y = (y0 + y1) / 2, top = y1 - 0.045;
+      g.add(box(0.405, y1 - y0 - 0.004, 0.018, wood, 0.52, y, 0.341));
+      g.add(rod([0.45, top, 0.364], [0.59, top, 0.364], 0.0055, metal));
+      for (const x of [0.46, 0.58]) g.add(rod([x, top, 0.35], [x, top, 0.364], 0.004, metal));
+    }
     return g;
   },
   monitor() {
@@ -979,6 +990,8 @@ const PLACEHOLDERS = {
     const g = new THREE.Group(), clay = std('#d7c5b2', { roughness: 0.5, side: THREE.DoubleSide });
     const body = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.038, 0.1, 28, 1, true), clay);
     body.position.y = 0.05; g.add(body);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.0405, 0.0028, 6, 28), clay);   // the lip: the mug has a thickness
+    rim.rotation.x = Math.PI / 2; rim.position.y = 0.1; g.add(rim);
     const base = new THREE.Mesh(new THREE.CircleGeometry(0.038, 28), clay); base.rotation.x = -Math.PI / 2; base.position.y = 0.002; g.add(base);
     const tea = new THREE.Mesh(new THREE.CircleGeometry(0.04, 28), std('#9a5f2c', { roughness: 0.2 }));
     tea.rotation.x = -Math.PI / 2; tea.position.y = 0.085; g.add(tea);
@@ -987,7 +1000,8 @@ const PLACEHOLDERS = {
   },
   clock() {
     const g = new THREE.Group();
-    g.add(box(0.17, 0.08, 0.07, std('#262427', { roughness: 0.4 }), 0, 0.04, 0));
+    const body = new THREE.Mesh(new RoundedBoxGeometry(0.17, 0.08, 0.07, 3, 0.012), std('#262427', { roughness: 0.4 }));
+    body.position.y = 0.04; g.add(body);
     const face = noShadow(new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.064),
       new THREE.MeshBasicMaterial({ map: clockTex, color: new THREE.Color(3, 3, 3) })));   // bright enough to glow
     face.name = 'clock-face'; face.position.set(0, 0.042, 0.0355); g.add(face);
@@ -995,15 +1009,17 @@ const PLACEHOLDERS = {
   },
   phone() {
     const g = new THREE.Group();
-    g.add(box(0.075, 0.009, 0.155, std('#1b1b1d', { roughness: 0.3, metalness: 0.4 }), 0, 0.0045, 0));
+    const body = new THREE.Mesh(new RoundedBoxGeometry(0.075, 0.009, 0.155, 2, 0.0042), std('#1b1b1d', { roughness: 0.3, metalness: 0.4 }));
+    body.position.y = 0.0045; g.add(body);
     const screen = noShadow(new THREE.Mesh(new THREE.PlaneGeometry(0.068, 0.145), new THREE.MeshBasicMaterial({ map: phoneTex })));
     screen.name = 'phone-screen'; screen.rotation.x = -Math.PI / 2; screen.position.y = 0.0092; g.add(screen);
     return g;
   },
   desklamp() {                           // a ceramic table lamp with a glowing fabric shade
     const g = new THREE.Group();
-    const profile = [[0, 0], [0.07, 0], [0.075, 0.02], [0.085, 0.08], [0.07, 0.15], [0.03, 0.2], [0.018, 0.21], [0, 0.21]];
-    g.add(new THREE.Mesh(new THREE.LatheGeometry(profile.map(([r, y]) => new THREE.Vector2(r, y)), 32), std('#8fa79c', { roughness: 0.5 })));
+    const profile = new THREE.SplineCurve([[0, 0], [0.064, 0], [0.072, 0.008], [0.08, 0.05], [0.084, 0.09], [0.074, 0.14], [0.048, 0.185],
+      [0.025, 0.204], [0.017, 0.212], [0, 0.214]].map(([r, y]) => new THREE.Vector2(r, y))).getPoints(60);   // a smooth glazed pot
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(profile, 40), std('#8fa79c', { roughness: 0.35 })));
     g.add(cyl(0.008, 0.008, 0.14, std('#b8955a', { metalness: 0.8, roughness: 0.3 }), 0, 0.27, 0, 10));
     g.add(lampShade(0.1, 0.14, 0.17, 0.39, 1.4));
     return g;
@@ -1021,22 +1037,46 @@ const PLACEHOLDERS = {
     // head to foot, nothing overlapping: pillows against the headboard, the cushions (objects.json) leaning on them, then the duvet
     // (the cushions are measured against all of these: none of them pokes into another, owner 2026-11-06)
     g.add(soft(0.98, 0.08, 1.13, '#9fb0a6', 0, 0.48, 0.405, 0.035));                  // duvet
+    g.add(soft(0.025, 0.19, 1.13, '#9fb0a6', -0.495, 0.385, 0.405, 0.011));           // hanging over the room side
     g.add(soft(0.99, 0.07, 0.2, '#e9e4da', 0, 0.5, -0.06, 0.03));                     // its folded-back edge
     const p1 = soft(0.42, 0.11, 0.3, '#f4f1ec', -0.23, 0.52, -0.76, 0.05); p1.rotation.x = -0.18;
     const p2 = soft(0.42, 0.11, 0.3, '#d7c5b2', 0.23, 0.52, -0.76, 0.05); p2.rotation.x = -0.18;
-    g.add(p1, p2, soft(1.0, 0.03, 0.5, '#b5643c', 0, 0.535, 0.72, 0.012));            // pillows, a rust throw at the foot
+    g.add(p1, p2);                                                                     // pillows
+    // A rust throw across the foot: it lies on the duvet from the wall side, bends over the room-side edge and hangs
+    // down in soft folds (deeper towards the hem). A plane bent into shape, along u (across the bed) and v (along it).
+    const top = 0.527, edge = -0.535, r = 0.04, flat = 1.0, arc = (r * Math.PI) / 2, drop = 0.2, len = flat + arc + drop;
+    const throwGeo = new THREE.PlaneGeometry(1, 0.46, 48, 10), q = throwGeo.attributes.position;
+    for (let i = 0; i < q.count; i++) {
+      const u = (q.getX(i) + 0.5) * len, v = q.getY(i);
+      let x, y;
+      if (u < flat) [x, y] = [edge + flat - u, top];
+      else if (u < flat + arc) { const a = (u - flat) / r; [x, y] = [edge - r * Math.sin(a), top - r + r * Math.cos(a)]; }
+      else [x, y] = [edge - r, top - r - (u - flat - arc)];
+      const hang = Math.max(0, u - flat) / (arc + drop);
+      q.setXYZ(i, x - 0.012 * hang * Math.sin(v * 40), y + 0.002 * Math.sin(u * 9) * (1 - hang), 0.7 + v);
+    }
+    throwGeo.computeVertexNormals();
+    g.add(new THREE.Mesh(throwGeo, cloth('#b5643c', len / 0.3, 0.46 / 0.3, { side: THREE.DoubleSide })));
     return g;
   },
-  wallshelf() {                          // a floating shelf with two books and a small plant
+  wallshelf() {                          // a floating shelf with two books and a small succulent
     const g = new THREE.Group();
     g.add(box(0.72, 0.025, 0.2, woodMat()));
     g.add(box(0.035, 0.2, 0.15, std('#26364f'), -0.31, 0.1125, 0), box(0.03, 0.18, 0.14, std('#d7c5b2'), -0.275, 0.1025, 0));
-    g.add(cyl(0.04, 0.032, 0.07, std('#b5643c', { roughness: 0.9 }), -0.17, 0.0475, 0));
-    const leafMat = std('#5d8a55', { roughness: 0.7 });
-    for (let i = 0; i < 7; i++) {
-      const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.02, 10, 8), leafMat);
-      leaf.position.set(-0.17 + Math.cos(i * 2.4) * 0.022, 0.095 + (i % 3) * 0.012, Math.sin(i * 2.4) * 0.022); g.add(leaf);
+    const plant = new THREE.Group();     // a snake plant (you look up at the shelf: its leaves stand tall) in a terracotta pot
+    const pot = new THREE.SplineCurve([[0.028, 0], [0.033, 0.004], [0.037, 0.05], [0.038, 0.053], [0.043, 0.055], [0.044, 0.07], [0.04, 0.072],
+      [0.037, 0.066], [0, 0.062]].map(([r, y]) => new THREE.Vector2(r, y))).getPoints(40);
+    pot.unshift(new THREE.Vector2(0, 0));
+    plant.add(new THREE.Mesh(new THREE.LatheGeometry(pot, 28), std('#b5643c', { roughness: 0.9 })));
+    const blade = new THREE.ConeGeometry(1, 1, 10).translate(0, 0.5, 0), leafMat = std('#4f7a4a', { roughness: 0.55 });
+    for (const [a, h, lean] of [[0, 0.2, 0.06], [1.3, 0.16, 0.2], [2.4, 0.18, 0.14], [3.5, 0.13, 0.26], [4.4, 0.17, 0.16], [5.4, 0.14, 0.22], [0.7, 0.12, 0.3]]) {
+      const leaf = new THREE.Mesh(blade, leafMat);
+      leaf.scale.set(0.0045, h, 0.013);                  // a flat, pointed blade, its face outwards, leaning out towards a
+      leaf.rotation.set(0, -a, -lean, 'YXZ');
+      leaf.position.set(Math.cos(a) * 0.012, 0.055, Math.sin(a) * 0.012);
+      plant.add(leaf);
     }
+    const baked = bake(plant); baked.position.set(-0.17, 0.0125, 0); g.add(baked);
     return g;
   },
   bookshelf() {
@@ -1074,9 +1114,25 @@ const PLACEHOLDERS = {
         const cx = x + 0.03 + Math.max(...stack.map(([h]) => h)) / 2;
         let y = top;
         for (const [h, t] of stack) { const d = depth(h); put(t, h, d, cx + (rand() - 0.5) * 0.012, y + t / 2, zOf(d), Math.PI / 2, (rand() - 0.5) * 0.08); y += t; }
-        if (0.395 - (cx + 0.16) > 0.24) {                                     // a woven basket in the space left
-          const bx = 0.395 - 0.13;
-          g.add(box(0.26, 0.2, 0.27, cloth('#9b8a72', 6, 4), bx, top + 0.1, -0.005), box(0.24, 0.004, 0.25, std('#4a3f33'), bx, top + 0.199, -0.005));
+        if (0.395 - (cx + 0.16) > 0.24) {                                     // a woven basket in the space left, a blanket folded in it
+          const bx = 0.395 - 0.13, bz = -0.005, bw = 0.26, bh = 0.19, bd = 0.27, t = 0.01, y = top + bh / 2;
+          const weave = canvasTexture(128, 128, (ctx, w) => {                 // basket weave: three strands a square, turning each square
+            ctx.fillStyle = '#4e3c29'; ctx.fillRect(0, 0, w, w);
+            const c = w / 8;
+            for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++) for (let k = 0; k < 3; k++) {
+              ctx.fillStyle = ['#b08d5e', '#a07e4e', '#bd9c69'][k];
+              const o = 1 + (k * (c - 2)) / 3, s = (c - 2) / 3 - 1;
+              if ((i + j) % 2) ctx.fillRect(i * c + 1, j * c + o, c - 2, s); else ctx.fillRect(i * c + o, j * c + 1, s, c - 2);
+            }
+          });
+          weave.wrapS = weave.wrapT = THREE.RepeatWrapping; weave.repeat.set(2, 1.5);
+          const wicker = std('#ffffff', { map: weave, roughness: 0.9 }), rim = std('#8a6c45', { roughness: 0.85 });
+          g.add(box(bw, t, bd, wicker, bx, top + t / 2, bz));
+          for (const s of [-1, 1]) g.add(box(bw, bh, t, wicker, bx, y, bz + s * (bd - t) / 2), box(t, bh, bd, wicker, bx + s * (bw - t) / 2, y, bz));
+          const C = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([sx, sz]) => [bx + (sx * (bw - t)) / 2, top + bh, bz + (sz * (bd - t)) / 2]);
+          C.forEach((p, k) => g.add(rod(p, C[(k + 1) % 4], 0.008, rim)));      // a rolled rim
+          const blanket = new THREE.Mesh(new RoundedBoxGeometry(bw - 2 * t - 0.006, 0.13, bd - 2 * t - 0.006, 3, 0.035), cloth('#e6dccb', 2, 2));
+          blanket.position.set(bx, top + bh - 0.075, bz); g.add(blanket);
         }
       }
       const label = canvasTexture(256, 64, (ctx, w, h) => {                  // a label-maker strip on the shelf's edge
@@ -1089,7 +1145,11 @@ const PLACEHOLDERS = {
     });
     const books = new THREE.Mesh(mergeGeometries(parts), std('#ffffff', { map: atlas.tex, roughness: 0.75 }));
     books.castShadow = true; books.receiveShadow = true; books.userData.titles = titles; g.add(books);
-    g.add(cyl(0.07, 0.06, 0.14, std('#d7c5b2', { roughness: 0.6 }), -0.25, 1.505 + 0.07, 0));   // a vase on top
+    const vase = new THREE.SplineCurve([[0.045, 0], [0.06, 0.03], [0.068, 0.075], [0.058, 0.13], [0.034, 0.165], [0.03, 0.19], [0.034, 0.2],
+      [0.029, 0.2], [0.025, 0.185], [0, 0.18]].map(([r, y]) => new THREE.Vector2(r, y))).getPoints(50);
+    vase.unshift(new THREE.Vector2(0, 0));
+    const pot = new THREE.Mesh(new THREE.LatheGeometry(vase, 32), std('#d7c5b2', { roughness: 0.45 }));     // a stoneware vase on top
+    pot.position.set(-0.25, 1.505, 0); g.add(pot);
     return g;
   },
   flag() {                               // a cloth flag hung from a thin rod, with a gentle ripple
@@ -1189,13 +1249,19 @@ const PLACEHOLDERS = {
     return g;
   },
   trophy() {
-    const g = new THREE.Group(), gold = std('#d8b25a', { metalness: 0.85, roughness: 0.28 });
-    g.add(box(0.15, 0.05, 0.15, std('#302b2f'), 0, 0.025, 0), cyl(0.018, 0.026, 0.09, gold, 0, 0.095, 0));
-    const cup = new THREE.Mesh(new THREE.LatheGeometry([0, 0.03, 0.055, 0.075, 0.08].map((r, i) => new THREE.Vector2(r, i * 0.035)), 32), gold);
-    cup.position.y = 0.14; g.add(cup);
-    for (const s of [-1, 1]) {
-      const h = new THREE.Mesh(new THREE.TorusGeometry(0.035, 0.008, 8, 20, Math.PI), gold);
-      h.position.set(s * 0.085, 0.23, 0); h.rotation.z = s * Math.PI / 2; g.add(h);
+    // A loving cup on a stepped plinth: one turned shape (foot, stem with a knop, the bowl and its lip, hollow inside),
+    // ear handles, a brass plate. Gold with no reflections to show reads as brown when fully metallic, so: half.
+    const g = new THREE.Group(), gold = std('#dcae55', { metalness: 0.5, roughness: 0.3 }), base = std('#2a2628', { roughness: 0.45 });
+    g.add(box(0.13, 0.032, 0.13, base, 0, 0.016, 0), box(0.1, 0.03, 0.1, base, 0, 0.047, 0));
+    g.add(box(0.064, 0.018, 0.002, std('#c9a45a', { metalness: 0.4, roughness: 0.4 }), 0, 0.017, 0.066));
+    const cup = new THREE.SplineCurve([[0.034, 0], [0.034, 0.006], [0.02, 0.014], [0.009, 0.03], [0.008, 0.045], [0.016, 0.053], [0.008, 0.061],
+      [0.009, 0.075], [0.03, 0.085], [0.05, 0.1], [0.06, 0.125], [0.064, 0.155], [0.066, 0.162], [0.061, 0.162], [0.056, 0.13],
+      [0.04, 0.1], [0, 0.092]].map(([r, y]) => new THREE.Vector2(r, y))).getPoints(90);
+    cup.unshift(new THREE.Vector2(0, 0));
+    const turned = new THREE.Mesh(new THREE.LatheGeometry(cup, 40), gold); turned.position.y = 0.062; g.add(turned);
+    for (const s of [-1, 1]) {                       // an ear from low on the bowl, out and up, back in under the lip
+      const path = [[0.046, 0.1], [0.07, 0.096], [0.088, 0.115], [0.086, 0.142], [0.062, 0.15]].map(([x, y]) => new THREE.Vector3(s * x, 0.062 + y, 0));
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(path), 24, 0.0055, 8), gold));
     }
     return g;
   },
