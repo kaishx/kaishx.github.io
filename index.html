@@ -62,6 +62,7 @@ canvas { display: block; outline: none; touch-action: none; }
 .daynight svg { width: 20px; height: 20px; }
 .daynight .sun, .daynight.night .moon { display: none; }
 .daynight.night .sun { display: block; }
+body:has(.desktop.on) .daynight { opacity: 0; pointer-events: none; }   /* not while sitting at the computer */
 
 /* ---------------------------------------------------------------- the computer's desktop: like a real one (owner,
    2026-11-06): a menu bar with the clock, folder and PDF icons, two widgets, a dock */

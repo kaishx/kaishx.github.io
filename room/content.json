@@ -102,11 +102,11 @@
       "id": "projects", "icon": "📁", "name": "Technical projects", "desktop": true,
       "title": "Technical projects",
       "items": [
-        { "title": "Live trading systems", "meta": "Python · Linux · VPS",
+        { "title": "Crypto trading research", "meta": "Personal project · Python · 2026",
           "text": [
-            "Market-making strategies tested across crypto and US equity perpetuals",
-            "State reconciliation, state tracking, data-staleness guards and circuit breakers",
-            "A real-time multi-venue feed covering 330+ instruments"
+            "Ran market-making bots with small real-money positions on crypto and US stock perpetuals",
+            "Recorded live order-book data from many exchanges (330+ instruments)",
+            "Backtested trading ideas with strict checks against overfitting; most of them did not hold up"
           ] },
         { "title": "Walk-forward analysis for pairs trading", "meta": "Python · Numba", "image": "assets/wfa.png",
           "text": [
@@ -121,11 +121,6 @@
             "Posts results to Telegram"
           ],
           "link": "https://github.com/kaishx/paper_trader" },
-        { "title": "Market microstructure research", "meta": "Order books · 15+ venues",
-          "text": [
-            "Screened perpetuals by spread, order-flow imbalance and lead-lag to separate market-making opportunity from adverse selection",
-            "Backtests with plateau and single-trade-dominance checks"
-          ] },
         { "title": "Autonomous robot", "meta": "NUS · EG1311 Design and Make", "image": "assets/photos/robot.jpg",
           "text": [
             "Team build of an Arduino-controlled autonomous robot",
