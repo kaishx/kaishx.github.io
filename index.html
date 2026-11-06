@@ -16,6 +16,18 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A cosy desk at night under string lights: a computer saying Hi, I'm Kai Le, a lamp, and the Singapore skyline through the window">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://kaishx.github.io/">
+<!-- for search engines: who this site is about (schema.org), so a search for the name finds it with the right links -->
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "Person",
+  "name": "Chu Kai Le", "url": "https://kaishx.github.io/",
+  "description": "Mechanical Engineering and Computing student at the National University of Singapore (CDE Engineering Scholar), looking for engineering and quant internships in summer 2027 or 2028.",
+  "email": "mailto:chukaile.work@gmail.com",
+  "affiliation": { "@type": "CollegeOrUniversity", "name": "National University of Singapore" },
+  "alumniOf": { "@type": "HighSchool", "name": "NUS High School of Mathematics and Science" },
+  "knowsAbout": ["Mechanical engineering", "Python", "Market microstructure", "Trading systems"],
+  "sameAs": ["https://www.linkedin.com/in/ckail/", "https://github.com/kaishx"] }
+</script>
 <!-- ?v=2: a new address, so browsers that cached the old site's icon fetch this one -->
 <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
 <link rel="icon" href="assets/favicon.svg?v=2" type="image/svg+xml">
@@ -41,6 +53,13 @@ canvas { display: block; outline: none; touch-action: none; }
 .tip { position: fixed; z-index: 6; pointer-events: none; background: var(--white); color: var(--navy); font-size: 12px; font-weight: 600;
        letter-spacing: .12em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; transform: translate(14px, 14px); opacity: 0; transition: opacity .2s; }
 .tip.on { opacity: 1; }
+.daynight { position: fixed; top: 16px; right: 16px; z-index: 5; display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.16); background: rgba(14,18,16,.55); color: var(--white); cursor: pointer; backdrop-filter: blur(6px);
+            transition: background .2s, transform .25s var(--ease); }
+.daynight:hover, .daynight:focus-visible { background: rgba(14,18,16,.8); transform: rotate(-12deg); outline: none; }
+.daynight svg { width: 20px; height: 20px; }
+.daynight .sun, .daynight.night .moon { display: none; }
+.daynight.night .sun { display: block; }
 
 /* ---------------------------------------------------------------- the computer's desktop: like a real one (owner,
    2026-11-06): a menu bar with the clock, folder and PDF icons, two widgets, a dock */
@@ -186,6 +205,10 @@ canvas { display: block; outline: none; touch-action: none; }
 </nav>
 <div class="hint" id="hint">Drag to look around · click the monitor</div>
 <div class="tip" id="tip"></div>
+<button type="button" class="daynight" id="daynight" aria-label="Switch to night" title="Switch to night">
+  <svg class="moon" viewBox="0 0 24 24"><path fill="currentColor" d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 1.8v2.4M12 19.8v2.4M1.8 12h2.4M19.8 12h2.4M4.8 4.8l1.7 1.7M17.5 17.5l1.7 1.7M4.8 19.2l1.7-1.7M17.5 6.5l1.7-1.7"/></svg>
+</button>
 
 <div class="desktop" id="desktop" aria-hidden="true">
   <div class="screen" role="dialog" aria-label="Kai's computer">

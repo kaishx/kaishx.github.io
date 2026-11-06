@@ -35,10 +35,10 @@ const rand = (() => { let a = 20261105; return () => {   // the same "random" ev
   a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; })();
 
-const FIXED_HOUR = Number.parseFloat(new URLSearchParams(location.search).get('t'));
+let fixedHour = Number.parseFloat(new URLSearchParams(location.search).get('t'));   // ?t=, or the day / night button
 function now() {
   const d = new Date();
-  if (Number.isFinite(FIXED_HOUR)) d.setHours(Math.floor(FIXED_HOUR) % 24, Math.round((FIXED_HOUR % 1) * 60), 0);
+  if (Number.isFinite(fixedHour)) d.setHours(Math.floor(fixedHour) % 24, Math.round((fixedHour % 1) * 60), 0);
   return d;
 }
 
@@ -390,6 +390,7 @@ world.add(box(0.015, 0.08, BACK - FRONT, trimMat, W - 0.0075, 0.04, MIDZ), box(0
 // little slack between them, round each corner. They only glow (and bloom): the one light that stood in for them lit a
 // single patch of wall and ceiling, a glow from nowhere (owner, 2026-11-06).
 const fairyMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.6, 0.85) });
+let fairyBulbs, fairyPick;
 {
   const x0 = -W + 0.03, x1 = W - 0.03, z0 = FRONT + 0.03, z1 = BACK - 0.03, corners = [[x0, z0], [x1, z0], [x1, z1], [x0, z1], [x0, z0]];
   const pts = [], hookY = h => (h % 2 ? 2.47 : 2.44);
@@ -406,17 +407,22 @@ const fairyMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.6, 
   }
   const curve = new THREE.CatmullRomCurve3(pts, true);
   world.add(noShadow(new THREE.Mesh(new THREE.TubeGeometry(curve, 900, 0.003, 4, true), std('#2b2a2e'))));
-  const bulbs = new THREE.InstancedMesh(new THREE.SphereGeometry(0.014, 10, 8), fairyMat, Math.round(curve.getLength() / 0.11));
+  const bulbs = fairyBulbs = new THREE.InstancedMesh(new THREE.SphereGeometry(0.014, 10, 8), fairyMat, Math.round(curve.getLength() / 0.11));
   const dummy = new THREE.Object3D();
   for (let i = 0; i < bulbs.count; i++) {
     const p = curve.getPointAt((i + 0.5) / bulbs.count);
     const [, ox, oz] = [[p.x - x0, 1, 0], [x1 - p.x, -1, 0], [p.z - z0, 0, 1], [z1 - p.z, 0, -1]].sort((a, b) => a[0] - b[0])[0];   // off the nearest wall
     dummy.position.set(p.x + ox * 0.008, p.y - 0.014, p.z + oz * 0.008);
     dummy.updateMatrix(); bulbs.setMatrixAt(i, dummy.matrix);
+    bulbs.setColorAt(i, new THREE.Color(1, 1, 1));               // full brightness; twinkle() dims them in a wave
   }
   bulbs.raycast = () => {};
   bulbs.frustumCulled = false;
   world.add(bulbs);
+  // the bulbs are too small to click: an invisible tube 10 cm thick along the wire takes the clicks (see DOES)
+  fairyPick = new THREE.Mesh(new THREE.TubeGeometry(curve, 300, 0.05, 6, true), new THREE.MeshBasicMaterial({ visible: false }));
+  fairyPick.userData = { entry: { does: 'twinkle' }, glowMeshes: [] };
+  world.add(fairyPick);
 }
 
 // ------------------------------------------------------------------ outside: sky, sun, moon, stars (the city: room/outside.js)
@@ -471,6 +477,7 @@ scene.add(sun, sun.target);
 const hemi = new THREE.HemisphereLight('#cfe0ea', '#9a8a76', 1);   // second colour: light bounced up off the floor
 scene.add(hemi);
 const lamps = [];                     // lamps register here: { light, shade, power }
+let lampOn = true;                    // click the desk lamp (DOES.lamp)
 
 // Time of day from the visitor's clock. e = how high the sun is: 1 at 13:00, 0 at 07:00 and 19:00, below 0 at night.
 const C = hex => new THREE.Color(hex);
@@ -499,7 +506,7 @@ function applyTime() {
   blend(hemi.color, 'horizon', w).lerp(blend(new THREE.Color(), 'top', w), 0.4);
   hemi.intensity = mixN(w, 0.55, 1.4, 2.6);
   const glow = mixN(w, 1, 0.75, 0.2);                                // the lamps matter most after dark
-  for (const l of lamps) { l.light.intensity = l.power * glow; l.shade.emissiveIntensity = 0.1 + glow * 0.5; }
+  for (const l of lamps) { l.light.intensity = lampOn ? l.power * glow : 0; l.shade.emissiveIntensity = lampOn ? 0.1 + glow * 0.5 : 0; }
   fairyMat.color.setRGB(0.7 + 1.6 * glow, 0.6 + 1.1 * glow, 0.45 + 0.45 * glow);
   const u = sky.material.uniforms;
   blend(u.top.value, 'top', w); blend(u.horizon.value, 'horizon', w); blend(u.bottom.value, 'bottom', w);
@@ -884,7 +891,7 @@ function motorbike() {      // a supersport, real size (2.05 m long, 1.4 m betwe
   g.add(sculpt(outline([0.8, 0.895], [[0.74, 0.96], [0.64, 1.04], [0.55, 1.095], [0.485, 1.125]], [[0.455, 1.11]], [[0.53, 1.01], [0.66, 0.955]]),
     (x, y) => 0.24 - 0.12 * smooth(0.92, 1.12, y), glass, 0.015));
   // the face: LED eyes either side of a ram-air intake; mirrors on stalks; the tail light and the plate under the tail
-  const eyeMat = lit(new THREE.Color(1.7, 1.7, 1.55));
+  const eyeMat = lit(new THREE.Color(1.7, 1.7, 1.55)); eyeMat.name = 'headlight';   // flashes when clicked (DOES.flash)
   for (const s of [-1, 1]) {
     const eye = at(box(0.075, 0.016, 0.01, eyeMat), 0.8, 0.8, s * 0.114); eye.rotation.set(0, s * 0.7, 0.35); g.add(eye);
     g.add(rod([0.64, 0.97, s * 0.16], [0.62, 1.01, s * 0.24], 0.008, gloss));
@@ -1321,7 +1328,8 @@ const PLACEHOLDERS = {
 };
 
 // ------------------------------------------------------------------ objects from objects.json (your models, or the placeholders)
-const interactive = [];              // things that open a folder ("opens") or say something on hover ("tip")
+const interactive = [];              // things that open a folder ("opens"), say something on hover ("tip") or do something ("does")
+interactive.push(fairyPick);
 const gltf = new GLTFLoader();
 const draco = new DRACOLoader();
 draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
@@ -1357,11 +1365,11 @@ function place(group, o) {
     m.castShadow = true; m.receiveShadow = true;
   });
   world.add(group);
-  if (o.opens || o.tip) {
+  if (o.opens || o.tip || o.does) {
     group.userData.entry = o;
     group.userData.glowMeshes = [];
     group.traverse(m => {
-      if (m.isMesh && m.material?.emissive) {
+      if (m.isMesh && m.material?.emissive && !lamps.some(l => l.shade === m.material)) {
         m.userData.e0 = { c: m.material.emissive.clone(), i: m.material.emissiveIntensity };
         group.userData.glowMeshes.push(m);
       }
@@ -1531,8 +1539,8 @@ const groupAt = (x, y) => groupOf(hitAt(x, y));
 // What the pointer says: a book its own name (the shelf's books are one shape, twelve triangles a book), else the thing's.
 const tipOf = (hit, g) => hit?.object.userData.titles?.[Math.floor(hit.faceIndex / 12)] ?? (g ? labelOf(g) : '');
 function labelOf(g) {
-  const { label, opens, tip } = g.userData.entry, f = folders[opens];
-  if (!opens) return tip || label || '';
+  const { label, opens, tip, does } = g.userData.entry, f = folders[opens];
+  if (!opens) return DOES[does]?.tip?.() || tip || label || '';
   return f && label && label !== f.name ? `${label} · ${f.name}` : label || f?.name || '';
 }
 function showTip(text, x, y) {
@@ -1544,13 +1552,18 @@ function showTip(text, x, y) {
 function hover(e) {
   const hit = mode === 'room' ? hitAt(e.clientX, e.clientY) : null, g = groupOf(hit);
   hovered = g;
-  canvas.style.cursor = g?.userData.entry.opens ? 'pointer' : 'grab';
+  canvas.style.cursor = g?.userData.entry.opens || g?.userData.entry.does ? 'pointer' : 'grab';
   showTip(tipOf(hit, g), e.clientX, e.clientY);
 }
 function tap(e, type) {
   if (mode !== 'room') return;
   const hit = hitAt(e.clientX, e.clientY), g = groupOf(hit);
   if (!g) { hideSheet(); if (isOn('win')) closeWin(); return; }
+  if (g.userData.entry.does && !g.userData.entry.opens) {        // the lamp, the lights: do it, and say what a click does now
+    DOES[g.userData.entry.does].run(g);
+    if (type === 'mouse') showTip(tipOf(hit, g), e.clientX, e.clientY);
+    return;
+  }
   if (!g.userData.entry.opens) {                               // something that only has a tip, like the mug or a book
     if (type !== 'mouse') {
       showTip(tipOf(hit, g), Math.max(12, e.clientX - 120), e.clientY - 70);
@@ -1561,10 +1574,46 @@ function tap(e, type) {
   if (type === 'mouse') act(g); else askFirst(g);              // on a phone: "Open Hobbies?" first
 }
 function act(g) {
+  DOES[g.userData.entry.does]?.run(g);                         // the lion hops, the bike flashes its headlight
   opened = true;
   $('hint').style.opacity = 0;
   if (g.userData.entry.opens === 'desktop') sitDown();
   else openFolder(g.userData.entry.opens, g);
+}
+// Things that do something when clicked (objects.json "does"). Small on purpose: each is a toggle or a second of motion.
+const DOES = {
+  lamp: { tip: () => (lampOn ? 'Turn the lamp off' : 'Turn the lamp on'), run: () => { lampOn = !lampOn; applyTime(); } },
+  twinkle: { tip: () => 'Make them twinkle', run: () => twinkle() },
+  hop: { run: g => hop(g) },
+  flash: { run: g => flash(g) },
+};
+function twinkle() {                   // a wave of light runs round the string lights for two seconds
+  const t0 = performance.now(), n = fairyBulbs.count, c = new THREE.Color();
+  anims.add(() => {
+    const s = (performance.now() - t0) / 1000, done = s > 2.2;
+    for (let i = 0; i < n; i++) c.setScalar(done ? 1 : 0.2 + 0.8 * (0.5 + 0.5 * Math.cos((i / n) * Math.PI * 16 - s * 10)) ** 2), fairyBulbs.setColorAt(i, c);
+    fairyBulbs.instanceColor.needsUpdate = true;
+    return !done;
+  });
+}
+function hop(g) {                      // two little hops (everything but its shadow on the desk)
+  const parts = g.children.filter(c => c.material !== blobMat), t0 = performance.now();
+  for (const p of parts) p.userData.y0 ??= p.position.y;
+  anims.add(() => {
+    const s = (performance.now() - t0) / 1000, up = s < 0.7 ? Math.abs(Math.sin((s / 0.7) * Math.PI * 2)) * 0.03 * (1 - s / 1.4) : 0;
+    for (const p of parts) p.position.y = p.userData.y0 + up / g.scale.y;
+    return s < 0.7;
+  });
+}
+function flash(g) {                    // the headlight blinks twice
+  const mats = [];
+  g.traverse(m => { if (m.material?.name === 'headlight' && !mats.includes(m.material)) mats.push(m.material); });
+  const base = mats.map(m => m.color.clone()), t0 = performance.now();
+  anims.add(() => {
+    const s = (performance.now() - t0) / 1000, on = s < 0.12 || (s > 0.24 && s < 0.36);
+    mats.forEach((m, i) => m.color.copy(base[i]).multiplyScalar(on && s < 0.5 ? 3.5 : 1));
+    return s < 0.5;
+  });
 }
 function askFirst(g) {
   const { opens, label } = g.userData.entry;
@@ -1732,6 +1781,7 @@ const timer = new THREE.Clock();
 // Behind the door (index.html) the room loads and is drawn, so it's ready when picked; the "click me" glow waits, and
 // its 20 seconds start when the visitor walks in.
 let entered = !!window.roomEntered;
+const anims = new Set();               // running animations (twinkle, hop, flash): each runs every frame until it returns false
 addEventListener('room-enter', () => { entered = true; timer.start(); invalidate(); });
 renderer.setAnimationLoop(() => {
   const dt = Math.min(timer.getDelta(), 0.1), t = timer.elapsedTime;
@@ -1750,6 +1800,7 @@ renderer.setAnimationLoop(() => {
   // clickable things glow three times to show they're there, then stop (each glow redraws the room for a second or so)
   const pulse = opened || STILL || !entered || t > 20 ? 0 : Math.pow(Math.max(0, Math.sin(t * 0.95 - 1)), 8) * 0.1;
   for (const g of interactive) setGlow(g, g === hovered || g === pending ? 0.16 : g.userData.entry.opens ? pulse : 0);
+  if (anims.size) { for (const a of anims) if (!a()) anims.delete(a); dirty = true; }
   if (!dirty) return;
   dirty = false;
   camera.position.copy(view.pos);
@@ -1758,6 +1809,20 @@ renderer.setAnimationLoop(() => {
   draw();
 });
 
+// Day or night: most visitors come by day and never see the room lit up at night. The button flips the room's hour
+// to 9:30 pm or 2 pm (the clocks follow); reloading goes back to the visitor's own time.
+const isNight = () => { const d = now(), h = d.getHours() + d.getMinutes() / 60; return h >= 18.75 || h < 6.75; };
+function showDayNight() {
+  const night = isNight(), b = $('daynight');
+  b.classList.toggle('night', night);
+  b.setAttribute('aria-label', night ? 'Switch to day' : 'Switch to night'); b.title = b.getAttribute('aria-label');
+}
+$('daynight').addEventListener('click', () => {
+  const toNight = !isNight();
+  fixedHour = toNight ? 21.5 : 14;
+  lastMinute = -1; applyTime(); tick(); showDayNight();
+  if (toNight) twinkle();
+});
 let lastMinute = -1;
 function tick() {
   const d = now();
@@ -1774,6 +1839,7 @@ function tick() {
 }
 applyTime();
 tick();
+showDayNight();
 setInterval(tick, 1000);
 
 addEventListener('resize', () => {                       // always the visitor's window size (and zoom level)
