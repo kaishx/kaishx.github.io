@@ -42,7 +42,7 @@ a { color: inherit; }
 .row .head { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: center; }
 .row .logo { grid-row: span 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 9px; box-sizing: border-box;
              background: var(--navy); color: var(--paper); font: 400 14px/1 'Anton', Impact, sans-serif; letter-spacing: .05em; }
-.row img.logo { object-fit: contain; padding: 4px; background: #fff; border: 1px solid rgba(23,30,25,.12); }
+.row img.logo { object-fit: cover; background: #fff; border: 1px solid rgba(23,30,25,.12); }   /* assets/logos: 128 px squares */
 .row p { margin: 6px 0 0; color: #3e3c3d; font-size: 14.5px; }
 .row ul.points { margin: 6px 0 0; padding-left: 18px; color: #3e3c3d; font-size: 14.5px; }
 .row ul.points li { margin-top: 3px; line-height: 1.45; }

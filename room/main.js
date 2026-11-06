@@ -581,16 +581,16 @@ const screenTex = canvasTexture(1024, 596, (ctx, w, h) => {
     ctx.fillStyle = 'rgba(28,32,34,0.45)'; roundRect(ctx, wx, y, ww, hh, 18); ctx.fill();
     ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1; ctx.stroke();
   };
-  card(40, 152);
+  card(40, 172);
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#fff'; ctx.font = `700 25px ${SANS}`; ctx.fillText("Hi, I'm Kai Le.", wx + 18, 78);
   ctx.fillStyle = 'rgba(255,255,255,0.82)'; ctx.font = `400 12.5px ${SANS}`;
-  wrapText(ctx, 'Mechanical Engineering and Computing at NUS, on the CDE Engineering Scholars Programme. I build trading systems and research market microstructure. Open a folder, or grab a CV.', wx + 18, 104, ww - 36, 19);
-  card(206, 74);
+  wrapText(ctx, 'Mechanical Engineering and Computing at NUS, on the CDE Engineering Scholars Programme. I build trading systems and research market microstructure. Looking for engineering and quant internships, summer 2027 or 2028.', wx + 18, 104, ww - 36, 19);
+  card(226, 74);
   ctx.fillStyle = '#fff'; ctx.font = `300 40px ${SANS}`; const t = timeText(d).replace(/\s?[ap]\.?m\.?$/i, '');
-  ctx.fillText(t, wx + 18, 258);
+  ctx.fillText(t, wx + 18, 278);
   const tw = ctx.measureText(t).width;
-  ctx.fillStyle = '#ff8a65'; ctx.font = `700 10.5px ${SANS}`; ctx.fillText(d.toLocaleDateString([], { weekday: 'long' }).toUpperCase(), wx + 34 + tw, 236);
-  ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = `400 12.5px ${SANS}`; ctx.fillText(d.toLocaleDateString([], { day: 'numeric', month: 'long' }), wx + 34 + tw, 256);
+  ctx.fillStyle = '#ff8a65'; ctx.font = `700 10.5px ${SANS}`; ctx.fillText(d.toLocaleDateString([], { weekday: 'long' }).toUpperCase(), wx + 34 + tw, 256);
+  ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = `400 12.5px ${SANS}`; ctx.fillText(d.toLocaleDateString([], { day: 'numeric', month: 'long' }), wx + 34 + tw, 276);
   // the dock
   const tiles = [['#5db4ff', '#1d6fe0'], ['#ffffff', '#eceae6'], ['#3b3f45', '#1d1f23'], ['#2a86d6', '#0a5eb0'], null, ['#5a5d63', '#34363b']];
   const dw = 5 * 46 + 4 * 8 + 18 + 18, dx = (w - dw) / 2, dy = h - 66;
